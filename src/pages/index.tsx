@@ -4,15 +4,42 @@ import { useSession } from 'next-auth/react';
 import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table } from '@mantine/core';
 import { IconBrandGoogle } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
-import productsByClass from './utils/product';
+import productsByClass, { Product } from './utils/product';
+import { useState } from 'react';
 
 export default function Home() {
     const { data: session, status } = useSession()
     const products = productsByClass["2年1組"].map((element) => (
         <tr key={element.id}>
-            <Button size={ "xl" }>{ element.name }</Button>
+            <Button size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
         </tr>
     ));
+
+    type OrderItem = {
+        product: Product;
+        count: number;
+    }
+    const [order, setOrder] = useState<OrderItem[]>([]);
+    function handleOrder(product: Product) {
+        const index = order.findIndex((item) => item.product.id === product.id);
+    
+        if (index === -1) {
+            setOrder([...order, { product, count: 1 }]);
+        } else {
+            const newOrder = [...order];
+            newOrder[index].count++;
+            setOrder(newOrder);
+        }
+    }
+
+    function deleteItemFromOrder(index:any) {
+        setOrder((prevOrder) => {
+            const newOrder = [...prevOrder];
+            newOrder.splice(index, 1);
+            return newOrder;
+        });
+    }
+
     return (
         <>
             <Head>
@@ -60,12 +87,14 @@ export default function Home() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr key="Name01">
-                                        <td>かき氷</td>
-                                        <td>¥300</td>
-                                        <td>1つ</td>
-                                        <td><a>削除</a></td>
-                                        </tr>
+                                        {order.map((item, index) => (
+                                            <tr key={index}>
+                                            <td>{item.product.name}</td>
+                                            <td>¥{item.product.price}</td>
+                                            <td>{item.count}</td>
+                                            <td><a onClick={() => deleteItemFromOrder(index)}>削除</a></td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                     </Table>
                                 </Flex>
@@ -106,7 +135,3 @@ export default function Home() {
         </>
     )
 }
-function useState(arg0: never[]): [any, any] {
-    throw new Error('Function not implemented.');
-}
-

@@ -18,3 +18,4 @@ const productsByClass: ProductsByClass = {
 }
 
 export default productsByClass;
+export type { Product };
