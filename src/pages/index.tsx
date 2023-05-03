@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, NumberInput, Center } from '@mantine/core';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center } from '@mantine/core';
 import { IconBrandGoogle, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
@@ -145,12 +145,11 @@ export default function Home() {
                             </Grid.Col>
                         </Grid>
                         <Modal opened={opened} onClose={close} title="支払いへ進む">
-                            {amountPaid}
                             合計金額: {calculateTotalPrice(order)}円
                             <NumPad/>
-                            {Number(amountPaid) >= calculateTotalPrice(order) && (
+                            {Number(amountPaid.join("")) >= calculateTotalPrice(order) && (
                                 <div>
-                                    お釣り: {calculateChange(Number(amountPaid), calculateTotalPrice(order))}円
+                                    お釣り: {calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order))}円
                                 </div>
                             )}
                             <br/>
@@ -162,7 +161,7 @@ export default function Home() {
                                 radius="xl"
                                 size="md"
                                 color="green"
-                                disabled={!(Number(amountPaid) >= calculateTotalPrice(order))}
+                                disabled={!(Number(amountPaid.join("")) >= calculateTotalPrice(order))}
                                 styles={{
                                 root: { paddingRight: rem(14), height: rem(48) },
                                 }}

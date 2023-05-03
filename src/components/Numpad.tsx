@@ -1,7 +1,6 @@
-import { ActionIcon, Box, Center, Group, SimpleGrid, Title } from "@mantine/core";
+import { ActionIcon, Center, Group, Title } from "@mantine/core";
 import { IconBackspace, IconNumber0, IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconNumber5, IconNumber6, IconNumber7, IconNumber8, IconNumber9 } from "@tabler/icons-react";
-import { useState } from "react";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { amountPaidState } from "../utils/states";
 
 export function NumPad() {
