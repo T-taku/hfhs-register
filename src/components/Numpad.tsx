@@ -1,14 +1,14 @@
 import { ActionIcon, Box, Center, Group, SimpleGrid, Title } from "@mantine/core";
 import { IconBackspace, IconNumber0, IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconNumber5, IconNumber6, IconNumber7, IconNumber8, IconNumber9 } from "@tabler/icons-react";
 import { useState } from "react";
-import { atom } from "recoil";
-
+import { atom, useRecoilState } from "recoil";
+import { amountPaidState } from "../utils/states";
 
 export function NumPad() {
-    const [amountPaid, setamountPaid] = useState<number[]>([]);
+    const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
     const onNumClick = (n: number) => {
-        const newId = [...amountPaid, n];
-        setamountPaid(newId);
+        const newamount = [...amountPaid, n];
+        setamountPaid(newamount);
     }
     const onDeleteNum = () => {
         if (amountPaid.length > 0) {

@@ -5,14 +5,15 @@ import { useSession } from 'next-auth/react';
 import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, NumberInput, Center } from '@mantine/core';
 import { IconBrandGoogle, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
-import productsByClass, { Product } from './utils/product';
+import productsByClass, { Product } from '../utils/product';
 import { useState } from 'react';
-import { useDisclosure, useInputState } from '@mantine/hooks';
-import { RecoilRoot } from 'recoil';
+import { useDisclosure } from '@mantine/hooks';
+import { useRecoilState } from 'recoil';
+import { amountPaidState } from "../utils/states";
 
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
-    const [amountPaid, setAmountPaid] = useInputState(0);
+    const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
     const { data: session } = useSession()
     const [order, setOrder] = useState<OrderItem[]>([]);
     const products = productsByClass["2年1組"].map((element) => (
@@ -27,7 +28,7 @@ export default function Home() {
     }
 
     function resetall(){
-        setAmountPaid(0)
+        setamountPaid([])
         setOrder([]);
     }
 
@@ -144,13 +145,12 @@ export default function Home() {
                             </Grid.Col>
                         </Grid>
                         <Modal opened={opened} onClose={close} title="支払いへ進む">
+                            {amountPaid}
                             合計金額: {calculateTotalPrice(order)}円
-                            <RecoilRoot>
-                                <NumPad/>
-                            </RecoilRoot>
-                            {amountPaid >= calculateTotalPrice(order) && (
+                            <NumPad/>
+                            {Number(amountPaid) >= calculateTotalPrice(order) && (
                                 <div>
-                                    お釣り: {calculateChange(amountPaid, calculateTotalPrice(order))}円
+                                    お釣り: {calculateChange(Number(amountPaid), calculateTotalPrice(order))}円
                                 </div>
                             )}
                             <br/>
@@ -162,7 +162,7 @@ export default function Home() {
                                 radius="xl"
                                 size="md"
                                 color="green"
-                                disabled={!(amountPaid >= calculateTotalPrice(order))}
+                                disabled={!(Number(amountPaid) >= calculateTotalPrice(order))}
                                 styles={{
                                 root: { paddingRight: rem(14), height: rem(48) },
                                 }}
