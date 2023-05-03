@@ -1,14 +1,8 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, getStylesRef, rem, Title } from '@mantine/core';
+import { createStyles, Navbar, Group, getStylesRef, rem, Title } from '@mantine/core';
 import {
     IconCalculator,
-    IconFingerprint,
-    IconKey,
-    IconSettings,
-    Icon2fa,
-    IconDatabaseImport,
     IconReceipt2,
-    IconSwitchHorizontal,
     IconLogout,
     IconUserCircle,
 } from '@tabler/icons-react';

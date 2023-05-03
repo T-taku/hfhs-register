@@ -1,13 +1,14 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
+import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Box, Mark, Modal, NumberInput, Center } from '@mantine/core';
-import { IconBrandGoogle, IconCoinYen, IconCoins } from '@tabler/icons-react';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, NumberInput, Center } from '@mantine/core';
+import { IconBrandGoogle, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from './utils/product';
 import { useState } from 'react';
 import { useDisclosure, useInputState } from '@mantine/hooks';
-import router from 'next/router';
+import { RecoilRoot } from 'recoil';
 
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -144,16 +145,9 @@ export default function Home() {
                         </Grid>
                         <Modal opened={opened} onClose={close} title="支払いへ進む">
                             合計金額: {calculateTotalPrice(order)}円
-                            <NumberInput
-                                placeholder="お預かり"
-                                label="お預かり"
-                                icon=<IconCoinYen/>
-                                withAsterisk
-                                hideControls
-                                required
-                                value={amountPaid}
-                                onChange={setAmountPaid}
-                            />
+                            <RecoilRoot>
+                                <NumPad/>
+                            </RecoilRoot>
                             {amountPaid >= calculateTotalPrice(order) && (
                                 <div>
                                     お釣り: {calculateChange(amountPaid, calculateTotalPrice(order))}円
