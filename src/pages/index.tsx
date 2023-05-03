@@ -1,14 +1,19 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { useSession } from 'next-auth/react';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table } from '@mantine/core';
-import { IconBrandGoogle } from '@tabler/icons-react';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Box, Mark, Modal, NumberInput, Center } from '@mantine/core';
+import { IconBrandGoogle, IconCoinYen, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from './utils/product';
 import { useState } from 'react';
+import { useDisclosure, useInputState } from '@mantine/hooks';
+import router from 'next/router';
 
 export default function Home() {
-    const { data: session, status } = useSession()
+    const [opened, { open, close }] = useDisclosure(false);
+    const [amountPaid, setAmountPaid] = useInputState(0);
+    const { data: session } = useSession()
+    const [order, setOrder] = useState<OrderItem[]>([]);
     const products = productsByClass["2年1組"].map((element) => (
         <tr key={element.id}>
             <Button size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
@@ -19,12 +24,17 @@ export default function Home() {
         product: Product;
         count: number;
     }
-    const [order, setOrder] = useState<OrderItem[]>([]);
+
+    function resetall(){
+        setAmountPaid(0)
+        setOrder([]);
+    }
+
     function handleOrder(product: Product) {
         const index = order.findIndex((item) => item.product.id === product.id);
     
         if (index === -1) {
-            setOrder([...order, { product, count: 1 }]);
+            setOrder((prevOrder) => [...prevOrder, { product, count: 1 }]);
         } else {
             const newOrder = [...order];
             newOrder[index].count++;
@@ -32,12 +42,24 @@ export default function Home() {
         }
     }
 
-    function deleteItemFromOrder(index:any) {
+    function deleteItemFromOrder(index:number) {
         setOrder((prevOrder) => {
             const newOrder = [...prevOrder];
             newOrder.splice(index, 1);
             return newOrder;
         });
+    }
+
+    function calculateTotalPrice(order: OrderItem[]): number {
+        let totalPrice = 0;
+        for (const item of order) {
+          totalPrice += item.product.price * item.count;
+        }
+        return totalPrice;
+    }
+
+    function calculateChange(amountPaid: number, totalPrice: number) {
+        return amountPaid - totalPrice;
     }
 
     return (
@@ -63,7 +85,7 @@ export default function Home() {
                                     direction="column"
                                     wrap="wrap"
                                 >
-                                    <Title order={4}>商品一覧</Title>
+                                    <Title order={3}>商品一覧</Title>
                                     {products}
                                 </Flex>
                             </Grid.Col>
@@ -76,8 +98,8 @@ export default function Home() {
                                     direction="column"
                                     wrap="wrap"
                                 >
-                                    <Title order={5}>購入商品</Title>
-                                    <Table verticalSpacing="xs">
+                                    <Title order={3}>購入商品</Title>
+                                    <Table verticalSpacing="lg" striped>
                                     <thead>
                                         <tr>
                                         <th>商品</th>
@@ -97,9 +119,65 @@ export default function Home() {
                                         ))}
                                     </tbody>
                                     </Table>
+                                    {
+                                        (order.length > 0)&&
+                                        <>
+                                            <Title order={5}>合計金額: <Mark color={"red"}>{calculateTotalPrice(order)}円</Mark></Title>
+                                            <Button
+                                                leftIcon={
+                                                    <IconCoins size="1.2rem" stroke={1.5} />
+                                                }
+                                                radius="xl"
+                                                size="md"
+                                                color="red"
+                                                styles={{
+                                                root: { paddingRight: rem(14), height: rem(48) },
+                                                }}
+                                                onClick={open}
+                                            >
+                                                支払いへ進む
+                                            </Button>
+                                        </>
+                                    }
                                 </Flex>
                             </Grid.Col>
                         </Grid>
+                        <Modal opened={opened} onClose={close} title="支払いへ進む">
+                            合計金額: {calculateTotalPrice(order)}円
+                            <NumberInput
+                                placeholder="お預かり"
+                                label="お預かり"
+                                icon=<IconCoinYen/>
+                                withAsterisk
+                                hideControls
+                                required
+                                value={amountPaid}
+                                onChange={setAmountPaid}
+                            />
+                            {amountPaid >= calculateTotalPrice(order) && (
+                                <div>
+                                    お釣り: {calculateChange(amountPaid, calculateTotalPrice(order))}円
+                                </div>
+                            )}
+                            <br/>
+                            <Center>
+                            <Button
+                                leftIcon={
+                                    <IconCoins size="1.2rem" stroke={1.5} />
+                                }
+                                radius="xl"
+                                size="md"
+                                color="green"
+                                disabled={!(amountPaid >= calculateTotalPrice(order))}
+                                styles={{
+                                root: { paddingRight: rem(14), height: rem(48) },
+                                }}
+                                onClick={()=>{close(); resetall()}}
+                            >
+                                支払いを完了
+                            </Button>
+                            </Center>
+                        </Modal>
                     </AppShell>
                 )
             }
