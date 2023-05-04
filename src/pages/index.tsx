@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center } from '@mantine/core';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
 import { IconBrandGoogle, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
@@ -77,73 +77,72 @@ export default function Home() {
                     <AppShell
                         navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"}/>}
                     >
-                        <Grid grow>
-                            <Grid.Col span={2}>
-                                <Flex
-                                    mih={50}
-                                    gap="sm"
-                                    justify="flex-end"
-                                    align="center"
-                                    direction="column"
-                                    wrap="wrap"
-                                >
-                                    <Title order={3}>商品一覧</Title>
-                                    {products}
-                                </Flex>
-                            </Grid.Col>
-                            <Grid.Col span={10}>
-                                <Flex
-                                    mih={50}
-                                    gap="sm"
-                                    justify="flex-end"
-                                    align="center"
-                                    direction="column"
-                                    wrap="wrap"
-                                >
-                                    <Title order={3}>購入商品</Title>
-                                    <Table verticalSpacing="lg" striped>
-                                    <thead>
-                                        <tr>
-                                        <th>商品</th>
-                                        <th>値段</th>
-                                        <th>個数</th>
-                                        <th>操作</th>
+                        <Flex
+                                mih={50}
+                                gap="sm"
+                                justify="flex-end"
+                                align="center"
+                                direction="column"
+                                wrap="wrap"
+                        >
+                            <Title order={3}>商品一覧</Title>
+                            <SimpleGrid cols={4} spacing="xs">
+                                {products}
+                            </SimpleGrid>
+                        </Flex>
+
+                        <SimpleGrid cols={0}>
+                            <Flex
+                                mih={50}
+                                gap="sm"
+                                justify="flex-end"
+                                align="center"
+                                direction="column"
+                                wrap="wrap"
+                            >
+                                <Title order={3}>購入商品</Title>
+                                <Table verticalSpacing="lg" striped>
+                                <thead>
+                                    <tr>
+                                    <th>商品</th>
+                                    <th>値段</th>
+                                    <th>個数</th>
+                                    <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {order.map((item, index) => (
+                                        <tr key={index}>
+                                        <td>{item.product.name}</td>
+                                        <td>¥{item.product.price}</td>
+                                        <td>{item.count}</td>
+                                        <td><a onClick={() => deleteItemFromOrder(index)}>削除</a></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {order.map((item, index) => (
-                                            <tr key={index}>
-                                            <td>{item.product.name}</td>
-                                            <td>¥{item.product.price}</td>
-                                            <td>{item.count}</td>
-                                            <td><a onClick={() => deleteItemFromOrder(index)}>削除</a></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                    </Table>
-                                    {
-                                        (order.length > 0)&&
-                                        <>
-                                            <Title order={5}>合計金額: <Mark color={"red"}>{calculateTotalPrice(order)}円</Mark></Title>
-                                            <Button
-                                                leftIcon={
-                                                    <IconCoins size="1.2rem" stroke={1.5} />
-                                                }
-                                                radius="xl"
-                                                size="md"
-                                                color="red"
-                                                styles={{
-                                                root: { paddingRight: rem(14), height: rem(48) },
-                                                }}
-                                                onClick={open}
-                                            >
-                                                支払いへ進む
-                                            </Button>
-                                        </>
-                                    }
-                                </Flex>
-                            </Grid.Col>
-                        </Grid>
+                                    ))}
+                                </tbody>
+                                </Table>
+                                {
+                                    (order.length > 0)&&
+                                    <>
+                                        <Title order={5}>合計金額: <Mark color={"red"}>{calculateTotalPrice(order)}円</Mark></Title>
+                                        <Button
+                                            leftIcon={
+                                                <IconCoins size="1.2rem" stroke={1.5} />
+                                            }
+                                            radius="xl"
+                                            size="md"
+                                            color="red"
+                                            styles={{
+                                            root: { paddingRight: rem(14), height: rem(48) },
+                                            }}
+                                            onClick={open}
+                                        >
+                                            支払いへ進む
+                                        </Button>
+                                    </>
+                                }
+                            </Flex>
+                        </SimpleGrid>
                         <Modal opened={opened} onClose={close} title="支払いへ進む">
                             合計金額: {calculateTotalPrice(order)}円
                             <NumPad/>

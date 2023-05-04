@@ -17,7 +17,7 @@ export function NumPad() {
     return(
         <>
             <Center>
-                <Title order={5}>入力 ¥{amountPaid}</Title>
+                <Title order={5}>¥{amountPaid}</Title>
             </Center>
             <Group position="center" spacing="xs">
                 <ActionIcon color="lime" size="xl" radius="xl" variant="outline" onClick={() => onNumClick(1)}>
