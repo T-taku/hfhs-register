@@ -104,7 +104,7 @@ export function Comp_Navbar({page, username, storeName}:{page: string, username?
     ));
 
     return (
-        <Navbar height={840} width={{ sm: 300 }} p="md" className={classes.navbar}>
+        <Navbar height={"100%"} width={{ sm: 300 }} p="md" className={classes.navbar}>
             <Navbar.Section grow>
             <Group className={classes.header} position="apart">
                 <Title order={4} color='#fff'>{storeName || "HFHS REGISYS"}</Title>
