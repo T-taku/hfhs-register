@@ -5,8 +5,10 @@ import {
     IconReceipt2,
     IconLogout,
     IconUserCircle,
+    IconSettings,
 } from '@tabler/icons-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
     navbar: {
@@ -84,23 +86,20 @@ export function Comp_Navbar({page, username, storeName}:{page: string, username?
     const [active, setActive] = useState(page);
 
     const data = [
-        { link: '', label: '会計', icon: IconCalculator },
-        { link: '', label: '売上確認', icon: IconReceipt2 },
+        { link: '/', label: '会計', icon: IconCalculator },
+        { link: '/history', label: '売上確認', icon: IconReceipt2 },
+        { link: '', label: '店舗設定', icon: IconSettings },
     ];
     
     const links = data.map((item) => (
-    <a
+    <Link
         className={cx(classes.link, { [classes.linkActive]: item.label === active })}
         href={item.link}
         key={item.label}
-        onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-        }}
     >
         <item.icon className={classes.linkIcon} stroke={1.5} />
         <span>{item.label}</span>
-    </a>
+    </Link>
     ));
 
     return (
