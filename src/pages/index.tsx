@@ -2,9 +2,9 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
-import { IconBrandGoogle, IconCoins, IconX } from '@tabler/icons-react';
+import { IconBrandGoogle, IconCheck, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
 import { useState } from 'react';
@@ -29,6 +29,17 @@ export default function Home() {
     }
 
     function resetall(){
+        notifications.show({
+            id: 'donerecord',
+            withCloseButton: true,
+            autoClose: 5000,
+            title: "決済が完了しました",
+            message: '決済記録が正常に記録されました。',
+            color: 'green',
+            icon: <IconCheck />,
+            className: 'my-notification-class',
+            loading: false,
+        });
         setamountPaid([]);
         setOrder([]);
     }
