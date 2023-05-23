@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
-import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid, Card, Progress, Accordion, createStyles, TextInput } from '@mantine/core';
+import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid, Card, Progress, Accordion, createStyles, TextInput, NumberInput } from '@mantine/core';
 import { useSession } from 'next-auth/react';
 
 
@@ -36,17 +36,17 @@ export default function History() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="店舗設定" username={session.user && session.user.name || "ゲスト"}/>}
+                        navbar={<Comp_Navbar page="店舗設定" username={session.user && session.user.name || "ゲスト"} storeName="デモ | HFHS REGI"/>}
                     >
                         <Title order={2}>店舗設定</Title>
                         <br/>
                         <Title order={3}>目標売り上げ</Title>
                         <Text>ここでの目標売上は、1日での売上額を指定してください。売上確認ページに反映されます。</Text>
-                        <TextInput label="目標売り上げ" placeholder="50,000円" className="" />
+                        <NumberInput size="sm" label="目標売り上げ" placeholder="50,000円" className=""/>
                         <br/>
                         <Title order={3}>準備金</Title>
                         <Text>生徒と先生の準備金の合計を入力してください。</Text>
-                        <TextInput label="準備金" placeholder="50,000円" className="" />
+                        <NumberInput size="sm" label="準備金" placeholder="50,000円" className="" />
                         <br/>
                         <Center>
                             <Button size={ "md" }>保存</Button>

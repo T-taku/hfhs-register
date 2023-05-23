@@ -36,7 +36,7 @@ export default function History() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"}/>}
+                        navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"} storeName="デモ | HFHS REGI"/>}
                     >
                         <Title order={2}>売上確認</Title>
                         <br/>

@@ -2,8 +2,9 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
+import { notifications } from '@mantine/notifications';
 import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
-import { IconBrandGoogle, IconCoins } from '@tabler/icons-react';
+import { IconBrandGoogle, IconCoins, IconX } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
 import { useState } from 'react';
@@ -28,7 +29,7 @@ export default function Home() {
     }
 
     function resetall(){
-        setamountPaid([])
+        setamountPaid([]);
         setOrder([]);
     }
 
@@ -75,7 +76,7 @@ export default function Home() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"}/>}
+                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName="デモ | HFHS REGI"/>}
                     >
                         <Flex
                                 mih={50}
@@ -164,7 +165,9 @@ export default function Home() {
                                 styles={{
                                 root: { paddingRight: rem(14), height: rem(48) },
                                 }}
-                                onClick={()=>{close(); resetall()}}
+                                onClick={
+                                    ()=>{close(); resetall();}
+                                }
                             >
                                 支払いを完了
                             </Button>

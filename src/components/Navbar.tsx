@@ -88,7 +88,7 @@ export function Comp_Navbar({page, username, storeName}:{page: string, username?
     const data = [
         { link: '/', label: '会計', icon: IconCalculator },
         { link: '/history', label: '売上確認', icon: IconReceipt2 },
-        { link: '', label: '店舗設定', icon: IconSettings },
+        { link: '/setting', label: '店舗設定', icon: IconSettings },
     ];
     
     const links = data.map((item) => (
