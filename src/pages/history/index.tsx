@@ -49,7 +49,7 @@ export default function History() {
                             現在の売り上げ
                         </Text>
                         <Text fz="lg" fw={500}>
-                            ¥50431 / ¥100,0000
+                            ¥5,0431 / ¥100,0000
                         </Text>
                         <Progress value={50.431} mt="md" size="lg" radius="xl" />
                         </Card>
