@@ -2,12 +2,11 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { SessionProvider } from 'next-auth/react'
+import { Session } from "next-auth"
 import { RecoilRoot } from 'recoil';
 import { Notifications } from '@mantine/notifications';
 
-export default function App(props: AppProps) {
-  const { Component, pageProps:{session, ...pageProps} } = props;
-
+export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <>
       <Head>
@@ -23,7 +22,7 @@ export default function App(props: AppProps) {
         }}
       >
         <Notifications />
-        <SessionProvider session={session}><RecoilRoot><Component {...pageProps} /></RecoilRoot></SessionProvider>
+        <SessionProvider session={pageProps.session}><RecoilRoot><Component {...pageProps} /></RecoilRoot></SessionProvider>
       </MantineProvider>
     </>
   );

@@ -7,7 +7,7 @@ import { notifications } from '@mantine/notifications';
 import { IconBrandGoogle, IconCheck, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
@@ -15,10 +15,23 @@ import { amountPaidState } from "../utils/states";
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
-    const { data: session } = useSession()
+    const { data: session } = useSession();
+    const [jwt, setjwt] = useState<string | null>('')
     const [order, setOrder] = useState<OrderItem[]>([]);
+    useEffect(() => {
+        const fetchjwt = async () => {
+            const response = await fetch('/api/auth/jwt')
+            const data = await response.json()
+            setjwt(data)
+        }
+        fetchjwt()
+    },[])
     const products = productsByClass["2年1組"].map((element) => (
-        <tr key={element.id}>
+        (element.id).includes("_")
+        ? <tr key={element.id}>
+            <Button color="red" size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
+        </tr>
+        : <tr key={element.id}>
             <Button size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
         </tr>
     ));
@@ -87,7 +100,7 @@ export default function Home() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName="デモ | HFHS REGI"/>}
+                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName="2年1組 | HFHS REGI"/>}
                     >
                         <Flex
                                 mih={50}
@@ -101,8 +114,8 @@ export default function Home() {
                             <SimpleGrid cols={4} spacing="xs">
                                 {products}
                             </SimpleGrid>
+                            <Text>赤色の商品は、割引額が登録されています。</Text>
                         </Flex>
-
                         <SimpleGrid cols={0}>
                             <Flex
                                 mih={50}
