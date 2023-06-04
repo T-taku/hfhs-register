@@ -16,11 +16,6 @@ const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     session: { strategy: "jwt" },
     callbacks: {
-      async signIn({ account, profile }) {
-        if (account.provider === "google") {
-          return profile.email_verified && profile.email.endsWith("@higashifukuoka.net")
-        }
-      },
       async session({ session, token }) {
         session.user.accessToken = token.accessToken;
         return session;
