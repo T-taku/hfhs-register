@@ -1,15 +1,10 @@
 {
   "openapi": "3.0.2",
-  "info": {
-    "title": "FastAPI",
-    "version": "0.1.0"
-  },
+  "info": { "title": "FastAPI", "version": "0.1.0" },
   "paths": {
     "/user": {
       "get": {
-        "tags": [
-          "ユーザー系"
-        ],
+        "tags": ["ユーザー系"],
         "summary": "Get Userinfo",
         "operationId": "get_userinfo_user_get",
         "responses": {
@@ -17,32 +12,27 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "title": "Response Get Userinfo User Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/User" }
+                }
               }
             }
           }
         },
-        "security": [
-          {
-            "Token": []
-          }
-        ]
+        "security": [{ "Token": [] }]
       }
     },
     "/history/{class_name}": {
       "get": {
-        "tags": [
-          "決済履歴系"
-        ],
+        "tags": ["決済履歴系"],
         "summary": "Get All History",
         "operationId": "get_all_history_history__class_name__get",
         "parameters": [
           {
             "required": true,
-            "schema": {
-              "title": "Class Name",
-              "type": "string"
-            },
+            "schema": { "title": "Class Name", "type": "string" },
             "name": "class_name",
             "in": "path"
           }
@@ -52,7 +42,11 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "title": "Response Get All History History  Class Name  Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/History" }
+                }
               }
             }
           },
@@ -60,61 +54,41 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
         },
-        "security": [
-          {
-            "Token": []
-          }
-        ]
+        "security": [{ "Token": [] }]
       }
     },
     "/history/add/{class_name}": {
       "post": {
-        "tags": [
-          "決済履歴系"
-        ],
+        "tags": ["決済履歴系"],
         "summary": "Add History",
         "operationId": "add_history_history_add__class_name__post",
         "parameters": [
           {
             "required": true,
-            "schema": {
-              "title": "Class Name",
-              "type": "string"
-            },
+            "schema": { "title": "Class Name", "type": "string" },
             "name": "class_name",
             "in": "path"
           },
           {
             "required": true,
-            "schema": {
-              "title": "Change",
-              "type": "integer"
-            },
+            "schema": { "title": "Change", "type": "integer" },
             "name": "change",
             "in": "query"
           },
           {
             "required": true,
-            "schema": {
-              "title": "Total",
-              "type": "integer"
-            },
+            "schema": { "title": "Total", "type": "integer" },
             "name": "total",
             "in": "query"
           },
           {
             "required": true,
-            "schema": {
-              "title": "Product",
-              "type": "string"
-            },
+            "schema": { "title": "Product", "type": "string" },
             "name": "product",
             "in": "query"
           }
@@ -124,7 +98,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": { "$ref": "#/components/schemas/HistoryAdd" }
               }
             }
           },
@@ -132,61 +106,39 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
         },
-        "security": [
-          {
-            "Token": []
-          }
-        ]
+        "security": [{ "Token": [] }]
       }
     },
     "/": {
       "get": {
+        "tags": ["その他"],
         "summary": "Index",
         "operationId": "index__get",
-        "tags": [
-          "その他"
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           }
         }
       }
     },
     "/auth": {
       "get": {
+        "tags": ["ユーザー系"],
         "summary": "Get Islogin",
         "operationId": "get_islogin_auth_get",
-        "tags": [
-          "ユーザー系"
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           }
         },
-        "security": [
-          {
-            "Token": []
-          }
-        ]
+        "security": [{ "Token": [] }]
       }
     }
   },
@@ -199,43 +151,125 @@
           "detail": {
             "title": "Detail",
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            }
+            "items": { "$ref": "#/components/schemas/ValidationError" }
+          }
+        }
+      },
+      "History": {
+        "title": "History",
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "title": "Payment Id",
+            "type": "string",
+            "description": "決済ID(ランダムなIDが自動指定)",
+            "default": "1685948563265"
+          },
+          "class_name": {
+            "title": "Class Name",
+            "type": "string",
+            "description": "クラス名",
+            "example": "2年1組"
+          },
+          "timestamp": {
+            "title": "Timestamp",
+            "type": "string",
+            "description": "タイムスタンプ",
+            "example": "2022-07-03 00:52:47"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer",
+            "description": "購入金額",
+            "example": 200
+          },
+          "change": {
+            "title": "Change",
+            "type": "integer",
+            "description": "お釣り",
+            "example": 100
+          },
+          "product": {
+            "title": "Product",
+            "type": "string",
+            "description": "購入商品",
+            "example": "かき氷, 練乳"
+          }
+        }
+      },
+      "HistoryAdd": {
+        "title": "HistoryAdd",
+        "type": "object",
+        "properties": {
+          "class_name": {
+            "title": "Class Name",
+            "type": "string",
+            "description": "クラス名",
+            "example": "2年1組"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer",
+            "description": "購入金額",
+            "example": 200
+          },
+          "change": {
+            "title": "Change",
+            "type": "integer",
+            "description": "お釣り",
+            "example": 100
+          },
+          "product": {
+            "title": "Product",
+            "type": "string",
+            "description": "購入商品",
+            "example": "かき氷, 練乳"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "user_role": {
+            "title": "User Role",
+            "type": "string",
+            "description": "管理者かどうか(管理者でない場合はNull)",
+            "default": "",
+            "example": "Admin"
+          },
+          "user_mail": {
+            "title": "User Mail",
+            "type": "string",
+            "description": "生徒のメールアドレス",
+            "example": "user@higashifukuoka.net"
+          },
+          "user_name": {
+            "title": "User Name",
+            "type": "string",
+            "description": "生徒氏名",
+            "example": "徳野常道"
+          },
+          "user_class": {
+            "title": "User Class",
+            "type": "string",
+            "description": "生徒所属クラス",
+            "example": "1年1組"
           }
         }
       },
       "ValidationError": {
         "title": "ValidationError",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "type": "object",
         "properties": {
           "loc": {
             "title": "Location",
             "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            }
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] }
           },
-          "msg": {
-            "title": "Message",
-            "type": "string"
-          },
-          "type": {
-            "title": "Error Type",
-            "type": "string"
-          }
+          "msg": { "title": "Message", "type": "string" },
+          "type": { "title": "Error Type", "type": "string" }
         }
       }
     },

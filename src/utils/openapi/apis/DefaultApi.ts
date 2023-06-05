@@ -16,10 +16,19 @@
 import * as runtime from '../runtime';
 import type {
   HTTPValidationError,
+  History,
+  HistoryAdd,
+  User,
 } from '../models';
 import {
     HTTPValidationErrorFromJSON,
     HTTPValidationErrorToJSON,
+    HistoryFromJSON,
+    HistoryToJSON,
+    HistoryAddFromJSON,
+    HistoryAddToJSON,
+    UserFromJSON,
+    UserToJSON,
 } from '../models';
 
 export interface AddHistoryHistoryAddClassNamePostRequest {
@@ -41,7 +50,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Add History
      */
-    async addHistoryHistoryAddClassNamePostRaw(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async addHistoryHistoryAddClassNamePostRaw(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HistoryAdd>> {
         if (requestParameters.className === null || requestParameters.className === undefined) {
             throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling addHistoryHistoryAddClassNamePost.');
         }
@@ -89,17 +98,13 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => HistoryAddFromJSON(jsonValue));
     }
 
     /**
      * Add History
      */
-    async addHistoryHistoryAddClassNamePost(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async addHistoryHistoryAddClassNamePost(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HistoryAdd> {
         const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -107,7 +112,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get All History
      */
-    async getAllHistoryHistoryClassNameGetRaw(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async getAllHistoryHistoryClassNameGetRaw(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<History>>> {
         if (requestParameters.className === null || requestParameters.className === undefined) {
             throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling getAllHistoryHistoryClassNameGet.');
         }
@@ -131,17 +136,13 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(HistoryFromJSON));
     }
 
     /**
      * Get All History
      */
-    async getAllHistoryHistoryClassNameGet(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async getAllHistoryHistoryClassNameGet(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<History>> {
         const response = await this.getAllHistoryHistoryClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -187,7 +188,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Userinfo
      */
-    async getUserinfoUserGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async getUserinfoUserGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<User>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -207,17 +208,13 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserFromJSON));
     }
 
     /**
      * Get Userinfo
      */
-    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<User>> {
         const response = await this.getUserinfoUserGetRaw(initOverrides);
         return await response.value();
     }
