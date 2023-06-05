@@ -2,7 +2,10 @@ apis/DefaultApi.ts
 apis/index.ts
 index.ts
 models/HTTPValidationError.ts
+models/History.ts
+models/HistoryAdd.ts
 models/LocationInner.ts
+models/User.ts
 models/ValidationError.ts
 models/index.ts
 runtime.ts
