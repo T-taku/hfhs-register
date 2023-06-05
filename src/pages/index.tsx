@@ -11,21 +11,22 @@ import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
+import { useApi } from '@/utils/useApi';
 
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
     const { data: session } = useSession();
-    const [jwt, setjwt] = useState<string | null>('')
     const [order, setOrder] = useState<OrderItem[]>([]);
-    useEffect(() => {
-        const fetchjwt = async () => {
-            const response = await fetch('/api/auth/jwt')
-            const data = await response.json()
-            setjwt(data)
-        }
-        fetchjwt()
-    },[])
+    
+    const fetchjwt = async () => {
+        const response = await fetch('/api/auth/jwt');
+        const data = await response.text();
+        return data
+    }
+
+    const api = useApi(fetchjwt);
+
     const products = productsByClass["2年1組"].map((element) => (
         (element.id).includes("_")
         ? <tr key={element.id}>
