@@ -1,0 +1,250 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "ユーザー系"
+        ],
+        "summary": "Get Userinfo",
+        "operationId": "get_userinfo_user_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    },
+    "/history/{class_name}": {
+      "get": {
+        "tags": [
+          "決済履歴系"
+        ],
+        "summary": "Get All History",
+        "operationId": "get_all_history_history__class_name__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Class Name",
+              "type": "string"
+            },
+            "name": "class_name",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    },
+    "/history/add/{class_name}": {
+      "post": {
+        "tags": [
+          "決済履歴系"
+        ],
+        "summary": "Add History",
+        "operationId": "add_history_history_add__class_name__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Class Name",
+              "type": "string"
+            },
+            "name": "class_name",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Change",
+              "type": "integer"
+            },
+            "name": "change",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Total",
+              "type": "integer"
+            },
+            "name": "total",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Product",
+              "type": "string"
+            },
+            "name": "product",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Index",
+        "operationId": "index__get",
+        "tags": [
+          "その他"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "get": {
+        "summary": "Get Islogin",
+        "operationId": "get_islogin_auth_get",
+        "tags": [
+          "ユーザー系"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Token": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "description": "Json Web Token with Encrypted",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

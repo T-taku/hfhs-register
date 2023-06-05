@@ -14,11 +14,137 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  HTTPValidationError,
+} from '../models';
+import {
+    HTTPValidationErrorFromJSON,
+    HTTPValidationErrorToJSON,
+} from '../models';
+
+export interface AddHistoryHistoryAddClassNamePostRequest {
+    className: string;
+    change: number;
+    total: number;
+    product: string;
+}
+
+export interface GetAllHistoryHistoryClassNameGetRequest {
+    className: string;
+}
 
 /**
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     * Add History
+     */
+    async addHistoryHistoryAddClassNamePostRaw(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        if (requestParameters.className === null || requestParameters.className === undefined) {
+            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling addHistoryHistoryAddClassNamePost.');
+        }
+
+        if (requestParameters.change === null || requestParameters.change === undefined) {
+            throw new runtime.RequiredError('change','Required parameter requestParameters.change was null or undefined when calling addHistoryHistoryAddClassNamePost.');
+        }
+
+        if (requestParameters.total === null || requestParameters.total === undefined) {
+            throw new runtime.RequiredError('total','Required parameter requestParameters.total was null or undefined when calling addHistoryHistoryAddClassNamePost.');
+        }
+
+        if (requestParameters.product === null || requestParameters.product === undefined) {
+            throw new runtime.RequiredError('product','Required parameter requestParameters.product was null or undefined when calling addHistoryHistoryAddClassNamePost.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.change !== undefined) {
+            queryParameters['change'] = requestParameters.change;
+        }
+
+        if (requestParameters.total !== undefined) {
+            queryParameters['total'] = requestParameters.total;
+        }
+
+        if (requestParameters.product !== undefined) {
+            queryParameters['product'] = requestParameters.product;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Token", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/history/add/{class_name}`.replace(`{${"class_name"}}`, encodeURIComponent(String(requestParameters.className))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Add History
+     */
+    async addHistoryHistoryAddClassNamePost(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get All History
+     */
+    async getAllHistoryHistoryClassNameGetRaw(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        if (requestParameters.className === null || requestParameters.className === undefined) {
+            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling getAllHistoryHistoryClassNameGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Token", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/history/{class_name}`.replace(`{${"class_name"}}`, encodeURIComponent(String(requestParameters.className))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Get All History
+     */
+    async getAllHistoryHistoryClassNameGet(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getAllHistoryHistoryClassNameGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get Islogin
@@ -55,6 +181,44 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getIsloginAuthGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.getIsloginAuthGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get Userinfo
+     */
+    async getUserinfoUserGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Token", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/user`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Get Userinfo
+     */
+    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getUserinfoUserGetRaw(initOverrides);
         return await response.value();
     }
 
