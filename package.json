@@ -45,8 +45,5 @@
     "react-dom": "18.2.0",
     "recoil": "^0.7.7",
     "typescript": "5.0.4"
-  },
-  "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.6.0"
   }
 }
