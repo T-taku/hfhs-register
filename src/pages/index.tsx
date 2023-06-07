@@ -12,12 +12,14 @@ import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
 import { useApi } from '@/utils/useApi';
+import { ResponseError, type ResponseUser } from '@/utils/openapi';
 
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
     const { data: session } = useSession();
     const [order, setOrder] = useState<OrderItem[]>([]);
+    const [userData, setUserData] = useState<ResponseUser | undefined>();
     
     const fetchjwt = async () => {
         const response = await fetch('/api/auth/jwt');
@@ -26,6 +28,23 @@ export default function Home() {
     }
 
     const api = useApi(fetchjwt);
+
+    useEffect(() => {
+        api.getUserinfoUserGet().then((res) => {
+            setUserData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    //API側のエラー
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+    }, [])
 
     const products = productsByClass["2年1組"].map((element) => (
         (element.id).includes("_")
@@ -101,7 +120,7 @@ export default function Home() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName="2年1組 | HFHS REGI"/>}
+                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
                         <Flex
                                 mih={50}
