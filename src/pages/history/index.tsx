@@ -2,10 +2,54 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import { AppShell, Container, Title, Text, Button, rem, Flex, Grid, Table, Mark, Modal, Center, SimpleGrid, Card, Progress, Accordion, createStyles } from '@mantine/core';
 import { useSession } from 'next-auth/react';
+import { useApi } from '@/utils/useApi';
+import { FetchError, ResponseError, type ResponseUser, type History } from '@/utils/openapi';
+import { useEffect, useState } from 'react';
 
 
 export default function History() {
     const { data: session } = useSession()
+    const [userData, setUserData] = useState<ResponseUser | undefined>();
+    const [historyData, setHistoryData] = useState<History | undefined>();
+    const fetchjwt = async () => {
+        const response = await fetch('/api/auth/jwt');
+        const data = await response.text();
+        return data
+    }
+
+    const api = useApi(fetchjwt);
+
+    useEffect(() => {
+        api.getUserinfoUserGet().then((res) => {
+            setUserData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+        const requestParameters = {
+            className: String(userData?.userClass),
+        }
+        api.getAllHistoryHistoryClassNameGet(requestParameters).then((res) => {
+            setHistoryData(res);
+            console.log(res)
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            }
+        })
+    }, [])
+
     const useStyles = createStyles((theme) => ({
         wrapper: {
             paddingTop: `calc(${theme.spacing.xl} * 2)`,
@@ -35,8 +79,9 @@ export default function History() {
             {
                 session && (
                     <AppShell
-                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+                        navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
+                        {historyData || "ありません"}
                         <Title order={2}>売上確認</Title>
                         <br/>
                         <Card
