@@ -18,7 +18,7 @@ import type {
   HTTPValidationError,
   History,
   HistoryAdd,
-  User,
+  ResponseUser,
 } from '../models';
 import {
     HTTPValidationErrorFromJSON,
@@ -27,8 +27,8 @@ import {
     HistoryToJSON,
     HistoryAddFromJSON,
     HistoryAddToJSON,
-    UserFromJSON,
-    UserToJSON,
+    ResponseUserFromJSON,
+    ResponseUserToJSON,
 } from '../models';
 
 export interface AddHistoryHistoryAddClassNamePostRequest {
@@ -188,7 +188,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Userinfo
      */
-    async getUserinfoUserGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<User>>> {
+    async getUserinfoUserGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseUser>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -208,13 +208,13 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseUserFromJSON(jsonValue));
     }
 
     /**
      * Get Userinfo
      */
-    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<User>> {
+    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseUser> {
         const response = await this.getUserinfoUserGetRaw(initOverrides);
         return await response.value();
     }

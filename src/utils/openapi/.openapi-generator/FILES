@@ -5,7 +5,7 @@ models/HTTPValidationError.ts
 models/History.ts
 models/HistoryAdd.ts
 models/LocationInner.ts
-models/User.ts
+models/ResponseUser.ts
 models/ValidationError.ts
 models/index.ts
 runtime.ts
