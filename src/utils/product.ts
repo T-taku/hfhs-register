@@ -37,8 +37,10 @@ const productsByClass: ProductsByClass = {
     "2年7組": [
         { id: "1", name: 'トッピング１種', price:220 },
         { id: "2", name: 'トッピング２種', price:240 },
-        { id: "_1", name: '※トッピング１種', price:200 },
+        { id: "3", name: 'キャラ', price:250 },
+        { id: "_1", name: '※トッピング１種', price:210 },
         { id: "_2", name: '※トッピング２種', price:220 },
+        { id: "_3", name: '※キャラ', price:220 },
     ],
     "2年8組": [
         { id: "1", name: 'バニラ', price:200 },
@@ -79,9 +81,11 @@ const productsByClass: ProductsByClass = {
         { id: "2", name: 'わたカップ', price:250 },
     ],
     "2年A組": [
-        { id: "1", name: 'フルーツポンチサイダー', price:300 },
-        { id: "2", name: 'アップルパイ１個', price:250 },
+        { id: "1", name: 'フルーツポンチサイダー', price:400 },
+        { id: "2", name: 'アップルパイ１個', price:300 },
         { id: "3", name: 'アップルパイ２個', price:400 },
+        { id: "_1", name: '※フルーツポンチサイダー', price:350 },
+        { id: "_2", name: '※アップルパイ１個', price:250 },
     ],
     "2年B組": [
         { id: "1", name: 'メロンパンアイス', price:400 },
@@ -95,10 +99,13 @@ const productsByClass: ProductsByClass = {
         { id: "3", name: 'こしあん団子', price:200 },
         { id: "4", name: 'ぜんざい温', price:500 },
         { id: "5", name: 'ぜんざい冷', price:500},
+        { id: "_1", name: '※みたらし団子', price:100 },
+        { id: "_2", name: '※きなこ団子', price:100 },
+        { id: "_3", name: '※こしあん団子', price:100 },
     ],
     "3年1組": [
         { id: "1", name: 'わたあめ', price:200 },
-        { id: "_1", name: '※わたあめ', price:150 },
+        { id: "_1", name: '※わたあめ', price:100 },
     ],
     "3年2組": [
         { id: "1", name: 'タピオカ', price:300 },

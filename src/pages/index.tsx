@@ -20,7 +20,6 @@ export default function Home() {
     const { data: session } = useSession();
     const [order, setOrder] = useState<OrderItem[]>([]);
     const [userData, setUserData] = useState<ResponseUser | undefined>();
-    
     const fetchjwt = async () => {
         const response = await fetch('/api/auth/jwt');
         const data = await response.text();
@@ -46,7 +45,7 @@ export default function Home() {
         })
     }, [])
 
-    const products = productsByClass["2年1組"].map((element) => (
+    const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
         (element.id).includes("_")
         ? <tr key={element.id}>
             <Button color="red" size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
@@ -55,6 +54,8 @@ export default function Home() {
             <Button size={ "xl" } onClick={() => handleOrder(element)}>{ element.name }</Button>
         </tr>
     ));
+
+    const products_normal_count=productsByClass[(userData?.userClass) || "" ]?.filter(element => !element.id.includes("_")).length
 
     type OrderItem = {
         product: Product;
@@ -131,7 +132,7 @@ export default function Home() {
                                 wrap="wrap"
                         >
                             <Title order={3}>商品一覧</Title>
-                            <SimpleGrid cols={4} spacing="xs">
+                            <SimpleGrid cols={products_normal_count} spacing="xs">
                                 {products}
                             </SimpleGrid>
                             <Text>赤色の商品は、割引額が登録されています。</Text>
