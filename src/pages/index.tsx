@@ -4,7 +4,7 @@ import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
 import { AppShell, Container, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconBrandGoogle, IconCheck, IconCoins } from '@tabler/icons-react';
+import { IconBrandGoogle, IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import productsByClass, { Product } from '../utils/product';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
 import { useApi } from '@/utils/useApi';
-import { ResponseError, type ResponseUser } from '@/utils/openapi';
+import { FetchError, ResponseError, type ResponseUser } from '@/utils/openapi';
 
 export default function Home() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -34,7 +34,6 @@ export default function Home() {
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
                 if (e.response.status === 500) {
-                    //API側のエラー
                     throw e
                 } else {
                     //それ以外は無視とする
@@ -62,18 +61,54 @@ export default function Home() {
         count: number;
     }
 
-    function resetall(){
+    async function retryAddHistory(api:any, requestParameters:any, maxRetries:number, retryDelay:number) {
+        let retries = 0;
+        while (retries < maxRetries) {
+            try {
+                await api.addHistoryHistoryAddClassNamePost(requestParameters);
+                return;
+            } catch (error) {
+                retries++;
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
+        }
         notifications.show({
-            id: 'donerecord',
+            id: 'error',
             withCloseButton: true,
             autoClose: 5000,
-            title: "決済が完了しました",
-            message: '決済記録が正常に記録されました。',
-            color: 'green',
-            icon: <IconCheck />,
+            title: "決済が正常に記録できていません",
+            message: '決済記録が正常に記録されていません。再試行回数の上限に達しました。',
+            color: 'red',
+            icon: <IconCircleX />,
             className: 'my-notification-class',
             loading: false,
         });
+    }
+
+    async function resetall(){
+        const requestParameters = {
+            className: String(userData?.userClass),
+            change: calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order)),
+            total: calculateTotalPrice(order),
+            product: order.map((item) => `${item.product.name}:${item.count}個`).join(','),
+        }
+        try {
+            api.addHistoryHistoryAddClassNamePost(requestParameters).then(_response => {
+                notifications.show({
+                    id: 'donerecord',
+                    withCloseButton: true,
+                    autoClose: 5000,
+                    title: "決済が完了しました",
+                    message: '決済記録が正常に記録されました。',
+                    color: 'green',
+                    icon: <IconCheck />,
+                    className: 'my-notification-class',
+                    loading: false,
+                });
+            })
+        } catch (error: any) {
+            await retryAddHistory(api, requestParameters, 3, 5000);
+        }
         setamountPaid([]);
         setOrder([]);
     }
