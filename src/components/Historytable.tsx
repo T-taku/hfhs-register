@@ -54,7 +54,7 @@ export default function Historytable() {
                 }
             })
         }
-    }, [])
+    }, [userData])
 
     // timestampでソートするヘルパー関数
     function sortByTimestamp(data) {
@@ -63,6 +63,26 @@ export default function Historytable() {
 
     // テーブルに表示するデータを取得
     const sortedData = sortByTimestamp(paymentData);
+    const useStyles = createStyles((theme) => ({
+        wrapper: {
+            paddingTop: `calc(${theme.spacing.xl} * 2)`,
+            paddingBottom: `calc(${theme.spacing.xl} * 2)`,
+            minHeight: 650,
+        },
+        
+        title: {
+            marginBottom: `calc(${theme.spacing.xl} * 1.5)`,
+        },
+        
+        item: {
+            borderRadius: theme.radius.md,
+            marginBottom: theme.spacing.lg,
+            border: `${rem(1)} solid ${
+            theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+            }`,
+        },
+        }));
+
     return (
         <>
             <Accordion variant="separated">
@@ -79,7 +99,7 @@ export default function Historytable() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr key={payment.paymentId}>
                                     <td>{formatTimestamp(payment.timestamp)}</td>
                                     <td>{payment.product}</td>
                                     <td>{payment.total}円(支払われた金額:{(payment.total) + (payment.change)}円 お釣り: {payment.change}円)</td>
