@@ -54,7 +54,7 @@ export default function Historytable() {
                 }
             })
         }
-    }, [userData])
+    }, [])
 
     // timestampでソートするヘルパー関数
     function sortByTimestamp(data) {

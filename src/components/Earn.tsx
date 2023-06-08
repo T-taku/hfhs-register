@@ -34,7 +34,7 @@ export default function Earn() {
                     throw e;
                 }
             });
-    }, [userData]);
+    }, []);
 
     const requestParameters = {
         className: String(userData?.userClass),
@@ -58,7 +58,7 @@ export default function Earn() {
                     }
                 });
         }
-    }, [userData]);
+    }, []);
 
     useEffect(() => {
         if (userData) {

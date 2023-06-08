@@ -56,7 +56,7 @@ export default function History() {
             }
             })
         }
-    }, [userData])
+    }, [])
 
     async function saveSetting() {
     const requestParameters = {

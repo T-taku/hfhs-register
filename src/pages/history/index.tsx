@@ -34,7 +34,7 @@ export default function History() {
             } else {
                 throw e;
             }
-        })}, [userData])
+        })}, [])
 
     return (
         <>
