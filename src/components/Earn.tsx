@@ -89,16 +89,33 @@ export default function Earn() {
 
     return (
         <>
-            <Card withBorder radius="md" padding="xl">
-                <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
-                    現在の売り上げ
-                </Text>
-                <Text fz="lg" fw={500}>
-                    ¥{totalSum} / ¥{settingData?.goal}
-                </Text>
-                <Text>右側の金額が表示されていない場合、設定ページが未登録です。</Text>
-                <Progress value={(totalSum / settingData?.goal) * 100} mt="md" size="lg" radius="xl" />
-            </Card>
+        {
+            settingData && (
+                <Card withBorder radius="md" padding="xl">
+                    <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
+                        現在の売り上げ
+                    </Text>
+                    <Text fz="lg" fw={500}>
+                        ¥{totalSum} / ¥{settingData?.goal}
+                    </Text>
+                    <Text>右側の金額が表示されていない場合、設定ページが未登録です。</Text>
+                    <Progress value={(totalSum / settingData?.goal) * 100} mt="md" size="lg" radius="xl" />
+                </Card>
+            )
+        }
+        {
+            !settingData && (
+                    <Card withBorder radius="md" padding="xl">
+                    <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
+                        現在の売り上げ
+                    </Text>
+                    <Text fz="lg" fw={500}>
+                        ¥{totalSum}
+                    </Text>
+                    <Text>設定ページにて、設定を保存すると現在の売上が、どのくらい目標金額に近づいているかを確認できます。</Text>
+                </Card>
+            )
+        }
         </>
     );
 }
