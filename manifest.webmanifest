@@ -1,0 +1,13 @@
+{
+    "theme_color": "#2B8A3E",
+    "background_color": "#2B8A3E",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "HFHS REGI SYS",
+    "short_name": "HRS",
+    "description": "\u6771\u798f\u5ca1\u9ad8\u6821 \u30ec\u30b8\u30b7\u30b9\u30c6\u30e0",
+    "icons": {
+        "name": "35788F82-1F17-40C5-B7CD-4BC7062B0C5D.PNG"
+    }
+}

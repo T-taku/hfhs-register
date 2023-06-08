@@ -16,62 +16,55 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface HistoryAdd
+ * @interface Setting
  */
-export interface HistoryAdd {
+export interface Setting {
     /**
      * クラス名
      * @type {string}
-     * @memberof HistoryAdd
+     * @memberof Setting
      */
     className?: string;
     /**
-     * 購入金額
+     * 目標金額
      * @type {number}
-     * @memberof HistoryAdd
+     * @memberof Setting
      */
-    total?: number;
+    goal?: number;
     /**
-     * お釣り
+     * 準備金
      * @type {number}
-     * @memberof HistoryAdd
+     * @memberof Setting
      */
-    change?: number;
-    /**
-     * 購入商品
-     * @type {string}
-     * @memberof HistoryAdd
-     */
-    product?: string;
+    reserve?: number;
 }
 
 /**
- * Check if a given object implements the HistoryAdd interface.
+ * Check if a given object implements the Setting interface.
  */
-export function instanceOfHistoryAdd(value: object): boolean {
+export function instanceOfSetting(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function HistoryAddFromJSON(json: any): HistoryAdd {
-    return HistoryAddFromJSONTyped(json, false);
+export function SettingFromJSON(json: any): Setting {
+    return SettingFromJSONTyped(json, false);
 }
 
-export function HistoryAddFromJSONTyped(json: any, ignoreDiscriminator: boolean): HistoryAdd {
+export function SettingFromJSONTyped(json: any, ignoreDiscriminator: boolean): Setting {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'className': !exists(json, 'class_name') ? undefined : json['class_name'],
-        'total': !exists(json, 'total') ? undefined : json['total'],
-        'change': !exists(json, 'change') ? undefined : json['change'],
-        'product': !exists(json, 'product') ? undefined : json['product'],
+        'goal': !exists(json, 'goal') ? undefined : json['goal'],
+        'reserve': !exists(json, 'reserve') ? undefined : json['reserve'],
     };
 }
 
-export function HistoryAddToJSON(value?: HistoryAdd | null): any {
+export function SettingToJSON(value?: Setting | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -81,9 +74,8 @@ export function HistoryAddToJSON(value?: HistoryAdd | null): any {
     return {
         
         'class_name': value.className,
-        'total': value.total,
-        'change': value.change,
-        'product': value.product,
+        'goal': value.goal,
+        'reserve': value.reserve,
     };
 }
 

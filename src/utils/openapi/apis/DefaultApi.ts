@@ -16,30 +16,46 @@
 import * as runtime from '../runtime';
 import type {
   HTTPValidationError,
-  History,
   HistoryAdd,
+  ResponseHistory,
+  ResponseSetting,
   ResponseUser,
+  Setting,
 } from '../models';
 import {
     HTTPValidationErrorFromJSON,
     HTTPValidationErrorToJSON,
-    HistoryFromJSON,
-    HistoryToJSON,
     HistoryAddFromJSON,
     HistoryAddToJSON,
+    ResponseHistoryFromJSON,
+    ResponseHistoryToJSON,
+    ResponseSettingFromJSON,
+    ResponseSettingToJSON,
     ResponseUserFromJSON,
     ResponseUserToJSON,
+    SettingFromJSON,
+    SettingToJSON,
 } from '../models';
 
 export interface AddHistoryHistoryAddClassNamePostRequest {
     className: string;
-    change: number;
     total: number;
+    change: number;
     product: string;
 }
 
-export interface GetAllHistoryHistoryClassNameGetRequest {
+export interface GetHistoryHistoryClassNameGetRequest {
     className: string;
+}
+
+export interface GetSettingSettingClassNameGetRequest {
+    className: string;
+}
+
+export interface SetSettingSettingSetClassNamePostRequest {
+    className: string;
+    goal: number;
+    reserve: number;
 }
 
 /**
@@ -55,12 +71,12 @@ export class DefaultApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling addHistoryHistoryAddClassNamePost.');
         }
 
-        if (requestParameters.change === null || requestParameters.change === undefined) {
-            throw new runtime.RequiredError('change','Required parameter requestParameters.change was null or undefined when calling addHistoryHistoryAddClassNamePost.');
-        }
-
         if (requestParameters.total === null || requestParameters.total === undefined) {
             throw new runtime.RequiredError('total','Required parameter requestParameters.total was null or undefined when calling addHistoryHistoryAddClassNamePost.');
+        }
+
+        if (requestParameters.change === null || requestParameters.change === undefined) {
+            throw new runtime.RequiredError('change','Required parameter requestParameters.change was null or undefined when calling addHistoryHistoryAddClassNamePost.');
         }
 
         if (requestParameters.product === null || requestParameters.product === undefined) {
@@ -69,12 +85,12 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters.change !== undefined) {
-            queryParameters['change'] = requestParameters.change;
-        }
-
         if (requestParameters.total !== undefined) {
             queryParameters['total'] = requestParameters.total;
+        }
+
+        if (requestParameters.change !== undefined) {
+            queryParameters['change'] = requestParameters.change;
         }
 
         if (requestParameters.product !== undefined) {
@@ -110,11 +126,11 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get All History
+     * Get History
      */
-    async getAllHistoryHistoryClassNameGetRaw(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<History>>> {
+    async getHistoryHistoryClassNameGetRaw(requestParameters: GetHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResponseHistory>>> {
         if (requestParameters.className === null || requestParameters.className === undefined) {
-            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling getAllHistoryHistoryClassNameGet.');
+            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling getHistoryHistoryClassNameGet.');
         }
 
         const queryParameters: any = {};
@@ -136,14 +152,14 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(HistoryFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ResponseHistoryFromJSON));
     }
 
     /**
-     * Get All History
+     * Get History
      */
-    async getAllHistoryHistoryClassNameGet(requestParameters: GetAllHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<History>> {
-        const response = await this.getAllHistoryHistoryClassNameGetRaw(requestParameters, initOverrides);
+    async getHistoryHistoryClassNameGet(requestParameters: GetHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResponseHistory>> {
+        const response = await this.getHistoryHistoryClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -182,6 +198,44 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getIsloginAuthGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.getIsloginAuthGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get Setting
+     */
+    async getSettingSettingClassNameGetRaw(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseSetting>> {
+        if (requestParameters.className === null || requestParameters.className === undefined) {
+            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling getSettingSettingClassNameGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Token", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/setting/{class_name}`.replace(`{${"class_name"}}`, encodeURIComponent(String(requestParameters.className))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseSettingFromJSON(jsonValue));
+    }
+
+    /**
+     * Get Setting
+     */
+    async getSettingSettingClassNameGet(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
+        const response = await this.getSettingSettingClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -246,6 +300,60 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async indexGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.indexGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Set Setting
+     */
+    async setSettingSettingSetClassNamePostRaw(requestParameters: SetSettingSettingSetClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Setting>> {
+        if (requestParameters.className === null || requestParameters.className === undefined) {
+            throw new runtime.RequiredError('className','Required parameter requestParameters.className was null or undefined when calling setSettingSettingSetClassNamePost.');
+        }
+
+        if (requestParameters.goal === null || requestParameters.goal === undefined) {
+            throw new runtime.RequiredError('goal','Required parameter requestParameters.goal was null or undefined when calling setSettingSettingSetClassNamePost.');
+        }
+
+        if (requestParameters.reserve === null || requestParameters.reserve === undefined) {
+            throw new runtime.RequiredError('reserve','Required parameter requestParameters.reserve was null or undefined when calling setSettingSettingSetClassNamePost.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.goal !== undefined) {
+            queryParameters['goal'] = requestParameters.goal;
+        }
+
+        if (requestParameters.reserve !== undefined) {
+            queryParameters['reserve'] = requestParameters.reserve;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Token", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/setting/set/{class_name}`.replace(`{${"class_name"}}`, encodeURIComponent(String(requestParameters.className))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SettingFromJSON(jsonValue));
+    }
+
+    /**
+     * Set Setting
+     */
+    async setSettingSettingSetClassNamePost(requestParameters: SetSettingSettingSetClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Setting> {
+        const response = await this.setSettingSettingSetClassNamePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

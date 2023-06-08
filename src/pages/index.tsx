@@ -66,17 +66,6 @@ export default function Home() {
         while (retries < maxRetries) {
             try {
                 await api.addHistoryHistoryAddClassNamePost(requestParameters);
-                notifications.show({
-                    id: 'donerecord',
-                    withCloseButton: true,
-                    autoClose: 5000,
-                    title: "決済が完了しました",
-                    message: '決済記録が正常に記録されました。',
-                    color: 'green',
-                    icon: <IconCheck />,
-                    className: 'my-notification-class',
-                    loading: false,
-                });
                 return;
             } catch (error) {
                 retries++;
@@ -109,7 +98,7 @@ export default function Home() {
                     id: 'donerecord',
                     withCloseButton: true,
                     autoClose: 5000,
-                    title: "決済が完了しました",
+                    title: "決済が完了しました", 
                     message: '決済記録が正常に記録されました。',
                     color: 'green',
                     icon: <IconCheck />,
