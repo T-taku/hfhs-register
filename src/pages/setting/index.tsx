@@ -16,7 +16,7 @@ export default function History() {
         return data
     }
     const [userData, setUserData] = useState<ResponseUser | undefined>();
-    const [settingData, setSettingData] = useState<ResponseSetting[]>([]);
+    const [settingData, setSettingData] = useState<ResponseSetting | undefined>();
     const [goal, setGoal] = useState<number | ''>(0);
     const [reserve, setReserve] = useState<number | ''>(0);
     const api = useApi(fetchjwt);
@@ -43,7 +43,7 @@ export default function History() {
     useEffect(() => {
         if (userData) {
             api.getSettingSettingClassNameGet(requestParameters).then((res) => {
-            setSettingData(res);
+                setSettingData(res);
             }).catch((e: Error) => {
             if (e instanceof ResponseError) {
                 if (e.response.status === 500) {
@@ -107,12 +107,12 @@ export default function History() {
             <Title order={2}>店舗設定</Title>
             <br />
             <Title order={3}>目標売り上げ</Title>
-            <Text>ここでの目標売上は、1日での売上額を指定してください。売上確認ページに反映されます。(現在の設定額: {String(settingData?.goal)}円)</Text>
-            <NumberInput size="sm" label="目標売り上げ" placeholder={String(settingData?.goal)} className="" onChange={setGoal} />
+            <Text>ここでの目標売上は、1日での売上額を指定してください。売上確認ページに反映されます。(現在の設定額: {String(settingData?.goal ?? "設定なし")}円)</Text>
+            <NumberInput size="sm" label="目標売り上げ" placeholder={String(settingData?.goal ?? "設定なし")} className="" onChange={setGoal} />
             <br />
             <Title order={3}>準備金</Title>
-            <Text>生徒と先生の準備金の合計を入力してください。(現在の設定額: {String(settingData?.reserve)}円)</Text>
-            <NumberInput size="sm" label="準備金" placeholder={String(settingData?.reserve)} className="" onChange={setReserve} />
+            <Text>生徒と先生の準備金の合計を入力してください。(現在の設定額: {String(settingData?.reserve ?? "設定なし")}円)</Text>
+            <NumberInput size="sm" label="準備金" placeholder={String(settingData?.goal ?? "設定なし")} className="" onChange={setReserve} />
             <br />
             <Center>
             <Button size={"md"} onClick={() => { saveSetting() }}>保存</Button>

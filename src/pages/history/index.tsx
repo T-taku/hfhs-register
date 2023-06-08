@@ -5,7 +5,7 @@ import Earn from '../../components/Earn';
 import { AppShell, Title, Text, rem, Table, Card, Progress, Accordion, createStyles, Button, Container } from '@mantine/core';
 import { signIn, useSession } from 'next-auth/react';
 import { useApi } from '@/utils/useApi';
-import { ResponseError, type ResponseUser, type History } from '@/utils/openapi';
+import { ResponseError, type ResponseUser } from '@/utils/openapi';
 import { useEffect, useState } from 'react';
 import { IconBrandGoogle } from '@tabler/icons-react';
 
@@ -34,7 +34,7 @@ export default function History() {
             } else {
                 throw e;
             }
-        })}, [])
+        })}, [userData])
 
     return (
         <>

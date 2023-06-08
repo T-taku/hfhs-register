@@ -42,7 +42,7 @@ export default function Home() {
                 throw e;
             }
         })
-    }, [])
+    }, [userData])
 
     const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
         (element.id).includes("_")
@@ -285,5 +285,5 @@ export default function Home() {
                 )
             }
         </>
-    )
+    );
 }
