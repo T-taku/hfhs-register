@@ -1,10 +1,7 @@
 {
-  "name": "hfhs-registar",
+  "name": "hfhs-register",
   "version": "0.1.0",
   "private": true,
-  "rules": {
-    "react-hooks/exhaustive-deps": "off"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
