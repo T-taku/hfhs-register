@@ -63,10 +63,10 @@ const productsByClass: ProductsByClass = {
         { id: "3", name: '抹茶ワッフル', price:200 },
     ],
     "2年12組": [
-        { id: "1", name: 'みたらし団子', price:200 },
-        { id: "2", name: 'きなこ団子', price:200 },
-        { id: "_1", name: '※みたらし団子', price:150 },
-        { id: "_2", name: '※きなこ団子', price:150 },
+        { id: "1", name: 'みたらし団子', price:150 },
+        { id: "2", name: 'きなこ団子', price:150 },
+        { id: "_1", name: '※みたらし団子', price:100 },
+        { id: "_2", name: '※きなこ団子', price:100 },
     ],
     "2年13組": [
         { id: "1", name: 'フローズンサイダー', price:150 },
@@ -94,11 +94,11 @@ const productsByClass: ProductsByClass = {
         { id: "_3", name: '※値引き③', price:200 },
     ],
     "2年C組": [
-        { id: "1", name: 'みたらし団子', price:200 },
-        { id: "2", name: 'きなこ団子', price:200 },
-        { id: "3", name: 'こしあん団子', price:200 },
+        { id: "1", name: 'みたらし団子', price:150 },
+        { id: "2", name: 'きなこ団子', price:150 },
+        { id: "3", name: 'こしあん団子', price:150 },
         { id: "4", name: 'ぜんざい温', price:500 },
-        { id: "5", name: 'ぜんざい冷', price:500},
+        { id: "5", name: 'ぜんざい冷', price:500 },
         { id: "_1", name: '※みたらし団子', price:100 },
         { id: "_2", name: '※きなこ団子', price:100 },
         { id: "_3", name: '※こしあん団子', price:100 },
@@ -108,8 +108,9 @@ const productsByClass: ProductsByClass = {
         { id: "_1", name: '※わたあめ', price:100 },
     ],
     "3年2組": [
-        { id: "1", name: 'タピオカ', price:300 },
-        { id: "2", name: 'チョコバナナ', price:200 },
+        { id: "1", name: 'タピオカ(M)', price:300 },
+        { id: "2", name: 'タピオカ(S)', price:200 },
+        { id: "3", name: 'チョコバナナ', price:250 },
     ],
     "3年3組": [
         { id: "1", name: '焼きそば', price:250 },
@@ -134,9 +135,9 @@ const productsByClass: ProductsByClass = {
         { id: "_1", name: '※ホットドッグ', price:100 },
     ],
     "3年8組": [
-        { id: "1", name: 'ベビーカステラ', price:250 },
+        { id: "1", name: '台湾カステラ', price:250 },
         { id: "2", name: 'トッピング', price:50 },
-        { id: "3", name: '缶ジュース', price:100 },
+        { id: "3", name: 'チェキ', price:200 },
     ],
     "3年9組": [
         { id: "1", name: 'わたあめ１色', price:200 },
@@ -171,8 +172,8 @@ const productsByClass: ProductsByClass = {
         { id: "_3", name: '※缶ジュース', price:100},
     ],
     "3年16組": [
-        { id: "1", name: 'チーズハットグ', price:400 },
-        { id: "2", name: 'レインボー', price:500 },
+        { id: "1", name: 'チーズハットグ', price:500 },
+        { id: "2", name: 'レインボー', price:600 },
     ],
     "3年17組": [
         { id: "1", name: 'ハンバーガー', price:300 },
@@ -205,9 +206,9 @@ const productsByClass: ProductsByClass = {
     ],
     "情報メディアセンター": [
         { id: "1", name: '１冊', price:100 },
-        { id: "2", name: '２冊', price:200 },
-        { id: "3", name: '５冊', price:500 },
-        { id: "4", name: '10冊', price:1000 },
+        { id: "2", name: '５冊', price:500 },
+        { id: "3", name: '10冊', price:1000 },
+        { id: "4", name: '図書カード', price:900 },
     ],
 }
 
