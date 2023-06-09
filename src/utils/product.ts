@@ -45,7 +45,7 @@ const productsByClass: ProductsByClass = {
         { id: "2", name: 'チョコ', price:250 },
         { id: "3", name: 'ダブル', price:250},
         { id: "4", name: 'いちご', price:250},
-        { id: "4", name: 'トッピング',price:50},
+        { id: "4", name: 'トッピング',price:50 },
         { id: "_1", name: '※バニラ', price:200 },
         { id: "_2", name: '※チョコ', price:200 },
     ],
