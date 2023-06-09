@@ -1,5 +1,5 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getProviders, signIn } from "next-auth/react"
+import type { GetServerSidePropsContext } from "next";
+import { signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]";
 import { Container, Title, Text, Button, rem } from "@mantine/core";
@@ -68,9 +68,8 @@ export default function SignIn() {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
-
   if (session) {
     return { redirect: { destination: "/" } };
   }
-  return {};
+  return { props: {} };
 }
