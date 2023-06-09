@@ -46,6 +46,7 @@ const productsByClass: ProductsByClass = {
         { id: "1", name: 'バニラ', price:250 },
         { id: "2", name: 'チョコ', price:250 },
         { id: "3", name: 'ダブル', price:250},
+        { id: "4", name: 'いちご', price:250},
         { id: "4", name: 'トッピング',price:50},
         { id: "_1", name: '※バニラ', price:200 },
         { id: "_2", name: '※チョコ', price:200 },
@@ -88,10 +89,8 @@ const productsByClass: ProductsByClass = {
         { id: "_2", name: '※アップルパイ１個', price:250 },
     ],
     "2年B組": [
-        { id: "1", name: 'メロンパンアイス', price:400 },
-        { id: "_1", name: '※値引き①', price:350 },
-        { id: "_2", name: '※値引き②', price:300 },
-        { id: "_3", name: '※値引き③', price:200 },
+        { id: "1", name: 'メロンパンアイス', price:350 },
+        { id: "_1", name: '※値引き①', price:300 },
     ],
     "2年C組": [
         { id: "1", name: 'みたらし団子', price:150 },
@@ -146,7 +145,9 @@ const productsByClass: ProductsByClass = {
     ],
     "3年10組": [
         { id: "1", name: 'ワッフル', price:300 },
-        { id: "2", name: 'チュロス', price:300 },
+        { id: "2", name: 'プレーンワッフル', price:180 },
+        { id: "3", name: 'チュロス', price:300 },
+        { id: "4", name: 'プレーンチュロス', price:200 },
     ],
     "3年11組": [
         { id: "1", name: 'フランクフルト', price:200 },
@@ -167,9 +168,11 @@ const productsByClass: ProductsByClass = {
         { id: "1", name: 'チョコバナナ１本', price:350 },
         { id: "2", name: 'チョコバナナ輪切り', price:250 },
         { id: "3", name: '缶ジュース', price:150},
+        { id: "4", name: 'マシュマロ', price:200},
         { id: "_1", name: '※チョコバナナ１本', price:300 },
         { id: "_2", name: '※チョコバナナ輪切り', price:200 },
         { id: "_3", name: '※缶ジュース', price:100},
+        { id: "_4", name: '※マシュマロ', price:200},
     ],
     "3年16組": [
         { id: "1", name: 'チーズハットグ', price:500 },
@@ -208,7 +211,6 @@ const productsByClass: ProductsByClass = {
         { id: "1", name: '１冊', price:100 },
         { id: "2", name: '５冊', price:500 },
         { id: "3", name: '10冊', price:1000 },
-        { id: "4", name: '図書カード', price:900 },
     ],
 }
 
