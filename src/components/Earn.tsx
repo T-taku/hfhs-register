@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useApi } from '@/utils/useApi';
 import { ResponseError, type ResponseUser, type ResponseHistory, ResponseSetting } from '@/utils/openapi';
 import { Card, Progress, Text } from '@mantine/core';
-import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 
 export default function Earn() {
