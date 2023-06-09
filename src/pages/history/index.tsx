@@ -71,7 +71,7 @@ export default function History({ api, userData }: { api: API | undefined, userD
                 throw e;
             }
         })
-    }, [api, userData])
+    })
 
     return (
         <>
