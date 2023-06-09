@@ -2,39 +2,15 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import Historytable from '../../components/Historytable';
 import Earn from '../../components/Earn';
-import { AppShell, Title, Text, rem, Table, Card, Progress, Accordion, createStyles, Button, Container } from '@mantine/core';
+import { AppShell, Title, Text, rem, Button, Container } from '@mantine/core';
 import { signIn, useSession } from 'next-auth/react';
-import { useApi } from '@/utils/useApi';
-import { ResponseError, type ResponseUser } from '@/utils/openapi';
-import { useEffect, useState } from 'react';
+import type { API } from '@/utils/useApi';
+import type { ResponseUser } from '@/utils/openapi';
 import { IconBrandGoogle } from '@tabler/icons-react';
 
 
-export default function History() {
+export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
     const { data: session } = useSession()
-    const [userData, setUserData] = useState<ResponseUser | undefined>();
-    const fetchjwt = async () => {
-        const response = await fetch('/api/auth/jwt');
-        const data = await response.text();
-        return data
-    }
-
-    const api = useApi(fetchjwt);
-
-    useEffect(() => {
-        api.getUserinfo().then((res) => {
-            setUserData(res);
-        }).catch((e: Error) => {
-            if (e instanceof ResponseError) {
-                if (e.response.status === 500) {
-                    throw e
-                } else {
-                    //それ以外は無視とする
-                }
-            } else {
-                throw e;
-            }
-        })}, [])
 
     return (
         <>
@@ -49,11 +25,11 @@ export default function History() {
                         navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
                         <Title order={2}>売上確認</Title>
-                        <br/>
+                        <br />
                         <Earn></Earn>
-                        <br/>
+                        <br />
                         <Title order={3}>会計履歴</Title>
-                        <br/>
+                        <br />
                         <Historytable></Historytable>
                     </AppShell>
                 )
@@ -78,7 +54,7 @@ export default function History() {
                             radius="xl"
                             size="md"
                             styles={{
-                            root: { paddingRight: rem(14), height: rem(48) },
+                                root: { paddingRight: rem(14), height: rem(48) },
                             }}
                             onClick={() => signIn()}
                         >
