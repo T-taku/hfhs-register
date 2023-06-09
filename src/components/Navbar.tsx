@@ -7,6 +7,7 @@ import {
     IconUserCircle,
     IconSettings,
     IconActivity,
+    IconHelp,
 } from '@tabler/icons-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -90,6 +91,7 @@ export function Comp_Navbar({page, username, storeName}:{page: string, username?
         { link: '/', label: '会計', icon: IconCalculator },
         { link: '/history', label: '売上確認', icon: IconReceipt2 },
         { link: '/setting', label: '店舗設定', icon: IconSettings },
+        { link: '/contact', label: '困った時は', icon: IconHelp },
         { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
     ];
     
