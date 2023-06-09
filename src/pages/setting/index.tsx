@@ -37,6 +37,22 @@ export default function History() {
         })
     }, [])
 
+    async function get_api() {
+        api.getSettingSettingClassNameGet(requestParameters).then((res) => {
+            setSettingData(res);
+        }).catch((e: Error) => {
+        if (e instanceof ResponseError) {
+            if (e.response.status === 500) {
+            throw e
+            } else {
+            //それ以外は無視とする
+            }
+        } else {
+            throw e;
+        }
+        })
+    }
+
     const requestParameters = {
         className: String(userData?.userClass)
     }
@@ -56,7 +72,7 @@ export default function History() {
             }
             })
         }
-    }, [])
+    }, [userData])
 
     async function saveSetting() {
         const requestParameters = {

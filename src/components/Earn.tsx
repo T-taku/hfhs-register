@@ -90,7 +90,6 @@ export default function Earn() {
                             <Text fz="lg" fw={500}>
                                 ¥{totalSum} / ¥{settingData?.goal}
                             </Text>
-                            <Text>右側の金額が表示されていない場合、設定ページが未登録です。</Text>
                             <Progress value={(totalSum / settingData?.goal) * 100} mt="md" size="lg" radius="xl" />
                         </Card>
                     </>
