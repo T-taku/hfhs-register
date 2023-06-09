@@ -1,3 +1,3 @@
-import Page from "./_app";
+import Page from "./_document";
 
 export default Page;
