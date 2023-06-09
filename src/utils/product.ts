@@ -43,12 +43,12 @@ const productsByClass: ProductsByClass = {
         { id: "_3", name: '※キャラ', price:220 },
     ],
     "2年8組": [
-        { id: "1", name: 'バニラ', price:200 },
-        { id: "2", name: 'チョコ', price:200 },
-        { id: "3", name: 'ダブル', price:350},
+        { id: "1", name: 'バニラ', price:250 },
+        { id: "2", name: 'チョコ', price:250 },
+        { id: "3", name: 'ダブル', price:250},
         { id: "4", name: 'トッピング',price:50},
-        { id: "_1", name: '※バニラ', price:170 },
-        { id: "_2", name: '※チョコ', price:170 },
+        { id: "_1", name: '※バニラ', price:200 },
+        { id: "_2", name: '※チョコ', price:200 },
     ],
     "2年9組": [
         { id: "1", name: 'チョコdeワッフル', price:250},
