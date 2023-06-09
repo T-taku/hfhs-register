@@ -8,8 +8,8 @@ import { useEffect } from "react";
 import { openDB } from "idb";
 import { RegisterDBSchema } from "@/utils/initAPI";
 
-export default function SignIn({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
+export default function SignIn() {
+  const providers = {"google":{"id":"google","name":"Google","type":"oauth","signinUrl":"http://localhost:3000/api/auth/signin/google","callbackUrl":"http://localhost:3000/api/auth/callback/google"}}
   useEffect(() => {
     const req = openDB<RegisterDBSchema>("register-db", 1, {
       upgrade(db, oldVersion, newVersion, transaction, event) {
@@ -72,10 +72,5 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (session) {
     return { redirect: { destination: "/" } };
   }
-
-  const providers = await getProviders();
-
-  return {
-    props: { providers: providers ?? [] },
-  }
+  return {};
 }

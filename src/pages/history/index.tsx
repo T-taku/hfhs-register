@@ -2,14 +2,76 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import Historytable from '../../components/Historytable';
 import Earn from '../../components/Earn';
-import { AppShell, Title } from '@mantine/core';
+import { AppShell, Button, Title } from '@mantine/core';
 import { useSession } from 'next-auth/react';
 import type { API } from '@/utils/initAPI';
-import type { ResponseUser } from '@/utils/openapi';
+import { ResponseError, ResponseHistory, ResponseSetting, ResponseUser } from '@/utils/openapi';
+import { useEffect, useState } from 'react';
 
 
-export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
-    const { data: session } = useSession({required: true})
+export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
+    const [paymentData, setPaymentData] = useState<ResponseHistory[]>([]);
+    const [settingData, setSettingData] = useState<ResponseSetting | undefined>(undefined);
+
+    const fetchHistory = () => {
+        if(!api || !userData) return;
+        api.fetchHistory({ className: userData!.userClass }).then((res) => {
+            setPaymentData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+        api.getStoreSetting({ className: userData!.userClass }).then((res) => {
+            setSettingData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!api || !userData) return;
+        api.getHistory({ className: userData.userClass }).then((res) => {
+            setPaymentData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+        api.getStoreSetting({ className: userData!.userClass }).then((res) => {
+            setSettingData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+    }, [api, userData])
 
     return (
         <>
@@ -19,17 +81,17 @@ export default function History({ api, userData }: { api: API | undefined, userD
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             {
-                session && (
+                userData && (
                     <AppShell
-                        navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+                        navbar={<Comp_Navbar page="売上確認" username={userData && userData.userName || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
-                        <Title order={2}>売上確認</Title>
+                        <Title order={2}>売上確認 <Button onClick={fetchHistory}>更新</Button></Title>
                         <br />
-                        <Earn></Earn>
+                        <Earn paymentData={paymentData} settingData={settingData}></Earn>
                         <br />
                         <Title order={3}>会計履歴</Title>
                         <br />
-                        <Historytable></Historytable>
+                        <Historytable paymentData={paymentData}></Historytable>
                     </AppShell>
                 )
             }

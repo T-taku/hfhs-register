@@ -22,7 +22,9 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
   }
 
   useEffect(() => {
-    setAPI(initAPI(fetchjwt))
+    initAPI(fetchjwt).then((resApi) => {
+      setAPI(resApi);
+    })
   }, [])
 
   useEffect(() => {

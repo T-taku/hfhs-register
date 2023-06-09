@@ -2,22 +2,20 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
 import { useSession } from 'next-auth/react';
-import { AppShell, Container, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
+import { AppShell, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconBrandGoogle, IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
-import { signIn } from 'next-auth/react';
+import { IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
 import productsByClass, { Product } from '../utils/product';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
-import type { ResponseUser } from '@/utils/openapi';
+import type { AddHistoryHistoryAddClassNamePostRequest, ResponseUser } from '@/utils/openapi';
 import type { API } from '@/utils/initAPI';
 
-export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
+export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
-    const { data: session } = useSession({required: true});
     const [order, setOrder] = useState<OrderItem[]>([]);
 
     const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
@@ -37,30 +35,6 @@ export default function Home({ api, userData }: { api: API | undefined, userData
         count: number;
     }
 
-    async function retryAddHistory(api: any, requestParameters: any, maxRetries: number, retryDelay: number) {
-        let retries = 0;
-        while (retries < maxRetries) {
-            try {
-                await api.addHistoryHistoryAddClassNamePost(requestParameters);
-                return;
-            } catch (error) {
-                retries++;
-                await new Promise(resolve => setTimeout(resolve, retryDelay));
-            }
-        }
-        notifications.show({
-            id: 'error',
-            withCloseButton: true,
-            autoClose: 5000,
-            title: "決済が正常に記録できていません",
-            message: '決済記録が正常に記録されていません。再試行回数の上限に達しました。',
-            color: 'red',
-            icon: <IconCircleX />,
-            className: 'my-notification-class',
-            loading: false,
-        });
-    }
-
     async function resetall() {
         if (!api) return;
         const requestParameters = {
@@ -70,21 +44,46 @@ export default function Home({ api, userData }: { api: API | undefined, userData
             product: order.map((item) => `${item.product.name}:${item.count}個`).join(','),
         }
         try {
-            api.addHistory(requestParameters).then(_response => {
+            api.addHistory(requestParameters).then(response => {
+                if (response.result) {
+                    notifications.show({
+                        id: 'donerecord',
+                        withCloseButton: true,
+                        autoClose: 5000,
+                        title: "決済が完了しました",
+                        message: '決済記録が正常に記録されました。',
+                        color: 'green',
+                        icon: <IconCheck />,
+                        className: 'my-notification-class',
+                        loading: false,
+                    });
+                } else {
+                    notifications.show({
+                        id: 'queuedrecord',
+                        withCloseButton: true,
+                        autoClose: 5000,
+                        title: "決済記録が送信できませんでした",
+                        message: '決済記録はアプリ内に保存されました。アプリ再起動時に再試行されます。',
+                        color: 'red',
+                        icon: <IconCheck />,
+                        className: 'my-notification-class',
+                        loading: false,
+                    });
+                }
+            })
+        } catch (error: unknown) {
+            if (error instanceof Error)
                 notifications.show({
-                    id: 'donerecord',
+                    id: 'error',
                     withCloseButton: true,
                     autoClose: 5000,
-                    title: "決済が完了しました",
-                    message: '決済記録が正常に記録されました。',
-                    color: 'green',
-                    icon: <IconCheck />,
+                    title: "決済が記録できませんでした",
+                    message: 'これはアプリのバグの可能性があります。\n' + error.name + ": " + error.message,
+                    color: 'red',
+                    icon: <IconCircleX />,
                     className: 'my-notification-class',
                     loading: false,
                 });
-            })
-        } catch (error: any) {
-            await retryAddHistory(api, requestParameters, 3, 5000);
         }
         setamountPaid([]);
         setOrder([]);
@@ -122,6 +121,39 @@ export default function Home({ api, userData }: { api: API | undefined, userData
         return amountPaid - totalPrice;
     }
 
+    useEffect(() => {
+        if (!api) return;
+        api.sendHistoryQueue().then((res) => {
+            if (res.length > 0) {
+                if (res.every(val => val.result)) {
+                    notifications.show({
+                        id: 'error',
+                        withCloseButton: true,
+                        autoClose: 5000,
+                        title: "以前の決済が正常に記録されました",
+                        message: "決済記録が正常に記録されました。",
+                        color: 'green',
+                        icon: <IconCheck />,
+                        className: 'my-notification-class',
+                        loading: false,
+                    });
+                } else {
+                    notifications.show({
+                        id: 'error',
+                        withCloseButton: true,
+                        autoClose: 5000,
+                        title: "以前の決済の記録が記録されていません",
+                        message: "アプリの再起動時に再試行されます。",
+                        color: 'red',
+                        icon: <IconCircleX />,
+                        className: 'my-notification-class',
+                        loading: false,
+                    });
+                }
+            }
+        })
+    }, [api])
+
     return (
         <>
             <Head>
@@ -130,9 +162,9 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             {
-                session && (
+                userData && (
                     <AppShell
-                        navbar={<Comp_Navbar page="会計" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+                        navbar={<Comp_Navbar page="会計" username={userData && userData.userName || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
                         <Flex
                             mih={50}
