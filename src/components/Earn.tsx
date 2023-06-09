@@ -17,7 +17,7 @@ export default function Earn() {
     const api = useApi(fetchjwt);
 
     useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
+        api.getUserinfo().then((res) => {
             setUserData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
@@ -36,7 +36,7 @@ export default function Earn() {
     }
     useEffect(() => {
         if (userData) {
-            api.getHistoryHistoryClassNameGet(requestParameters).then((res) => {
+            api.getHistory(requestParameters).then((res) => {
                 setPaymentData(res);
             }).catch((e: Error) => {
                 if (e instanceof ResponseError) {
@@ -54,7 +54,7 @@ export default function Earn() {
 
     useEffect(() => {
         if (userData) {
-            api.getSettingSettingClassNameGet(requestParameters).then((res) => {
+            api.getStoreSetting(requestParameters).then((res) => {
             setSettingData(res);
             }).catch((e: Error) => {
             if (e instanceof ResponseError) {

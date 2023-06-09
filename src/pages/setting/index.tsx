@@ -22,7 +22,7 @@ export default function History() {
     const api = useApi(fetchjwt);
 
     useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
+        api.getUserinfo().then((res) => {
             setUserData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
@@ -38,7 +38,7 @@ export default function History() {
     }, [])
 
     async function get_api() {
-        api.getSettingSettingClassNameGet(requestParameters).then((res) => {
+        api.getStoreSetting(requestParameters).then((res) => {
             setSettingData(res);
         }).catch((e: Error) => {
         if (e instanceof ResponseError) {
@@ -58,7 +58,7 @@ export default function History() {
     }
     useEffect(() => {
         if (userData) {
-            api.getSettingSettingClassNameGet(requestParameters).then((res) => {
+            api.getStoreSetting(requestParameters).then((res) => {
                 setSettingData(res);
             }).catch((e: Error) => {
             if (e instanceof ResponseError) {
@@ -81,7 +81,7 @@ export default function History() {
             reserve: Number(reserve)
         }
         try {
-            api.setSettingSettingSetClassNamePost(requestParameters).then(_response => {
+            api.setStoreSetting(requestParameters).then(_response => {
             notifications.show({
                 id: 'donerecord',
                 withCloseButton: true,
@@ -93,7 +93,7 @@ export default function History() {
                 className: 'my-notification-class',
                 loading: false,
             });
-            api.getSettingSettingClassNameGet(requestParameters).then((res) => {
+            api.getStoreSetting(requestParameters).then((res) => {
                 setSettingData(res);
             });
             })

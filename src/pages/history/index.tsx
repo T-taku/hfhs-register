@@ -22,7 +22,7 @@ export default function History() {
     const api = useApi(fetchjwt);
 
     useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
+        api.getUserinfo().then((res) => {
             setUserData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {

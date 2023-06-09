@@ -29,7 +29,7 @@ export default function Home() {
     const api = useApi(fetchjwt);
 
     useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
+        api.getUserinfo().then((res) => {
             setUserData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
@@ -93,7 +93,7 @@ export default function Home() {
             product: order.map((item) => `${item.product.name}:${item.count}個`).join(','),
         }
         try {
-            api.addHistoryHistoryAddClassNamePost(requestParameters).then(_response => {
+            api.addHistory(requestParameters).then(_response => {
                 notifications.show({
                     id: 'donerecord',
                     withCloseButton: true,

@@ -21,7 +21,7 @@ export default function Historytable() {
     const api = useApi(fetchjwt);
 
     useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
+        api.getUserinfo().then((res) => {
             setUserData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
@@ -40,7 +40,7 @@ export default function Historytable() {
     }
     useEffect(() => {
         if (userData) {
-            api.getHistoryHistoryClassNameGet(requestParameters).then((res) => {
+            api.getHistory(requestParameters).then((res) => {
                 setPaymentData(res);
             }).catch((e: Error) => {
                 if (e instanceof ResponseError) {
