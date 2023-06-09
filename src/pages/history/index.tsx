@@ -2,28 +2,21 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import Historytable from '../../components/Historytable';
 import Earn from '../../components/Earn';
-import { AppShell, Title, Text, rem, Table, Card, Progress, Accordion, createStyles, Button, Container } from '@mantine/core';
-import { signIn, useSession } from 'next-auth/react';
-import { useApi } from '@/utils/useApi';
-import { ResponseError, type ResponseUser } from '@/utils/openapi';
+import { AppShell, Button, Title } from '@mantine/core';
+import { useSession } from 'next-auth/react';
+import type { API } from '@/utils/initAPI';
+import { ResponseError, ResponseHistory, ResponseSetting, ResponseUser } from '@/utils/openapi';
 import { useEffect, useState } from 'react';
-import { IconBrandGoogle } from '@tabler/icons-react';
 
 
-export default function History() {
-    const { data: session } = useSession()
-    const [userData, setUserData] = useState<ResponseUser | undefined>();
-    const fetchjwt = async () => {
-        const response = await fetch('/api/auth/jwt');
-        const data = await response.text();
-        return data
-    }
+export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
+    const [paymentData, setPaymentData] = useState<ResponseHistory[]>([]);
+    const [settingData, setSettingData] = useState<ResponseSetting | undefined>(undefined);
 
-    const api = useApi(fetchjwt);
-
-    useEffect(() => {
-        api.getUserinfoUserGet().then((res) => {
-            setUserData(res);
+    const fetchHistory = () => {
+        if(!api || !userData) return;
+        api.fetchHistory({ className: userData!.userClass }).then((res) => {
+            setPaymentData(res);
         }).catch((e: Error) => {
             if (e instanceof ResponseError) {
                 if (e.response.status === 500) {
@@ -34,7 +27,51 @@ export default function History() {
             } else {
                 throw e;
             }
-        })}, [])
+        })
+        api.getStoreSetting({ className: userData!.userClass }).then((res) => {
+            setSettingData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!api || !userData) return;
+        api.getHistory({ className: userData.userClass }).then((res) => {
+            setPaymentData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+        api.getStoreSetting({ className: userData!.userClass }).then((res) => {
+            setSettingData(res);
+        }).catch((e: Error) => {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 500) {
+                    throw e
+                } else {
+                    //それ以外は無視とする
+                }
+            } else {
+                throw e;
+            }
+        })
+    })
 
     return (
         <>
@@ -44,47 +81,18 @@ export default function History() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             {
-                session && (
+                userData && (
                     <AppShell
-                        navbar={<Comp_Navbar page="売上確認" username={session.user && session.user.name || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+                        navbar={<Comp_Navbar page="売上確認" username={userData && userData.userName || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
                     >
-                        <Title order={2}>売上確認</Title>
-                        <br/>
-                        <Earn></Earn>
-                        <br/>
+                        <Title order={2}>売上確認 <Button onClick={fetchHistory}>更新</Button></Title>
+                        <br />
+                        <Earn paymentData={paymentData} settingData={settingData}></Earn>
+                        <br />
                         <Title order={3}>会計履歴</Title>
-                        <br/>
-                        <Historytable></Historytable>
+                        <br />
+                        <Historytable paymentData={paymentData}></Historytable>
                     </AppShell>
-                )
-            }
-            {
-                !session && (
-                    <Container
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "100vh",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Title order={2}>ログイン</Title>
-                        <Text>学校のGoogleアカウントを使って、ログインしてください。</Text>
-                        <Button
-                            leftIcon={
-                                <IconBrandGoogle size="1.2rem" stroke={1.5} />
-                            }
-                            radius="xl"
-                            size="md"
-                            styles={{
-                            root: { paddingRight: rem(14), height: rem(48) },
-                            }}
-                            onClick={() => signIn()}
-                        >
-                            Googleでログイン
-                        </Button>
-                    </Container>
                 )
             }
         </>

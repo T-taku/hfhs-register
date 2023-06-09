@@ -37,6 +37,7 @@
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
+    "idb": "^7.1.1",
     "jsonwebtoken": "^9.0.0",
     "ky": "^0.33.3",
     "next": "13.3.0",
@@ -48,6 +49,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.6.0"
+    "@openapitools/openapi-generator-cli": "^2.6.0",
+    "@types/next-pwa": "^5.6.4"
   }
 }

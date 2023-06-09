@@ -120,7 +120,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Add History
      */
-    async addHistoryHistoryAddClassNamePost(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HistoryAdd> {
+    async addHistory(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HistoryAdd> {
         const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -158,7 +158,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get History
      */
-    async getHistoryHistoryClassNameGet(requestParameters: GetHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResponseHistory>> {
+    async getHistory(requestParameters: GetHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResponseHistory>> {
         const response = await this.getHistoryHistoryClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -196,7 +196,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Islogin
      */
-    async getIsloginAuthGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async getIslogin(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.getIsloginAuthGetRaw(initOverrides);
         return await response.value();
     }
@@ -234,7 +234,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Setting
      */
-    async getSettingSettingClassNameGet(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
+    async getStoreSetting(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
         const response = await this.getSettingSettingClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -268,7 +268,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Userinfo
      */
-    async getUserinfoUserGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseUser> {
+    async getUserinfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseUser> {
         const response = await this.getUserinfoUserGetRaw(initOverrides);
         return await response.value();
     }
@@ -352,7 +352,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Set Setting
      */
-    async setSettingSettingSetClassNamePost(requestParameters: SetSettingSettingSetClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Setting> {
+    async setStoreSetting(requestParameters: SetSettingSettingSetClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Setting> {
         const response = await this.setSettingSettingSetClassNamePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
