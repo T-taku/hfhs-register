@@ -5,14 +5,46 @@ import { SessionProvider } from 'next-auth/react'
 import { Session } from "next-auth"
 import { RecoilRoot } from 'recoil';
 import { Notifications } from '@mantine/notifications';
+import Script from "next/script";
+import * as gtag from "../lib/gtag";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
+  const router = useRouter();
+    useEffect(() => {
+      const handleRouterChange = (url: any) => {
+        gtag.pageview(url);
+      };
+      router.events.on("routeChangeComplete", handleRouterChange);
+      return () => {
+        router.events.off("routeChangeComplete", handleRouterChange);
+      };
+    }, [router.events]);
   return (
     <>
       <Head>
-        <title>東福岡学園祭レジ</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta name="theme-color" content="#2B8A3E" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </Head>
+      <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${gtag.GA_MEASUREMENT_ID}');
+            `,
+          }}
+        />
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
