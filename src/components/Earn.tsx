@@ -88,8 +88,9 @@ export default function Earn() {
                                 現在の売り上げ
                             </Text>
                             <Text fz="lg" fw={500}>
-                                ¥{totalSum} / ¥{settingData?.goal}
+                                ¥{totalSum} / ¥{settingData?.goal + settingData.reserve}
                             </Text>
+                            <Text>目標金額には、準備金が含まれています。</Text>
                             <Progress value={(totalSum / settingData?.goal) * 100} mt="md" size="lg" radius="xl" />
                         </Card>
                     </>
