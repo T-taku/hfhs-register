@@ -10,7 +10,7 @@ import * as gtag from "../lib/gtag";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ResponseError, ResponseUser } from '@/utils/openapi';
-import { API, initAPI } from '@/utils/useApi';
+import { API, initAPI } from '@/utils/initAPI';
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   const [userData, setUserData] = useState<ResponseUser | undefined>();

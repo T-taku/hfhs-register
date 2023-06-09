@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { initAPI } from '@/utils/useApi';
+import { initAPI } from '@/utils/initAPI';
 import { ResponseError, type ResponseUser, type ResponseHistory } from '@/utils/openapi';
 import { Accordion, Table, createStyles, rem } from '@mantine/core';
 import dayjs from 'dayjs';

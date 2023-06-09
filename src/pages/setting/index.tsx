@@ -3,7 +3,7 @@ import { Comp_Navbar } from '../../components/Navbar'
 import { AppShell, Title, Text, Button, Center, NumberInput } from '@mantine/core';
 import { useSession } from 'next-auth/react';
 import { IconCheck, IconCircleX } from '@tabler/icons-react';
-import type { API } from '@/utils/useApi';
+import type { API } from '@/utils/initAPI';
 import { ResponseError, type ResponseUser, type ResponseSetting } from '@/utils/openapi';
 import { useEffect, useState } from 'react';
 import { notifications } from '@mantine/notifications';

@@ -12,7 +12,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
 import type { ResponseUser } from '@/utils/openapi';
-import type { API } from '@/utils/useApi';
+import type { API } from '@/utils/initAPI';
 
 export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
     const [opened, { open, close }] = useDisclosure(false);

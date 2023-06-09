@@ -10,7 +10,7 @@ import type {
   Setting,
 } from './openapi/models';
 
-interface RegisterDBSchema extends DBSchema {
+export interface RegisterDBSchema extends DBSchema {
   history: {
     value: {
       name: string;
@@ -111,6 +111,7 @@ export class API extends DefaultApi {
     if (this.database) {
       try {
         const userdata = await this.userTransaction!.objectStore("user").get("userData");
+        console.log(userdata);
         if (userdata) return userdata;
       } catch (e) {
         console.warn(e)
@@ -120,7 +121,7 @@ export class API extends DefaultApi {
     const value = await response.value();
     if (this.database) {
       try {
-        const userdata = await this.userTransaction!.objectStore("user").put(value, "userData")
+        await this.userTransaction!.objectStore("user").put(value, "userData")
       } catch (e) {
         console.error(e)
       }
@@ -143,9 +144,7 @@ export class API extends DefaultApi {
     const response = await this.setSettingSettingSetClassNamePostRaw(requestParameters, initOverrides);
     return await response.value();
   }
-
 }
-
 
 export function initAPI(token: (() => string) | (() => Promise<string>)) {
   const db = openDB<RegisterDBSchema>("register-db", 1, {

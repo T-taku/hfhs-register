@@ -4,7 +4,7 @@ import Historytable from '../../components/Historytable';
 import Earn from '../../components/Earn';
 import { AppShell, Title } from '@mantine/core';
 import { useSession } from 'next-auth/react';
-import type { API } from '@/utils/useApi';
+import type { API } from '@/utils/initAPI';
 import type { ResponseUser } from '@/utils/openapi';
 
 
