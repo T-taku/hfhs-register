@@ -16,8 +16,8 @@ const productsByClass: ProductsByClass = {
         { id: "_2", name: '※7発', price:150 },
     ],
     "2年2組": [
-        { id: "1", name: '豚バラ', price:100 },
-        { id: "_1", name: '※豚バラ', price:80 },
+        { id: "1", name: '焼き鳥', price:100 },
+        { id: "_1", name: '※焼き鳥', price:80 },
     ],
     "2年3組": [
         { id: "1", name: '焼き鳥', price:100 },
