@@ -142,10 +142,10 @@ const productsByClass: ProductsByClass = {
         { id: "_1", name: '※わたあめ２色', price:200 },
     ],
     "3年10組": [
-        { id: "1", name: 'ワッフル', price:300 },
-        { id: "2", name: 'プレーンワッフル', price:180 },
-        { id: "3", name: 'チュロス', price:300 },
-        { id: "4", name: 'プレーンチュロス', price:200 },
+        { id: "1", name: 'ワッフル', price:280 },
+        { id: "2", name: 'プレーンワッフル', price:250 },
+        { id: "3", name: 'チュロス', price:200 },
+        { id: "4", name: '○○×○○ワッフル', price:300 },
     ],
     "3年11組": [
         { id: "1", name: 'フランクフルト', price:200 },
