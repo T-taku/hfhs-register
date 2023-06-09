@@ -20,6 +20,14 @@ interface RegisterDBSchema extends DBSchema {
     key: string;
     indexes: { 'by-price': number };
   };
+  "history-queue": {
+    value: AddHistoryHistoryAddClassNamePostRequest;
+    key: number;
+  };
+  user: {
+    value: ResponseUser;
+    key: "userData";
+  }
 }
 
 /**
@@ -29,10 +37,22 @@ export class API extends DefaultApi {
 
   database?: IDBPDatabase<RegisterDBSchema>
 
+  get historyQueueTransaction() {
+    return this.database?.transaction("history-queue", "readwrite")
+  }
+
+  get historyTransaction() {
+    return this.database?.transaction("history", "readwrite")
+  }
+
+  get userTransaction() {
+    return this.database?.transaction("user", "readwrite")
+  }
+
   constructor(protected configuration: Configuration, database: Promise<IDBPDatabase<RegisterDBSchema>>) {
     super(configuration);
     database.then((db) => {
-      this.database = db 
+      this.database = db
     })
   }
 
@@ -40,7 +60,9 @@ export class API extends DefaultApi {
    * Add History
    */
   async addHistory(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HistoryAdd> {
+    if (this.database) {
 
+    }
     const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
     return await response.value();
   }
@@ -86,8 +108,24 @@ export class API extends DefaultApi {
    * Get Userinfo
    */
   async getUserinfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseUser> {
+    if (this.database) {
+      try {
+        const userdata = await this.userTransaction!.objectStore("user").get("userData");
+        if (userdata) return userdata;
+      } catch (e) {
+        console.warn(e)
+      }
+    }
     const response = await this.getUserinfoUserGetRaw(initOverrides);
-    return await response.value();
+    const value = await response.value();
+    if (this.database) {
+      try {
+        const userdata = await this.userTransaction!.objectStore("user").put(value, "userData")
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    return value
   }
 
   /**
@@ -109,10 +147,12 @@ export class API extends DefaultApi {
 }
 
 
-export function useApi(token: (() => string) | (() => Promise<string>)) {
+export function initAPI(token: (() => string) | (() => Promise<string>)) {
   const db = openDB<RegisterDBSchema>("register-db", 1, {
     upgrade(db, oldVersion, newVersion, transaction, event) {
-
+      db.createObjectStore("user");
+      db.createObjectStore("history");
+      db.createObjectStore("history-queue", { autoIncrement: true });
     },
     blocked(currentVersion, blockedVersion, event) {
       throw event

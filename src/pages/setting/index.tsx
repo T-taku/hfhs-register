@@ -1,15 +1,15 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
-import { AppShell, Container, Title, Text, Button, rem, Center, NumberInput } from '@mantine/core';
-import { signIn, useSession } from 'next-auth/react';
-import { IconBrandGoogle, IconCheck, IconCircleX } from '@tabler/icons-react';
+import { AppShell, Title, Text, Button, Center, NumberInput } from '@mantine/core';
+import { useSession } from 'next-auth/react';
+import { IconCheck, IconCircleX } from '@tabler/icons-react';
 import type { API } from '@/utils/useApi';
 import { ResponseError, type ResponseUser, type ResponseSetting } from '@/utils/openapi';
 import { useEffect, useState } from 'react';
 import { notifications } from '@mantine/notifications';
 
 export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
-    const { data: session } = useSession()
+    const { data: session } = useSession({ required: true })
     const [settingData, setSettingData] = useState<ResponseSetting | undefined>();
     const [goal, setGoal] = useState<number | ''>(0);
     const [reserve, setReserve] = useState<number | ''>(0);
@@ -116,33 +116,6 @@ export default function History({ api, userData }: { api: API | undefined, userD
                         <Button size={"md"} onClick={() => { saveSetting() }}>保存</Button>
                     </Center>
                 </AppShell>
-            )}
-            {!session && (
-                <Container
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "100vh",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <Title order={2}>ログイン</Title>
-                    <Text>学校のGoogleアカウントを使って、ログインしてください。</Text>
-                    <Button
-                        leftIcon={
-                            <IconBrandGoogle size="1.2rem" stroke={1.5} />
-                        }
-                        radius="xl"
-                        size="md"
-                        styles={{
-                            root: { paddingRight: rem(14), height: rem(48) },
-                        }}
-                        onClick={() => signIn()}
-                    >
-                        Googleでログイン
-                    </Button>
-                </Container>
             )}
         </>
     )

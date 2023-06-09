@@ -17,7 +17,7 @@ import type { API } from '@/utils/useApi';
 export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
-    const { data: session } = useSession();
+    const { data: session } = useSession({required: true});
     const [order, setOrder] = useState<OrderItem[]>([]);
 
     const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
@@ -230,35 +230,6 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                             </Center>
                         </Modal>
                     </AppShell>
-                )
-            }
-            {
-                !session && (
-                    <Container
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "100vh",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Title order={2}>ログイン</Title>
-                        <Text>学校のGoogleアカウントを使って、ログインしてください。</Text>
-                        <Button
-                            leftIcon={
-                                <IconBrandGoogle size="1.2rem" stroke={1.5} />
-                            }
-                            radius="xl"
-                            size="md"
-                            styles={{
-                                root: { paddingRight: rem(14), height: rem(48) },
-                            }}
-                            onClick={() => signIn()}
-                        >
-                            Googleでログイン
-                        </Button>
-                    </Container>
                 )
             }
         </>

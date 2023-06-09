@@ -2,15 +2,14 @@ import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import Historytable from '../../components/Historytable';
 import Earn from '../../components/Earn';
-import { AppShell, Title, Text, rem, Button, Container } from '@mantine/core';
-import { signIn, useSession } from 'next-auth/react';
+import { AppShell, Title } from '@mantine/core';
+import { useSession } from 'next-auth/react';
 import type { API } from '@/utils/useApi';
 import type { ResponseUser } from '@/utils/openapi';
-import { IconBrandGoogle } from '@tabler/icons-react';
 
 
 export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser }) {
-    const { data: session } = useSession()
+    const { data: session } = useSession({required: true})
 
     return (
         <>
@@ -32,35 +31,6 @@ export default function History({ api, userData }: { api: API | undefined, userD
                         <br />
                         <Historytable></Historytable>
                     </AppShell>
-                )
-            }
-            {
-                !session && (
-                    <Container
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "100vh",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Title order={2}>ログイン</Title>
-                        <Text>学校のGoogleアカウントを使って、ログインしてください。</Text>
-                        <Button
-                            leftIcon={
-                                <IconBrandGoogle size="1.2rem" stroke={1.5} />
-                            }
-                            radius="xl"
-                            size="md"
-                            styles={{
-                                root: { paddingRight: rem(14), height: rem(48) },
-                            }}
-                            onClick={() => signIn()}
-                        >
-                            Googleでログイン
-                        </Button>
-                    </Container>
                 )
             }
         </>

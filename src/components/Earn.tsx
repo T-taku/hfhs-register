@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '@/utils/useApi';
+import { initAPI } from '@/utils/useApi';
 import { ResponseError, type ResponseUser, type ResponseHistory, ResponseSetting } from '@/utils/openapi';
 import { Card, Progress, Text } from '@mantine/core';
 import 'dayjs/locale/ja';
@@ -14,7 +14,7 @@ export default function Earn() {
         return data
     }
 
-    const api = useApi(fetchjwt);
+    const api = initAPI(fetchjwt);
 
     useEffect(() => {
         api.getUserinfo().then((res) => {

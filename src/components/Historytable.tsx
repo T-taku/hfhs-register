@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useApi } from '@/utils/useApi';
+import { initAPI } from '@/utils/useApi';
 import { ResponseError, type ResponseUser, type ResponseHistory } from '@/utils/openapi';
 import { Accordion, Table, createStyles, rem } from '@mantine/core';
 import dayjs from 'dayjs';
@@ -18,7 +18,7 @@ export default function Historytable() {
         return data
     }
 
-    const api = useApi(fetchjwt);
+    const api = initAPI(fetchjwt);
 
     useEffect(() => {
         api.getUserinfo().then((res) => {
