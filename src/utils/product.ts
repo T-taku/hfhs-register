@@ -179,6 +179,7 @@ const productsByClass: ProductsByClass = {
     "3年17組": [
         { id: "1", name: 'ハンバーガー', price:300 },
         { id: "2", name: 'ドリンク', price:150 },
+        { id: "3", name: '6段ハンバーガー', price:1000 },
         { id: "_1", name: '※ハンバーガー', price:250 },
         { id: "_2", name: '※※ハンバーガー', price:230 },
         { id: "_3", name: '※ドリンク', price:120},
