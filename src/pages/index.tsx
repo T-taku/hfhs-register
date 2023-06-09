@@ -12,6 +12,7 @@ import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
 import type { AddHistoryHistoryAddClassNamePostRequest, ResponseUser } from '@/utils/openapi';
 import type { API } from '@/utils/initAPI';
+import { useRouter } from 'next/router';
 
 export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -120,6 +121,15 @@ export default function Home({ api, userData }: { api: API | undefined, userData
     function calculateChange(amountPaid: number, totalPrice: number) {
         return amountPaid - totalPrice;
     }
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!api) return;
+        api.getIslogin().then((res) => {}).catch(() => {
+            router.replace("/auth/signin");
+        })
+    }, [api])
 
     useEffect(() => {
         if (!api) return;

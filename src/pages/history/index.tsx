@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import type { API } from '@/utils/initAPI';
 import { ResponseError, ResponseHistory, ResponseSetting, ResponseUser } from '@/utils/openapi';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 
 export default function History({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
@@ -42,6 +43,15 @@ export default function History({ api, userData }: { api: API | undefined, userD
             }
         })
     }
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!api) return;
+        api.getIslogin().then((res) => {}).catch(() => {
+            router.replace("/auth/signin");
+        })
+    }, [api])
 
     useEffect(() => {
         if (!api || !userData) return;
