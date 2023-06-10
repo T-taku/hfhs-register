@@ -64,7 +64,7 @@ export class API extends DefaultApi {
     if (this.database) {
       try {
         const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
-        return { result: true, ...(await response.value())};
+        return { result: true, ...(await response.value()) };
       } catch (e) {
         const history = await this.historyQueueTransaction!.objectStore("history-queue").add(requestParameters);
         return { result: false, ...requestParameters }
@@ -74,6 +74,22 @@ export class API extends DefaultApi {
     }
   }
 
+    /**
+   * Add History
+   */
+    async _addHistoryWithOutQueue(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponceAdd> {
+      if (this.database) {
+        try {
+          const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
+          return { result: true, ...(await response.value()) };
+        } catch (e) {
+          return { result: false, ...requestParameters }
+        }
+      } else {
+        throw Error("IndexedDB failed.");
+      }
+    }
+
   async sendHistoryQueue(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponceAdd[]> {
     if (this.database) {
       if (await this.historyQueueTransaction!.objectStore("history-queue").count() === 0) return [];
@@ -81,7 +97,7 @@ export class API extends DefaultApi {
       const results: ResponceAdd[] = [];
       for (const index of historyKeys) {
         const historyQueue = (await this.historyQueueTransaction!.objectStore("history-queue").get(index))!;
-        const request = await this.addHistory(historyQueue, initOverrides);
+        const request = await this._addHistoryWithOutQueue(historyQueue, initOverrides);
         if (request.result) await this.historyQueueTransaction!.objectStore("history-queue").delete(index);
         results.push(request);
       }
@@ -104,6 +120,19 @@ export class API extends DefaultApi {
       }
     }
     return await this.fetchHistory(requestParameters, initOverrides);
+  }
+
+  /**
+   * Get HistoryQueue
+   */
+  async getHistoryQueue(): Promise<Array<AddHistoryHistoryAddClassNamePostRequest>> {
+    if (this.database) {
+      const history = await this.historyQueueTransaction!.objectStore("history-queue").getAll()
+      if (history) return history;
+      else return [];
+    } else {
+      throw Error("IndexedDB is unavailable.");
+    }
   }
 
   async fetchHistory(requestParameters: GetHistoryHistoryClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResponseHistory>> {
