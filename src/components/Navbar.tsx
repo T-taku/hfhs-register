@@ -120,7 +120,7 @@ export function Comp_Navbar({page, username, storeName}:{page: string, username?
                     <IconUserCircle className={classes.linkIcon} stroke={1.5} />
                     <span>{username}</span>
                 </div>
-                <a href="#" className={classes.link} onClick={() => signOut()}>
+                <a href="#" className={classes.link} onClick={() => signOut({redirect: true, callbackUrl: "/auth/signout"})}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>ログアウト</span>
                 </a>

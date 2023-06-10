@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
-import { useSession } from 'next-auth/react';
 import { AppShell, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
@@ -10,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useRecoilState } from 'recoil';
 import { amountPaidState } from "../utils/states";
-import type { AddHistoryHistoryAddClassNamePostRequest, ResponseUser } from '@/utils/openapi';
+import type { ResponseUser } from '@/utils/openapi';
 import type { API } from '@/utils/initAPI';
 import { useRouter } from 'next/router';
 
