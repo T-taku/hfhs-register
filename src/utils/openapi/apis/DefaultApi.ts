@@ -235,7 +235,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Setting
      */
-    async getStoreSetting(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
+    async getStoredSetting(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
         const response = await this.getSettingSettingClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -332,6 +332,10 @@ export class DefaultApi extends runtime.BaseAPI {
 
         if (requestParameters.reserve !== undefined) {
             queryParameters['reserve'] = requestParameters.reserve;
+        }
+
+        if (requestParameters.additionalreserve !== undefined) {
+            queryParameters['additionalreserve'] = requestParameters.additionalreserve;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

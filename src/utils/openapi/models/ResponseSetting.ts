@@ -37,7 +37,6 @@ export interface ResponseSetting {
      * @memberof ResponseSetting
      */
     reserve: number;
-
     /**
      * 
      * @type {number}
