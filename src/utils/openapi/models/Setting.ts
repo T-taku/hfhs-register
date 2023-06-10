@@ -37,6 +37,12 @@ export interface Setting {
      * @memberof Setting
      */
     reserve?: number;
+    /**
+     * 追加準備金
+     * @type {number}
+     * @memberof Setting
+     */
+    additionalreserve?: number;
 }
 
 /**
