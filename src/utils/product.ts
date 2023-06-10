@@ -166,7 +166,7 @@ const productsByClass: ProductsByClass = {
         { id: "1", name: 'チョコバナナ１本', price:350 },
         { id: "2", name: 'チョコバナナ輪切り', price:250 },
         { id: "3", name: '缶ジュース', price:150},
-        { id: "4", name: 'マシュマロ', price:200},
+        { id: "4", name: 'マシュマロ', price:300},
         { id: "_1", name: '※チョコバナナ１本', price:300 },
         { id: "_2", name: '※チョコバナナ輪切り', price:200 },
         { id: "_3", name: '※缶ジュース', price:100},
