@@ -56,6 +56,7 @@ export interface SetSettingSettingSetClassNamePostRequest {
     className: string;
     goal: number;
     reserve: number;
+    additionalreserve: number;
 }
 
 /**
@@ -317,6 +318,10 @@ export class DefaultApi extends runtime.BaseAPI {
 
         if (requestParameters.reserve === null || requestParameters.reserve === undefined) {
             throw new runtime.RequiredError('reserve','Required parameter requestParameters.reserve was null or undefined when calling setSettingSettingSetClassNamePost.');
+        }
+
+        if (requestParameters.additionalreserve === null || requestParameters.reserve === undefined) {
+            throw new runtime.RequiredError('additionalreserve','Required parameter requestParameters.additionalreserve was null or undefined when calling setSettingSettingSetClassNamePost.');
         }
 
         const queryParameters: any = {};

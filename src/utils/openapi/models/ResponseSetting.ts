@@ -37,6 +37,13 @@ export interface ResponseSetting {
      * @memberof ResponseSetting
      */
     reserve: number;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof ResponseSetting
+     */
+    additionalreserve: number;
 }
 
 /**
@@ -64,6 +71,7 @@ export function ResponseSettingFromJSONTyped(json: any, ignoreDiscriminator: boo
         'className': json['class_name'],
         'goal': json['goal'],
         'reserve': json['reserve'],
+        'additionalreserve': json['additionalreserve'],
     };
 }
 

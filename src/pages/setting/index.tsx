@@ -13,6 +13,8 @@ export default function History({ api, userData }: { api: API | undefined, userD
     const [settingData, setSettingData] = useState<ResponseSetting | undefined>();
     const [goal, setGoal] = useState<number | ''>(0);
     const [reserve, setReserve] = useState<number | ''>(0);
+    const [additionalreserve, setAdditionalreserve] = useState<number | ''>(0);
+    additionalreserve
 
     async function get_api() {
         if (!api) return;
@@ -57,7 +59,8 @@ export default function History({ api, userData }: { api: API | undefined, userD
         const requestParameters = {
             className: String(userData?.userClass),
             goal: Number(goal),
-            reserve: Number(reserve)
+            reserve: Number(reserve),
+            additionalreserve: Number(additionalreserve),
         }
         try {
             api.setStoreSetting(requestParameters).then(_response => {
@@ -110,6 +113,10 @@ export default function History({ api, userData }: { api: API | undefined, userD
                     <br />
                     <Title order={3}>準備金</Title>
                     <Text>生徒と先生の準備金の合計を入力してください。(現在の設定額: {String(settingData?.reserve ?? "設定なし")}円)</Text>
+                    <NumberInput size="sm" label="準備金" placeholder={String(settingData?.reserve ?? "設定なし")} className="" onChange={setReserve} />
+                    <br />
+                    <Title order={3}>追加準備金</Title>
+                    <Text>追加で必要になった準備金を入力してください。(現在の設定額: {String(settingData?.additionalreserve ?? "設定なし")}円)</Text>
                     <NumberInput size="sm" label="準備金" placeholder={String(settingData?.reserve ?? "設定なし")} className="" onChange={setReserve} />
                     <br />
                     <Center>
