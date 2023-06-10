@@ -42,7 +42,7 @@ export default function Home({ api, userData }: { api: API | undefined, userData
             className: String(userData?.userClass),
             change: calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
             total: calculateTotalPrice(order, times),
-            product: order.map((item) => `${item.product.name}:${item.count * times}個`).join(','),
+            product: times > 0 ? order.map((item) => `${item.product.name}:${item.count * times}個`).join(',') : "返金対応",
         }
         try {
             api.addHistory(requestParameters).then(response => {
