@@ -117,7 +117,7 @@ export default function History({ api, userData }: { api: API | undefined, userD
                     <br />
                     <Title order={3}>追加準備金</Title>
                     <Text>追加で必要になった準備金を入力してください。(現在の設定額: {String(settingData?.additionalreserve ?? "設定なし")}円)</Text>
-                    <NumberInput size="sm" label="準備金" placeholder={String(settingData?.reserve ?? "設定なし")} className="" onChange={setReserve} />
+                    <NumberInput size="sm" label="準備金" placeholder={String(settingData?.additionalreserve ?? "設定なし")} className="" onChange={setReserve} />
                     <br />
                     <Center>
                         <Button size={"md"} onClick={() => { saveSetting() }}>保存</Button>
