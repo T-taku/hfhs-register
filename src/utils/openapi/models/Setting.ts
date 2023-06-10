@@ -83,6 +83,7 @@ export function SettingToJSON(value?: Setting | null): any {
         'class_name': value.className,
         'goal': value.goal,
         'reserve': value.reserve,
+        'additionalreserve': value.additionalreserve,
     };
 }
 
