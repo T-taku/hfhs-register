@@ -38,11 +38,16 @@ export default function Home({ api, userData }: { api: API | undefined, userData
 
     async function resetall(times: number = 1) {
         if (!api) return;
-        const requestParameters = {
-            className: String(userData?.userClass),
+        const requestParameters = times > 0 ? {
+            className: userData?.userClass!,
             change: calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
             total: calculateTotalPrice(order, times),
-            product: times > 0 ? order.map((item) => `${item.product.name}:${item.count * times}個`).join(',') : "返金対応",
+            product: order.map((item) => `${item.product.name}:${item.count * times}個`).join(','),
+        } : {
+            className: userData?.userClass!,
+            change: 0,
+            total: -calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
+            product: "返金対応",
         }
         try {
             api.addHistory(requestParameters).then(response => {
@@ -126,7 +131,7 @@ export default function Home({ api, userData }: { api: API | undefined, userData
 
     useEffect(() => {
         if (!api) return;
-        api.getIslogin().then((res) => {}).catch(() => {
+        api.getIslogin().then((res) => { }).catch(() => {
             router.replace("/auth/signin");
         })
     }, [api])
@@ -234,32 +239,34 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                                             styles={{
                                                 root: { paddingRight: rem(14), height: rem(48) },
                                             }}
-                                            onClick={() => {setMagnification(1);open()}}
+                                            onClick={() => { setMagnification(1); open() }}
                                         >
                                             支払いへ進む
                                         </Button>
-                                        <Button
-                                            leftIcon={
-                                                <IconArrowBigLeftLine size="0.8rem" stroke={1.5} />
-                                            }
-                                            radius="xl"
-                                            size="sm"
-                                            color="blue"
-                                            styles={{
-                                                root: { paddingRight: rem(14), height: rem(48) },
-                                            }}
-                                            onClick={() => {setMagnification(-1);open()}}
-                                        >
-                                            返金対応へ進む
-                                        </Button>
                                     </>
                                 }
+                                <Button
+                                    leftIcon={
+                                        <IconArrowBigLeftLine size="0.8rem" stroke={1.5} />
+                                    }
+                                    radius="xl"
+                                    size="sm"
+                                    color="blue"
+                                    styles={{
+                                        root: { paddingRight: rem(14), height: rem(48) },
+                                    }}
+                                    onClick={() => { setMagnification(-1); open() }}
+                                >
+                                    返金対応
+                                </Button>
                             </Flex>
                         </SimpleGrid>
                         <Modal opened={opened} onClose={close} title={magnification > 0 ? "支払いへ進む" : "返金対応"}>
-                            合計金額: {calculateTotalPrice(order)}円
-                            <NumPad />
-                            {Number(amountPaid.join("")) >= calculateTotalPrice(order) && (
+                            {magnification > 0 && (<>
+                                合計金額: {calculateTotalPrice(order)}円
+                            </>)}
+                            <NumPad refund={(magnification > 0)} />
+                            {magnification > 0 && parseInt(amountPaid.join(""), 10) >= calculateTotalPrice(order) && (
                                 <div>
                                     お釣り: {calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order))}円
                                 </div>
@@ -272,8 +279,8 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                                     }
                                     radius="xl"
                                     size="md"
-                                    color="green"
-                                    disabled={!(Number(amountPaid.join("")) >= calculateTotalPrice(order))}
+                                    color={ magnification > 0 ? "green" : "blue"}
+                                    disabled={!(parseInt(amountPaid.join("")) >= calculateTotalPrice(order)) && magnification > 0}
                                     styles={{
                                         root: { paddingRight: rem(14), height: rem(48) },
                                     }}
