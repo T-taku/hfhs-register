@@ -235,7 +235,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Get Setting
      */
-    async getStoredSetting(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
+    async getStoreSetting(requestParameters: GetSettingSettingClassNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseSetting> {
         const response = await this.getSettingSettingClassNameGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
