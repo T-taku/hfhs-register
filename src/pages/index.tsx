@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../components/Navbar'
 import { NumPad } from '../components/Numpad'
-import { AppShell, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
+import { AppShell, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid, Container } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
+import { IconCheck, IconCircleX, IconCoins, IconArrowBigLeftLine } from '@tabler/icons-react';
 import productsByClass, { Product } from '../utils/product';
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
     const [opened, { open, close }] = useDisclosure(false);
     const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
+    const [magnification, setMagnification] = useState<number>(1);
     const [order, setOrder] = useState<OrderItem[]>([]);
 
     const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
@@ -35,13 +36,13 @@ export default function Home({ api, userData }: { api: API | undefined, userData
         count: number;
     }
 
-    async function resetall() {
+    async function resetall(times: number = 1) {
         if (!api) return;
         const requestParameters = {
             className: String(userData?.userClass),
-            change: calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order)),
-            total: calculateTotalPrice(order),
-            product: order.map((item) => `${item.product.name}:${item.count}個`).join(','),
+            change: calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
+            total: calculateTotalPrice(order, times),
+            product: order.map((item) => `${item.product.name}:${item.count * times}個`).join(','),
         }
         try {
             api.addHistory(requestParameters).then(response => {
@@ -109,16 +110,16 @@ export default function Home({ api, userData }: { api: API | undefined, userData
         });
     }
 
-    function calculateTotalPrice(order: OrderItem[]): number {
+    function calculateTotalPrice(order: OrderItem[], times: number = 1): number {
         let totalPrice = 0;
         for (const item of order) {
-            totalPrice += item.product.price * item.count;
+            totalPrice += item.product.price * item.count * times;
         }
         return totalPrice;
     }
 
-    function calculateChange(amountPaid: number, totalPrice: number) {
-        return amountPaid - totalPrice;
+    function calculateChange(amountPaid: number, totalPrice: number, times: number = 1) {
+        return times > 0 ? amountPaid - totalPrice : amountPaid + totalPrice;
     }
 
     const router = useRouter();
@@ -233,15 +234,29 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                                             styles={{
                                                 root: { paddingRight: rem(14), height: rem(48) },
                                             }}
-                                            onClick={open}
+                                            onClick={() => {setMagnification(1);open()}}
                                         >
                                             支払いへ進む
+                                        </Button>
+                                        <Button
+                                            leftIcon={
+                                                <IconArrowBigLeftLine size="0.8rem" stroke={1.5} />
+                                            }
+                                            radius="xl"
+                                            size="sm"
+                                            color="blue"
+                                            styles={{
+                                                root: { paddingRight: rem(14), height: rem(48) },
+                                            }}
+                                            onClick={() => {setMagnification(-1);open()}}
+                                        >
+                                            返金対応へ進む
                                         </Button>
                                     </>
                                 }
                             </Flex>
                         </SimpleGrid>
-                        <Modal opened={opened} onClose={close} title="支払いへ進む">
+                        <Modal opened={opened} onClose={close} title={magnification > 0 ? "支払いへ進む" : "返金対応"}>
                             合計金額: {calculateTotalPrice(order)}円
                             <NumPad />
                             {Number(amountPaid.join("")) >= calculateTotalPrice(order) && (
@@ -263,10 +278,10 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                                         root: { paddingRight: rem(14), height: rem(48) },
                                     }}
                                     onClick={
-                                        () => { close(); resetall(); }
+                                        () => { close(); resetall(magnification); }
                                     }
                                 >
-                                    支払いを完了
+                                    {magnification > 0 ? "支払い" : "返金"}を完了
                                 </Button>
                             </Center>
                         </Modal>
