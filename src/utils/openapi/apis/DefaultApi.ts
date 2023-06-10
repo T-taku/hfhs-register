@@ -320,7 +320,7 @@ export class DefaultApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('reserve','Required parameter requestParameters.reserve was null or undefined when calling setSettingSettingSetClassNamePost.');
         }
 
-        if (requestParameters.additionalreserve === null || requestParameters.reserve === undefined) {
+        if (requestParameters.additionalreserve === null || requestParameters.additionalreserve === undefined) {
             throw new runtime.RequiredError('additionalreserve','Required parameter requestParameters.additionalreserve was null or undefined when calling setSettingSettingSetClassNamePost.');
         }
 
