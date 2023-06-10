@@ -188,7 +188,7 @@ export default function Home({ api, userData }: { api: API | undefined, userData
                             <SimpleGrid cols={products_normal_count} spacing="xs">
                                 {products}
                             </SimpleGrid>
-                            <Text>赤色の商品は、割引額が登録されています。</Text>
+                            <Text>赤色の商品は、割引額が登録されています。ボタンが繋がっている場合は、文字の上を押して下さい。</Text>
                         </Flex>
                         <SimpleGrid cols={0}>
                             <Flex
