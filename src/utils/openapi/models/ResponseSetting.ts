@@ -54,6 +54,7 @@ export function instanceOfResponseSetting(value: object): boolean {
     isInstance = isInstance && "className" in value;
     isInstance = isInstance && "goal" in value;
     isInstance = isInstance && "reserve" in value;
+    isInstance = isInstance && "additionalreserve" in value;
 
     return isInstance;
 }
@@ -87,6 +88,7 @@ export function ResponseSettingToJSON(value?: ResponseSetting | null): any {
         'class_name': value.className,
         'goal': value.goal,
         'reserve': value.reserve,
+        'additionalreserve': value.additionalreserve,
     };
 }
 
