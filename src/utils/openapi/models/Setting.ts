@@ -67,6 +67,7 @@ export function SettingFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'className': !exists(json, 'class_name') ? undefined : json['class_name'],
         'goal': !exists(json, 'goal') ? undefined : json['goal'],
         'reserve': !exists(json, 'reserve') ? undefined : json['reserve'],
+        'additionalreserve': !exists(json, 'additionalreserve') ? undefined : json['additionalreserve'],
     };
 }
 
