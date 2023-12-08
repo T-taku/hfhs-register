@@ -32,7 +32,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "dayjs": "^1.11.8",
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.38.0",
