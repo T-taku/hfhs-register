@@ -139,6 +139,10 @@ export class RegiAPI {
     }
   }
 
+  async getHistoryQueue() {
+    return await this.db?.getAll("history-queue");
+  }
+
   async flushHistory() {
     try {
       const historyQueueIndexes = await this.db?.getAllKeys("history-queue");
