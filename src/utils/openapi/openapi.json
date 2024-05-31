@@ -1,0 +1,670 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "HFHS Regi",
+    "summary": "hfhs-regi API Backend",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://regi-api.hfhs-digital.app",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:8000",
+      "description": "Development Server"
+    }
+  ],
+  "tags": [{
+    "name": "ユーザー系"
+  }, {
+    "name": "決済履歴系"
+  }, {
+    "name": "店舗設定系"
+  }, {
+    "name": "ステータス"
+  }, {
+    "name": "認証系"
+  }],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "ユーザー系"
+        ],
+        "summary": "Get Userinfo",
+        "operationId": "get_userinfo",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/history/{class_name}": {
+      "get": {
+        "tags": [
+          "決済履歴系"
+        ],
+        "summary": "Get History",
+        "operationId": "get_history",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClassNameParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/History"
+                  },
+                  "title": "Response of Get History"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/add/{class_name}": {
+      "post": {
+        "tags": [
+          "決済履歴系"
+        ],
+        "summary": "Add History",
+        "operationId": "add_history",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClassNameParam"
+          },
+          {
+            "name": "total",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Total"
+            }
+          },
+          {
+            "name": "change",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Change"
+            }
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddHistoryQuery"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/{class_name}": {
+      "get": {
+        "tags": [
+          "店舗設定系"
+        ],
+        "summary": "Get Setting",
+        "operationId": "get_setting",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClassNameParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Setting"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/set/{class_name}": {
+      "post": {
+        "tags": [
+          "店舗設定系"
+        ],
+        "summary": "Set Setting",
+        "operationId": "set_setting",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClassNameParam"
+          },
+          {
+            "name": "goal",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Goal"
+            }
+          },
+          {
+            "name": "reserve",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Reserve"
+            }
+          },
+          {
+            "name": "additionalreserve",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Additionalreserve"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Setting"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "ステータス"
+        ],
+        "summary": "Index",
+        "operationId": "get_status",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "Status",
+                      "examples": ["200 OK"]
+                    }
+                  },
+                  "type": "object",
+                  "title": "Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "get": {
+        "tags": [
+          "認証系"
+        ],
+        "summary": "Get Islogin",
+        "operationId": "get_isLogin",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isLogin": {
+                      "type": "string",
+                      "description": "result",
+                      "examples": ["user@example.com"]
+                    }
+                  },
+                  "type": "object",
+                  "title": "AuthStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "ClassNameParam": {
+        "name": "class_name",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "title": "Class Name",
+          "description": "クラス名",
+          "examples": ["2年1組"]
+        }
+      }
+    },
+    "schemas": {
+      "AddHistoryQuery": {
+        "properties": {
+          "class_name": {
+            "type": "string",
+            "title": "Class Name",
+            "description": "クラス名",
+            "examples": [
+              "2年1組"
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "購入金額",
+            "examples": [
+              200
+            ]
+          },
+          "change": {
+            "type": "integer",
+            "title": "Change",
+            "description": "お釣り",
+            "examples": [
+              100
+            ]
+          },
+          "product": {
+            "type": "string",
+            "title": "Product",
+            "description": "購入商品",
+            "examples": [
+              "かき氷, 練乳"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "AddHistoryQuery"
+      },
+      "History": {
+        "properties": {
+          "payment_id": {
+            "type": "string",
+            "title": "Payment Id"
+          },
+          "paid_class": {
+            "type": "string",
+            "title": "Paid Class"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "change": {
+            "type": "integer",
+            "title": "Change"
+          },
+          "product": {
+            "type": "string",
+            "title": "Product"
+          }
+        },
+        "type": "object",
+        "required": [
+          "payment_id",
+          "paid_class",
+          "timestamp",
+          "total",
+          "change",
+          "product"
+        ],
+        "title": "History",
+        "description": "決済情報"
+      },
+      "User": {
+        "properties": {
+          "user_mail": {
+            "type": "string",
+            "title": "User Mail"
+          },
+          "user_name": {
+            "type": "string",
+            "title": "User Name"
+          },
+          "user_class": {
+            "type": "string",
+            "title": "User Class"
+          },
+          "user_role": {
+            "type": "string",
+            "title": "User Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_mail",
+          "user_name",
+          "user_class",
+          "user_role"
+        ],
+        "title": "User"
+      },
+      "Setting": {
+        "properties": {
+          "class_name": {
+            "type": "string",
+            "title": "Class Name",
+            "description": "クラス名",
+            "examples": [
+              "2年1組"
+            ]
+          },
+          "goal": {
+            "type": "integer",
+            "title": "Goal",
+            "description": "目標金額",
+            "examples": [
+              200
+            ]
+          },
+          "reserve": {
+            "type": "integer",
+            "title": "Reserve",
+            "description": "準備金",
+            "examples": [
+              10000000
+            ]
+          },
+          "additionalreserve": {
+            "type": "integer",
+            "title": "Additionalreserve",
+            "description": "追加準備金",
+            "examples": [
+              10000000
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Setting"
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "http",
+        "description": "Json Web Token with Encrypted",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
