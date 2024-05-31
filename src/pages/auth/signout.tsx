@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 export default function SignOut() {
   const router = useRouter()
-  
+
   useEffect(() => {
     const req = openDB<RegisterDBSchema>("register-db", 1, {
       upgrade(db, oldVersion, newVersion, transaction, event) {

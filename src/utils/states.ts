@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
 export const amountPaidState = atom<number[]>({
-    key: 'amountPaidState',
-    default: [],
+  key: 'amountPaidState',
+  default: [],
 });

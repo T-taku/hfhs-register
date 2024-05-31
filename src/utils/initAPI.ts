@@ -74,21 +74,21 @@ export class API extends DefaultApi {
     }
   }
 
-    /**
-   * Add History
-   */
-    async _addHistoryWithOutQueue(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponceAdd> {
-      if (this.database) {
-        try {
-          const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
-          return { result: true, ...(await response.value()) };
-        } catch (e) {
-          return { result: false, ...requestParameters }
-        }
-      } else {
-        throw Error("IndexedDB failed.");
+  /**
+ * Add History
+ */
+  async _addHistoryWithOutQueue(requestParameters: AddHistoryHistoryAddClassNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponceAdd> {
+    if (this.database) {
+      try {
+        const response = await this.addHistoryHistoryAddClassNamePostRaw(requestParameters, initOverrides);
+        return { result: true, ...(await response.value()) };
+      } catch (e) {
+        return { result: false, ...requestParameters }
       }
+    } else {
+      throw Error("IndexedDB failed.");
     }
+  }
 
   async sendHistoryQueue(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponceAdd[]> {
     if (this.database) {
@@ -296,6 +296,6 @@ export async function initAPI(token: (() => string) | (() => Promise<string>) | 
     }
   });
 
-  const config = new Configuration({ basePath: "https://registar-api.hfhs-schoolfestival2023.fun", accessToken: token });
+  const config = new Configuration({ basePath: "http://localhost:8000", accessToken: token });
   return new API(config, db);
 }
