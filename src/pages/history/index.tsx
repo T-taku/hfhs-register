@@ -1,4 +1,4 @@
-import HistoryQueuetable from '@/components/HistoryQueueTable';
+import HistoryQueueTable from '@/components/HistoryQueueTable';
 import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
 import { useAPI } from '@/utils/useAPI';
 import { useUserinfo } from '@/utils/useUserinfo';
@@ -98,7 +98,7 @@ export default function History() {
           paymentQueueData.length > 0 &&
           (<>
             <Title order={3}>送信待機中の会計履歴</Title><Button onClick={() => { sendHistoryQueue() }}>送信</Button>
-            <HistoryQueuetable paymentData={paymentQueueData}></HistoryQueuetable>
+            <HistoryQueueTable paymentData={paymentQueueData}></HistoryQueueTable>
           </>)
         }
         <br />
