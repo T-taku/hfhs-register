@@ -14,7 +14,6 @@ import { Comp_Navbar } from '../../components/Navbar';
 
 export default function History() {
   const api = useAPI();
-  const userinfo = useUserinfo();
 
   const [paymentData, setPaymentData] = useState<History[]>([]);
   const [paymentQueueData, setPaymentQueueData] = useState<AddHistoryQuery[]>([]);
@@ -22,7 +21,7 @@ export default function History() {
 
   const sendHistoryQueue = () => {
     if (!api) return;
-    api.then((api) => api.flushHistory()).then((res) => {
+    api.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
         notifications.show({
           id: 'done-queuesend',
@@ -55,32 +54,25 @@ export default function History() {
 
   const getHistoryQueue = () => {
     if (!api) return;
-    api.then(api => api.getHistoryQueue()).then((res) => {
+    api.getHistoryQueue().then((res) => {
       setPaymentQueueData(res ?? []);
     })
   }
 
   const fetchHistory = () => {
-    if (!api || !userinfo) return;
-    userinfo
-      .then((user) => {
-        if(user) {
-          api.then(api => {
-            api.fetchHistory({ className: user.userClass }).then((res) => {
-              setPaymentData(res);
-            })
-            api.getSetting({ className: user.userClass }).then((res) => {
-              setSettingData(res);
-            })
-          })
-        }
-      })
+    if (!api) return;
+    api.fetchHistory(true).then((res) => {
+      setPaymentData(res);
+    })
+    api.getSetting().then((res) => {
+      setSettingData(res);
+    })
   }
 
   useEffect(() => {
     fetchHistory();
     getHistoryQueue();
-  }, [api, userinfo])
+  }, [api])
 
   return (
     <>

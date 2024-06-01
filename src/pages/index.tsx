@@ -11,16 +11,10 @@ import { Comp_Navbar } from '../components/Navbar';
 import { NumPad } from '../components/Numpad';
 import productsByClass, { Product } from '../utils/product';
 import { amountPaidState } from "../utils/states";
-import { User } from '@/utils/RegiAPI';
 
 export default function Home() {
   const api = useAPI();
-  const userinfo = useUserinfo();
-  const [userData, setUserData] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    userinfo?.then(user => setUserData(user));
-  })
+  const userData = useUserinfo();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
@@ -58,7 +52,7 @@ export default function Home() {
       product: "返金対応",
     }
     try {
-      api.then(api => api.addHistory(requestParameters)).then(response => {
+      api.addHistory(requestParameters).then(response => {
         if (response.status == "COMPLETE") {
           notifications.show({
             id: 'donerecord',
@@ -138,7 +132,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!api) return;
-    api.then(api => api.flushHistory()).then((res) => {
+    api.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
         notifications.show({
           id: 'error',
