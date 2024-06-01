@@ -11,9 +11,7 @@ export default function SignIn() {
   const providers = { "google": { "id": "google", "name": "Google", "type": "oauth", "signinUrl": "http://localhost:3000/api/auth/signin/google", "callbackUrl": "http://localhost:3000/api/auth/callback/google" } }
   const api = useAPI(false);
   useEffect(() => {
-    if(api) {
-      api.then((api) => api.clearAllCache())
-    }
+    api?.clearAllCache();
   }, [api]);
   return (
     <>

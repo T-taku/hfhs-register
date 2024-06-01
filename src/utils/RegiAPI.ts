@@ -1,11 +1,8 @@
 import { Configuration, DefaultApi } from "./openapi";
 import { DBSchema, openDB, IDBPDatabase } from "idb";
-import { env } from "process";
 
 import type {
   AddHistoryRequest,
-  GetHistoryRequest,
-  GetSettingRequest,
   SetSettingRequest,
   Setting,
   User,
@@ -48,15 +45,15 @@ export interface RegisterDBSchema extends DBSchema {
 export class RegiAPI {
   api: DefaultApi;
   db?: IDBPDatabase<RegisterDBSchema>;
+  userinfo?: User;
 
   constructor(
-    token: Promise<string> | string | (() => Promise<string> | string),
+    token?: Promise<string> | string | (() => Promise<string> | string)   ,
     useLocal?: boolean
   ) {
     this.api = new DefaultApi(
       new Configuration({
-        basePath:
-        useLocal
+        basePath: useLocal
           ? "http://localhost:8000"
           : "https://regi-api.hfhs-digital.app",
         accessToken: token,
@@ -86,7 +83,7 @@ export class RegiAPI {
       return await this.updateUserinfoCache();
     }
     try {
-      const userinfoCache = (await this.db?.get("user", "userinfo")) as
+      const userinfoCache = this.userinfo ?? (await this.db?.get("user", "userinfo")) as
         | User
         | undefined;
       if (!userinfoCache) {
@@ -94,37 +91,47 @@ export class RegiAPI {
         await this.db?.put("user", userinfo, "userinfo");
         return userinfo;
       }
-      return userinfoCache;
+      this.userinfo = userinfoCache;
     } catch {
-      return await this.api.getUserinfo();
+      this.userinfo = await this.api.getUserinfo();
     }
+    return this.userinfo;
   }
 
   private async updateUserinfoCache() {
-    const usetinfo = await this.api.getUserinfo();
+    const userinfo = await this.api.getUserinfo();
     try {
-      await this.db?.put("user", usetinfo, "userinfo");
+      await this.db?.put("user", userinfo, "userinfo");
     } catch {}
-    return usetinfo;
+    this.userinfo = userinfo;
+    return userinfo;
   }
 
-  async fetchHistory(param: GetHistoryRequest, force?: boolean) {
+  async fetchHistory(force?: boolean) {
     if (force) {
-      return await this.updateHistoryCache(param);
+      return await this.updateHistoryCache();
     } else {
       try {
         const historiesCache = await this.db?.getAll("history");
         if (!historiesCache) {
-          return this.updateHistoryCache(param);
+          return this.updateHistoryCache();
         }
         return historiesCache;
       } catch {
+        const param = {
+          className:
+            this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+        };
         return await this.api.getHistory(param);
       }
     }
   }
 
-  private async updateHistoryCache(param: GetHistoryRequest) {
+  private async updateHistoryCache() {
+    const param = {
+      className:
+        this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+    };
     const histories = await this.api.getHistory(param);
     try {
       const transaction = this.db?.transaction("history", "readwrite");
@@ -136,16 +143,26 @@ export class RegiAPI {
     return histories;
   }
 
-  async addHistory(param: AddHistoryRequest) {
+  async addHistory(param: Omit<AddHistoryRequest, "className">) {
     try {
       const flushResult = await this.flushHistory();
       if (flushResult.status == "IN-QUEUE") {
         throw flushResult.error;
       }
-      await this.api.addHistory(param);
+      const request = {
+        className:
+          this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+        ...param,
+      };
+      await this.api.addHistory(request);
       return { status: "COMPLETE" } as const;
     } catch (e) {
-      await this.db?.put("history-queue", param);
+      const request = {
+        className:
+          this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+        ...param,
+      };
+      await this.db?.put("history-queue", request);
       return { status: "IN-QUEUE", error: e } as const;
     }
   }
@@ -170,34 +187,38 @@ export class RegiAPI {
         }
         return { status: "COMPLETE" } as const;
       } else {
-        return { status: "NONE" } as const
+        return { status: "NONE" } as const;
       }
     } catch (e) {
       return { status: "IN-QUEUE", error: e } as const;
     }
   }
 
-  async getSetting(param: GetSettingRequest, force?: boolean) {
+  async getSetting(force?: boolean) {
     if (force) {
-      return await this.updateSettingCache(param);
+      return await this.updateSettingCache();
     } else {
       try {
         const settingCache = (await this.db?.get("user", "settings")) as
           | Setting
           | undefined;
         if (!settingCache) {
+          if (!this.userinfo) await this.getUserinfo();
+          const param = { className: this.userinfo?.userClass! };
           const setting = await this.api.getSetting(param);
           await this.db?.put("user", setting, "settings");
           return setting;
         }
         return settingCache;
       } catch {
+        const param = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass };
         return await this.api.getSetting(param);
       }
     }
   }
 
-  private async updateSettingCache(param: GetSettingRequest) {
+  private async updateSettingCache() {
+    const param = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass };
     const setting = await this.api.getSetting(param);
     try {
       await this.db?.put("user", setting, "settings");
@@ -205,14 +226,15 @@ export class RegiAPI {
     return setting;
   }
 
-  async setSetting(param: SetSettingRequest) {
-    return await this.api.setSetting(param);
+  async setSetting(param: Omit<SetSettingRequest, "className">) {
+    const request = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass, ...param };
+    return await this.api.setSetting(request);
   }
 
   async clearAllCache() {
     const stores = ["history", "history-queue", "user"] as const;
     const transaction = this.db?.transaction(stores, "readwrite");
-    for(const storeName of stores) {
+    for (const storeName of stores) {
       const store = transaction?.objectStore(storeName);
       await store?.clear();
     }

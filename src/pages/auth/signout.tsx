@@ -7,11 +7,9 @@ export default function SignOut() {
   const router = useRouter()
   const api = useAPI(false);
   useEffect(() => {
-    if (api) {
-      api.then((api) => api.clearAllCache()).then(() => {
-        router.replace("/auth/signin")
-      });
-    }
+    api?.clearAllCache().then(() => {
+      router.replace("/auth/signin")
+    });
   }, [api]);
   return (
     <>

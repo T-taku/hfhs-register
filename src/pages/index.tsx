@@ -11,23 +11,19 @@ import { Comp_Navbar } from '../components/Navbar';
 import { NumPad } from '../components/Numpad';
 import productsByClass, { Product } from '../utils/product';
 import { amountPaidState } from "../utils/states";
-import { User } from '@/utils/RegiAPI';
 
 export default function Home() {
   const api = useAPI();
-  const userinfo = useUserinfo();
-  const [userData, setUserData] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    userinfo?.then(user => setUserData(user));
-  })
+  const userData = useUserinfo();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
   const [magnification, setMagnification] = useState<number>(1);
   const [order, setOrder] = useState<OrderItem[]>([]);
 
-  const products = productsByClass[(userData?.userClass) || ""]?.map((element) => (
+  const products = productsByClass[userData?.userClass ?? ""] ?? [];
+
+  const productsElement = products.map((element) => (
     (element.id).includes("_")
       ? <div key={element.id}>
         <Button color="red" size={"xl"} onClick={() => handleOrder(element)}>{element.name}</Button>
@@ -37,7 +33,7 @@ export default function Home() {
       </div>
   ));
 
-  const products_normal_count = productsByClass[(userData?.userClass) || ""]?.filter(element => !element.id.includes("_")).length
+  const products_normal_count = productsByClass[(userData?.userClass) ?? ""]?.filter(element => !element.id.includes("_")).length
 
   type OrderItem = {
     product: Product;
@@ -45,7 +41,6 @@ export default function Home() {
   }
 
   async function resetall(times: number = 1) {
-    if (!api) return;
     const requestParameters = times > 0 ? {
       className: userData?.userClass!,
       change: calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
@@ -57,35 +52,33 @@ export default function Home() {
       total: -calculateChange(parseInt(amountPaid.join(""), 10), calculateTotalPrice(order, times), times),
       product: "返金対応",
     }
-    try {
-      api.then(api => api.addHistory(requestParameters)).then(response => {
-        if (response.status == "COMPLETE") {
-          notifications.show({
-            id: 'donerecord',
-            withCloseButton: true,
-            autoClose: 5000,
-            title: "決済が完了しました",
-            message: '決済記録が正常に記録されました。',
-            color: 'green',
-            icon: <IconCheck />,
-            className: 'my-notification-class',
-            loading: false,
-          });
-        } else {
-          notifications.show({
-            id: 'queuedrecord',
-            withCloseButton: true,
-            autoClose: 5000,
-            title: "決済記録が送信できませんでした",
-            message: '決済記録はアプリ内に保存されました。アプリ再起動時に再試行されます。',
-            color: 'red',
-            icon: <IconCheck />,
-            className: 'my-notification-class',
-            loading: false,
-          });
-        }
-      })
-    } catch (e) {
+    api?.addHistory(requestParameters).then(response => {
+      if (response.status == "COMPLETE") {
+        notifications.show({
+          id: 'donerecord',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: "決済が完了しました",
+          message: '決済記録が正常に記録されました。',
+          color: 'green',
+          icon: <IconCheck />,
+          className: 'my-notification-class',
+          loading: false,
+        });
+      } else {
+        notifications.show({
+          id: 'queuedrecord',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: "決済記録が送信できませんでした",
+          message: '決済記録はアプリ内に保存されました。アプリ再起動時に再試行されます。',
+          color: 'red',
+          icon: <IconCheck />,
+          className: 'my-notification-class',
+          loading: false,
+        });
+      }
+    }).catch(e => {
       const error = e as Error;
       notifications.show({
         id: 'error',
@@ -98,7 +91,7 @@ export default function Home() {
         className: 'my-notification-class',
         loading: false,
       });
-    }
+    })
     setamountPaid([]);
     setOrder([]);
   }
@@ -137,8 +130,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (!api) return;
-    api.then(api => api.flushHistory()).then((res) => {
+    api?.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
         notifications.show({
           id: 'error',
@@ -187,7 +179,7 @@ export default function Home() {
         >
           <Title order={3}>商品一覧</Title>
           <SimpleGrid cols={products_normal_count} spacing="xs">
-            {products}
+            {productsElement}
           </SimpleGrid>
           <Text>赤色の商品は、割引額が登録されています。ボタンが繋がっている場合は、文字の上を押して下さい。</Text>
         </Flex>

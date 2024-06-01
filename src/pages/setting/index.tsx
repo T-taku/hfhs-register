@@ -10,7 +10,6 @@ import { Comp_Navbar } from '../../components/Navbar';
 
 export default function History() {
   const api = useAPI();
-  const userinfo = useUserinfo();
   const [settingData, setSettingData] = useState<Setting | undefined>()
   const [goal, setGoal] = useState<number | ''>(0);
   const [reserve, setReserve] = useState<number | ''>(0);
@@ -18,30 +17,25 @@ export default function History() {
 
   const fetchSetting = () => {
     if (api) {
-      userinfo?.then((user) => {
-        if(user) {
-          api.then(api => api.getSetting({ className: user.userClass })).then((res) => {
-            setSettingData(res);
-          })
-        }
+      api.getSetting().then((res) => {
+        setSettingData(res);
       })
     }
   }
 
   useEffect(() => {
     fetchSetting()
-  }, [userinfo, api])
+  }, [api])
 
   async function saveSetting() {
     if (!api) return
     const requestParameters = {
-      className: (await userinfo)?.userClass!,
       goal: Number(goal),
       reserve: Number(reserve),
       additionalreserve: Number(additionalreserve),
     }
     try {
-      api.then(api => api.setSetting(requestParameters)).then(_response => {
+      api.setSetting(requestParameters).then(_response => {
         notifications.show({
           id: 'donerecord',
           withCloseButton: true,

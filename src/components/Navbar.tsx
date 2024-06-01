@@ -85,17 +85,15 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Comp_Navbar({ page}: { page: string }) {
+export function Comp_Navbar({ page }: { page: string }) {
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(page);
   const api = useAPI();
   const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    api?.then((api) => {
-      api.getUserinfo().then((val) => setUserinfo(val))
-    })
-  })
+    api?.getUserinfo().then((val) => setUserinfo(val))
+  }, [api])
 
   const data = [
     { link: '/', label: '会計', icon: IconCalculator },
