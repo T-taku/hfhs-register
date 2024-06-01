@@ -1,5 +1,5 @@
 import type { History } from '@/utils/RegiAPI';
-import { Accordion, Table } from '@mantine/core';
+import { Accordion, Table, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 
@@ -17,32 +17,37 @@ export default function HistoryTable({ paymentData }: { paymentData: History[] }
   const sortedData = sortByTimestamp(paymentData);
 
   return (
-    <>
-      <Accordion variant="separated">
-        {sortedData.map((payment) => (
-          <Accordion.Item className={payment.paymentId} value={payment.paymentId} key={payment.paymentId}>
-            <Accordion.Control>{formatTimestamp(payment.timestamp)}</Accordion.Control>
-            <Accordion.Panel>
-              <Table miw={700}>
-                <thead>
-                  <tr>
-                    <th>購入日時</th>
-                    <th>購入商品</th>
-                    <th>金額</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr key={payment.paymentId}>
-                    <td>{formatTimestamp(payment.timestamp)}</td>
-                    <td>{payment.product}</td>
-                    <td><p>{payment.total}円</p><p>(支払われた金額:{(payment.total) + (payment.change)}円 お釣り: {payment.change}円)</p></td>
-                  </tr>
-                </tbody>
-              </Table>
-            </Accordion.Panel>
-          </Accordion.Item>
-        ))}
-      </Accordion>
-    </>
+    <Accordion variant="separated">
+      {sortedData.map((payment) => (
+        <Accordion.Item className={payment.paymentId} value={payment.paymentId} key={payment.paymentId}>
+          <Accordion.Control>{formatTimestamp(payment.timestamp)}</Accordion.Control>
+          <Accordion.Panel>
+            <Table maw="100%">
+              <thead>
+                <tr>
+                  <th>購入日時</th>
+                  <th>購入商品</th>
+                  <th>金額</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr key={payment.paymentId}>
+                  <td>{formatTimestamp(payment.timestamp)}</td>
+                  <td>{payment.product.split(",").map(t => (
+                    <Text component='p'>
+                      {t}
+                    </Text>
+                  ))}</td>
+                  <td>
+                    <Text component="p">{payment.total}円</Text>
+                    {payment.product !== "返金対応" && <Text component='p'>(支払われた金額:{(payment.total) + (payment.change)}円 お釣り: {payment.change}円)</Text>}
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          </Accordion.Panel>
+        </Accordion.Item>
+      ))}
+    </Accordion>
   );
 }

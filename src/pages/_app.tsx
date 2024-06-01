@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
   return (
     <>
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2B8A3E" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
@@ -51,6 +52,38 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
         theme={{
           /** Put your mantine theme override here */
           colorScheme: 'light',
+          components: {
+            Text: {
+              styles: {
+                root: {
+                  margin: "0em"
+                }
+              }
+            },
+            NumberInput: {
+              styles: {
+                label: {
+                  fontSize: "1.5em",
+                  fontWeight: "bold"
+                },
+                description: {
+                  color: "black",
+                  fontSize: "0.9em"
+                }
+              }
+            },
+            Tabs: {
+              styles: {
+                tabLabel: {
+                  fontSize: "1.2em",
+                  fontWeight: "bold"
+                },
+                tab: {
+                  borderBottom: "0.3rem solid transparent"
+                }
+              }
+            }
+          }
         }}
       >
         <Notifications />

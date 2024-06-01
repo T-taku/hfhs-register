@@ -83,7 +83,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const data = [
+export const pages = [
   { link: '/', label: '会計', icon: IconCalculator },
   { link: '/history', label: '売上確認', icon: IconReceipt2 },
   { link: '/setting', label: '店舗設定', icon: IconSettings },
@@ -91,11 +91,11 @@ const data = [
   { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
 ] as const;
 
-export function Comp_Navbar({ page }: { page: (typeof data)[number]["label"] }) {
+export function Comp_Navbar({ page }: { page: (typeof pages)[number]["label"] }) {
   const { classes, cx } = useStyles();
   const userinfo = useUserinfo();
 
-  const links = data.map((item) => (
+  const links = pages.map((item) => (
     <Link
       className={cx(classes.link, { [classes.linkActive]: item.label === page })}
       href={item.link}
@@ -107,7 +107,7 @@ export function Comp_Navbar({ page }: { page: (typeof data)[number]["label"] }) 
   ));
 
   return (
-    <Navbar height={" 100% "} width={{ sm: 300 }} p="md" className={classes.navbar} fixed={true}>
+    <Navbar hidden hiddenBreakpoint="xs" height="100%" width={{ xs: 170, sm: 210, md: 300 }} p="md" className={classes.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Title order={4} color='#fff'>{`${userinfo?.userClass ?? "取得中..."} | HFHS REGI`}</Title>
