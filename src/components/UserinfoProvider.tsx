@@ -6,11 +6,11 @@ import { useAPI } from "@/utils/useAPI";
 export const UserinfoContext = createContext<User | undefined>(undefined);
 
 export function UserinfoProvider({ children }: { children: React.ReactNode }) {
-  const api = useAPI(false);
+  const api = useAPI();
   const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
   useEffect(() => {
     api?.getUserinfo().then(user => setUserinfo(user))
-  })
+  }, [api])
   return <UserinfoContext.Provider value={userinfo}>
     {children}
   </UserinfoContext.Provider>

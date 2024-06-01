@@ -48,7 +48,7 @@ export class RegiAPI {
   userinfo?: User;
 
   constructor(
-    token: Promise<string> | string | (() => Promise<string> | string),
+    token?: Promise<string> | string | (() => Promise<string> | string)   ,
     useLocal?: boolean
   ) {
     this.api = new DefaultApi(

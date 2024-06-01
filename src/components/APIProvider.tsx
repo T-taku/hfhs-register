@@ -9,9 +9,10 @@ export function APIProvider({ children }: { children: React.ReactNode }) {
   const [api, setAPI] = useState<RegiAPI | undefined>(undefined);
   useEffect(() => {
     fetch('/api/auth/jwt')
-      .then((res) => res.text()).then((token) => new RegiAPI(token, local))
-      .then(api => setAPI(api));
-  })
+      .then(res => res.text())
+      .then(token => setAPI(new RegiAPI(token, local)))
+      .catch(() => setAPI(new RegiAPI()));
+  }, [])
   return <APIContext.Provider value={api}>
     {children}
   </APIContext.Provider>

@@ -61,7 +61,7 @@ export default function History() {
 
   const fetchHistory = () => {
     if (!api) return;
-    api.fetchHistory(true).then((res) => {
+    api.fetchHistory().then((res) => {
       setPaymentData(res);
     })
     api.getSetting().then((res) => {

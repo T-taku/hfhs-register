@@ -57,9 +57,16 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
         <SessionProvider session={pageProps.session}>
           <RecoilRoot>
             <APIProvider>
-              <UserinfoProvider>
-                <Component {...pageProps} />
-              </UserinfoProvider>
+              {
+                !router.pathname.includes("/auth") ?
+                  (
+                    <UserinfoProvider>
+                      <Component {...pageProps} />
+                    </UserinfoProvider>
+                  ) : (
+                    <Component {...pageProps} />
+                  )
+              }
             </APIProvider>
           </RecoilRoot>
         </SessionProvider>
