@@ -1,4 +1,4 @@
-import HistoryQueueTable from '@/components/HistoryQueueTable';
+import HistoryQueueTable from '@/components/HistoryQueuetable';
 import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
 import { useAPI } from '@/utils/useAPI';
 import { useUserinfo } from '@/utils/useUserinfo';
@@ -8,7 +8,7 @@ import { IconCheck, IconCircleX } from '@tabler/icons-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Earn from '../../components/Earn';
-import Historytable from '../../components/HistoryTable';
+import HistoryTable from '../../components/Historytable';
 import { Comp_Navbar } from '../../components/Navbar';
 
 
@@ -104,7 +104,7 @@ export default function History() {
         <br />
         <Title order={3}>会計履歴</Title>
         <br />
-        <Historytable paymentData={paymentData}></Historytable>
+        <HistoryTable paymentData={paymentData}></HistoryTable>
       </AppShell>
     </>
   )
