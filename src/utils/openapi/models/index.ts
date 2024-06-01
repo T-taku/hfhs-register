@@ -1,10 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AddHistoryQuery';
+export * from './AuthStatus';
 export * from './HTTPValidationError';
-export * from './HistoryAdd';
-export * from './LocationInner';
-export * from './ResponseHistory';
-export * from './ResponseSetting';
-export * from './ResponseUser';
+export * from './History';
 export * from './Setting';
+export * from './Status';
+export * from './User';
 export * from './ValidationError';
+export * from './ValidationErrorLocInner';

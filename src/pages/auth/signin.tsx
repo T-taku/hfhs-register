@@ -5,32 +5,16 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { Container, Title, Text, Button, rem } from "@mantine/core";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { useEffect } from "react";
-import { openDB } from "idb";
-import { RegisterDBSchema } from "@/utils/initAPI";
+import { useAPI } from "@/utils/useAPI";
 
 export default function SignIn() {
-  const providers = {"google":{"id":"google","name":"Google","type":"oauth","signinUrl":"http://localhost:3000/api/auth/signin/google","callbackUrl":"http://localhost:3000/api/auth/callback/google"}}
+  const providers = { "google": { "id": "google", "name": "Google", "type": "oauth", "signinUrl": "http://localhost:3000/api/auth/signin/google", "callbackUrl": "http://localhost:3000/api/auth/callback/google" } }
+  const api = useAPI(false);
   useEffect(() => {
-    const req = openDB<RegisterDBSchema>("register-db", 1, {
-      upgrade(db, oldVersion, newVersion, transaction, event) {
-        db.createObjectStore("user");
-        db.createObjectStore("history");
-        db.createObjectStore("history-queue", { autoIncrement: true });
-      },
-      blocked(currentVersion, blockedVersion, event) {
-        throw event
-      },
-      blocking(currentVersion, blockedVersion, event) {
-        throw event
-      }
-    });
-    req.then(async (db) => {
-      const transaction = db.transaction(["user", "history", "history-queue"], "readwrite");
-      await transaction.objectStore("user").clear();
-      await transaction.objectStore("history").clear();
-      await transaction.objectStore("history-queue").clear();
-    })
-  })
+    if(api) {
+      api.then((api) => api.clearAllCache())
+    }
+  }, [api]);
   return (
     <>
       <Container
