@@ -1,4 +1,4 @@
-import { type ResponseHistory } from '@/utils/openapi';
+import type { History } from '@/utils/RegiAPI';
 import { Accordion, Table, createStyles, rem } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
@@ -7,7 +7,7 @@ function formatTimestamp(timestamp: string): string {
   return dayjs(timestamp).format('YYYY年MM月DD日 HH:mm');
 }
 
-export default function Historytable({ paymentData }: { paymentData: ResponseHistory[] }) {
+export default function HistoryTable({ paymentData }: { paymentData: History[] }) {
   // timestampでソートするヘルパー関数
   function sortByTimestamp(data) {
     return data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());

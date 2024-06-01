@@ -1,4 +1,4 @@
-import { type AddHistoryHistoryAddClassNamePostRequest } from '@/utils/openapi';
+import type { AddHistoryRequest } from '@/utils/RegiAPI';
 import { Accordion, Table, createStyles, rem } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
@@ -7,7 +7,7 @@ function formatTimestamp(timestamp: string): string {
   return dayjs(timestamp).format('YYYY年MM月DD日 HH:mm');
 }
 
-export default function HistoryQueueQtable({ paymentData }: { paymentData: AddHistoryHistoryAddClassNamePostRequest[] }) {
+export default function HistoryQueueTable({ paymentData }: { paymentData: AddHistoryRequest[] }) {
   const useStyles = createStyles((theme) => ({
     wrapper: {
       paddingTop: `calc(${theme.spacing.xl} * 2)`,
