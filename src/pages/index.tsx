@@ -11,6 +11,7 @@ import { Comp_Navbar } from '../components/Navbar';
 import { NumPad } from '../components/Numpad';
 import productsByClass, { Product } from '../utils/product';
 import { amountPaidState } from "../utils/states";
+import { notif } from '@/utils/notif';
 
 export default function Home() {
   const api = useAPI();
@@ -54,43 +55,13 @@ export default function Home() {
     }
     api?.addHistory(requestParameters).then(response => {
       if (response.status == "COMPLETE") {
-        notifications.show({
-          id: 'donerecord',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "決済が完了しました",
-          message: '決済記録が正常に記録されました。',
-          color: 'green',
-          icon: <IconCheck />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("DONERECORD");
       } else {
-        notifications.show({
-          id: 'queuedrecord',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "決済記録が送信できませんでした",
-          message: '決済記録はアプリ内に保存されました。アプリ再起動時に再試行されます。',
-          color: 'red',
-          icon: <IconCheck />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("QUEUE");
       }
     }).catch(e => {
       const error = e as Error;
-      notifications.show({
-        id: 'error',
-        withCloseButton: true,
-        autoClose: 5000,
-        title: "決済が記録できませんでした",
-        message: 'これはアプリのバグの可能性があります。\n' + error.name + ": " + error.message,
-        color: 'red',
-        icon: <IconCircleX />,
-        className: 'my-notification-class',
-        loading: false,
-      });
+      notif("ERROR", error);
     })
     setamountPaid([]);
     setOrder([]);
@@ -132,29 +103,9 @@ export default function Home() {
   useEffect(() => {
     api?.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
-        notifications.show({
-          id: 'error',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "以前の決済が正常に記録されました",
-          message: "決済記録が正常に記録されました。",
-          color: 'green',
-          icon: <IconCheck />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("SENT");
       } else if (res.status == "IN-QUEUE") {
-        notifications.show({
-          id: 'error',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "以前の決済の記録が送信されていません",
-          message: "アプリの再起動時に再試行されます。",
-          color: 'red',
-          icon: <IconCircleX />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("FAILWARN");
       }
     })
   }, [api])

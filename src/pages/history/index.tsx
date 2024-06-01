@@ -2,13 +2,12 @@ import HistoryQueueTable from '@/components/HistoryQueuetable';
 import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
 import { useAPI } from '@/utils/useAPI';
 import { AppShell, Button, Title } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconCircleX } from '@tabler/icons-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Earn from '../../components/Earn';
 import HistoryTable from '../../components/Historytable';
 import { Comp_Navbar } from '../../components/Navbar';
+import { notif } from '@/utils/notif';
 
 
 export default function History() {
@@ -22,29 +21,9 @@ export default function History() {
     if (!api) return;
     api.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
-        notifications.show({
-          id: 'done-queuesend',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "決済が正常に記録されました",
-          message: "決済記録が正常に記録されました。",
-          color: 'green',
-          icon: <IconCheck />,
-          className: 'my-notification-class',
-          loading: false,
-        })
+        notif("SENT");
       } else {
-        notifications.show({
-          id: 'error-queuesend',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "送信できませんでした",
-          message: "アプリの再起動時に再試行されます。",
-          color: 'red',
-          icon: <IconCircleX />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("FAIL");
       }
     }).finally(() => {
       getHistoryQueue()
