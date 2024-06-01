@@ -64,14 +64,16 @@ export default function History() {
     if (!api || !userinfo) return;
     userinfo
       .then((user) => {
-        api.then(api => {
-          api.fetchHistory({ className: user.userClass }).then((res) => {
-            setPaymentData(res);
+        if(user) {
+          api.then(api => {
+            api.fetchHistory({ className: user.userClass }).then((res) => {
+              setPaymentData(res);
+            })
+            api.getSetting({ className: user.userClass }).then((res) => {
+              setSettingData(res);
+            })
           })
-          api.getSetting({ className: user.userClass }).then((res) => {
-            setSettingData(res);
-          })
-        })
+        }
       })
   }
 
