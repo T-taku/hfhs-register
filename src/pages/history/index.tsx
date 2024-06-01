@@ -25,7 +25,7 @@ export default function History() {
 
   const sendHistoryQueue = () => {
     if (!api) return;
-    api.flushHistory().then((res) => {
+    api.then((api) => api.flushHistory()).then((res) => {
       if (res.status == "COMPLETE") {
         notifications.show({
           id: 'done-queuesend',
@@ -58,7 +58,7 @@ export default function History() {
 
   const getHistoryQueue = () => {
     if (!api) return;
-    api.getHistoryQueue().then((res) => {
+    api.then(api => api.getHistoryQueue()).then((res) => {
       setPaymentQueueData(res ?? []);
     })
   }
@@ -67,11 +67,13 @@ export default function History() {
     if (!api || !userinfo) return;
     userinfo
       .then((user) => {
-        api.fetchHistory({ className: user.userClass }).then((res) => {
-          setPaymentData(res);
-        })
-        api.getSetting({ className: user.userClass }).then((res) => {
-          setSettingData(res);
+        api.then(api => {
+          api.fetchHistory({ className: user.userClass }).then((res) => {
+            setPaymentData(res);
+          })
+          api.getSetting({ className: user.userClass }).then((res) => {
+            setSettingData(res);
+          })
         })
       })
   }

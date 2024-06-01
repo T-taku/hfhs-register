@@ -58,7 +58,7 @@ export class RegiAPI {
           env.NODE_ENV === "production"
             ? "https://regi-api.hfhs-digital.app"
             : "http://localhost:8000",
-        apiKey: token,
+        accessToken: token,
       })
     );
     openDB<RegisterDBSchema>("hfhs-regi", 1, {
@@ -167,8 +167,10 @@ export class RegiAPI {
           }
           await this.db?.delete("history-queue", historyIndex);
         }
+        return { status: "COMPLETE" } as const;
+      } else {
+        return { status: "NONE" } as const
       }
-      return { status: "COMPLETE" } as const;
     } catch (e) {
       return { status: "IN-QUEUE", error: e } as const;
     }

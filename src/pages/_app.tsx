@@ -1,18 +1,16 @@
-import { AppProps } from 'next/app';
-import Head from 'next/head';
-import { MantineProvider } from '@mantine/core';
-import { SessionProvider } from 'next-auth/react'
-import { Session } from "next-auth"
-import { RecoilRoot } from 'recoil';
-import { Notifications } from '@mantine/notifications';
-import Script from "next/script";
-import * as gtag from "../lib/gtag";
-import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { User } from '@/utils/RegiAPI';
-import { RegiAPI } from '@/utils/RegiAPI';
 import { APIProvider } from '@/components/APIProvider';
 import { UserinfoProvider } from '@/components/UserinfoProvider';
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import { Session } from "next-auth";
+import { SessionProvider } from 'next-auth/react';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import Script from "next/script";
+import { useEffect } from 'react';
+import { RecoilRoot } from 'recoil';
+import * as gtag from "../lib/gtag";
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   const router = useRouter();

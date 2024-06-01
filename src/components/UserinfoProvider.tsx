@@ -8,7 +8,7 @@ export const UserinfoContext = createContext<Promise<User> | undefined>(undefine
 export function UserinfoProvider({ children }: { children: React.ReactNode }) {
   const api = useContext(APIContext);
   return <UserinfoContext.Provider value={
-    api?.getUserinfo()
+    api?.then((api) => api.getUserinfo())
   }>
     {children}
   </UserinfoContext.Provider>

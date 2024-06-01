@@ -12,7 +12,7 @@ export default function SignIn() {
   const api = useAPI(false);
   useEffect(() => {
     if(api) {
-      api.clearAllCache();
+      api.then((api) => api.clearAllCache())
     }
   }, [api]);
   return (

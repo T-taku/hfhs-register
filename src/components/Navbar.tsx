@@ -92,7 +92,9 @@ export function Comp_Navbar({ page}: { page: string }) {
   const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    api?.getUserinfo().then((val) => setUserinfo(val))
+    api?.then((api) => {
+      api.getUserinfo().then((val) => setUserinfo(val))
+    })
   })
 
   const data = [
@@ -126,7 +128,7 @@ export function Comp_Navbar({ page}: { page: string }) {
       <Navbar.Section className={classes.footer}>
         <div className={classes.link}>
           <IconUserCircle className={classes.linkIcon} stroke={1.5} />
-          <span>{userinfo?.userClass ?? "ゲスト"}</span>
+          <span>{userinfo?.userName ?? "ゲスト"}</span>
         </div>
         <a href="#" className={classes.link} onClick={() => signOut({ redirect: true, callbackUrl: "/auth/signout" })}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />

@@ -19,7 +19,7 @@ export default function History() {
   const fetchSetting = () => {
     if (api) {
       userinfo?.then((user) => {
-        api.getSetting({ className: user.userClass }).then((res) => {
+        api.then(api => api.getSetting({ className: user.userClass })).then((res) => {
           setSettingData(res);
         })
       })
@@ -39,7 +39,7 @@ export default function History() {
       additionalreserve: Number(additionalreserve),
     }
     try {
-      api.setSetting(requestParameters).then(_response => {
+      api.then(api => api.setSetting(requestParameters)).then(_response => {
         notifications.show({
           id: 'donerecord',
           withCloseButton: true,

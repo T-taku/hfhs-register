@@ -5,17 +5,22 @@ import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconArrowBigLeftLine, IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { Comp_Navbar } from '../components/Navbar';
 import { NumPad } from '../components/Numpad';
 import productsByClass, { Product } from '../utils/product';
 import { amountPaidState } from "../utils/states";
+import { User } from '@/utils/RegiAPI';
 
-export default async function Home() {
+export default function Home() {
   const api = useAPI();
-  const userData = await useUserinfo();
+  const userinfo = useUserinfo();
+  const [userData, setUserData] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    userinfo?.then(user => setUserData(user));
+  })
 
   const [opened, { open, close }] = useDisclosure(false);
   const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
@@ -53,7 +58,7 @@ export default async function Home() {
       product: "返金対応",
     }
     try {
-      api.addHistory(requestParameters).then(response => {
+      api.then(api => api.addHistory(requestParameters)).then(response => {
         if (response.status == "COMPLETE") {
           notifications.show({
             id: 'donerecord',
@@ -133,7 +138,7 @@ export default async function Home() {
 
   useEffect(() => {
     if (!api) return;
-    api.flushHistory().then((res) => {
+    api.then(api => api.flushHistory()).then((res) => {
       if (res.status == "COMPLETE") {
         notifications.show({
           id: 'error',
@@ -146,7 +151,7 @@ export default async function Home() {
           className: 'my-notification-class',
           loading: false,
         });
-      } else {
+      } else if (res.status == "IN-QUEUE") {
         notifications.show({
           id: 'error',
           withCloseButton: true,
@@ -169,125 +174,121 @@ export default async function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {
-        userData && (
-          <AppShell
-            navbar={<Comp_Navbar page="会計" />}
+      <AppShell
+        navbar={<Comp_Navbar page="会計" />}
+      >
+        <Flex
+          mih={50}
+          gap="sm"
+          justify="flex-end"
+          align="center"
+          direction="column"
+          wrap="wrap"
+        >
+          <Title order={3}>商品一覧</Title>
+          <SimpleGrid cols={products_normal_count} spacing="xs">
+            {products}
+          </SimpleGrid>
+          <Text>赤色の商品は、割引額が登録されています。ボタンが繋がっている場合は、文字の上を押して下さい。</Text>
+        </Flex>
+        <SimpleGrid cols={0}>
+          <Flex
+            mih={50}
+            gap="sm"
+            justify="flex-end"
+            align="center"
+            direction="column"
+            wrap="wrap"
           >
-            <Flex
-              mih={50}
-              gap="sm"
-              justify="flex-end"
-              align="center"
-              direction="column"
-              wrap="wrap"
-            >
-              <Title order={3}>商品一覧</Title>
-              <SimpleGrid cols={products_normal_count} spacing="xs">
-                {products}
-              </SimpleGrid>
-              <Text>赤色の商品は、割引額が登録されています。ボタンが繋がっている場合は、文字の上を押して下さい。</Text>
-            </Flex>
-            <SimpleGrid cols={0}>
-              <Flex
-                mih={50}
-                gap="sm"
-                justify="flex-end"
-                align="center"
-                direction="column"
-                wrap="wrap"
-              >
-                <Title order={3}>購入商品</Title>
-                <Table verticalSpacing="lg" striped>
-                  <thead>
-                    <tr>
-                      <th>商品</th>
-                      <th>値段</th>
-                      <th>個数</th>
-                      <th>操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {order.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.product.name}</td>
-                        <td>¥{item.product.price}</td>
-                        <td>{item.count}</td>
-                        <td><a onClick={() => deleteItemFromOrder(index)}>削除</a></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                {
-                  (order.length > 0) &&
-                  <>
-                    <Title order={5}>合計金額: <Mark color={"red"}>{calculateTotalPrice(order)}円</Mark></Title>
-                    <Button
-                      leftIcon={
-                        <IconCoins size="1.2rem" stroke={1.5} />
-                      }
-                      radius="xl"
-                      size="md"
-                      color="red"
-                      styles={{
-                        root: { paddingRight: rem(14), height: rem(48) },
-                      }}
-                      onClick={() => { setMagnification(1); open() }}
-                    >
-                      支払いへ進む
-                    </Button>
-                  </>
-                }
-                <Button
-                  leftIcon={
-                    <IconArrowBigLeftLine size="0.8rem" stroke={1.5} />
-                  }
-                  radius="xl"
-                  size="sm"
-                  color="blue"
-                  styles={{
-                    root: { paddingRight: rem(14), height: rem(48) },
-                  }}
-                  onClick={() => { setMagnification(-1); open() }}
-                >
-                  返金対応
-                </Button>
-              </Flex>
-            </SimpleGrid>
-            <Modal opened={opened} onClose={close} title={magnification > 0 ? "支払いへ進む" : "返金対応"}>
-              {magnification > 0 && (<>
-                合計金額: {calculateTotalPrice(order)}円
-              </>)}
-              <NumPad refund={(magnification > 0)} />
-              {magnification > 0 && parseInt(amountPaid.join(""), 10) >= calculateTotalPrice(order) && (
-                <div>
-                  お釣り: {calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order))}円
-                </div>
-              )}
-              <br />
-              <Center>
+            <Title order={3}>購入商品</Title>
+            <Table verticalSpacing="lg" striped>
+              <thead>
+                <tr>
+                  <th>商品</th>
+                  <th>値段</th>
+                  <th>個数</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.product.name}</td>
+                    <td>¥{item.product.price}</td>
+                    <td>{item.count}</td>
+                    <td><a onClick={() => deleteItemFromOrder(index)}>削除</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            {
+              (order.length > 0) &&
+              <>
+                <Title order={5}>合計金額: <Mark color={"red"}>{calculateTotalPrice(order)}円</Mark></Title>
                 <Button
                   leftIcon={
                     <IconCoins size="1.2rem" stroke={1.5} />
                   }
                   radius="xl"
                   size="md"
-                  color={magnification > 0 ? "green" : "blue"}
-                  disabled={!(parseInt(amountPaid.join("")) >= calculateTotalPrice(order)) && magnification > 0}
+                  color="red"
                   styles={{
                     root: { paddingRight: rem(14), height: rem(48) },
                   }}
-                  onClick={
-                    () => { close(); resetall(magnification); }
-                  }
+                  onClick={() => { setMagnification(1); open() }}
                 >
-                  {magnification > 0 ? "支払い" : "返金"}を完了
+                  支払いへ進む
                 </Button>
-              </Center>
-            </Modal>
-          </AppShell>
-        )
-      }
+              </>
+            }
+            <Button
+              leftIcon={
+                <IconArrowBigLeftLine size="0.8rem" stroke={1.5} />
+              }
+              radius="xl"
+              size="sm"
+              color="blue"
+              styles={{
+                root: { paddingRight: rem(14), height: rem(48) },
+              }}
+              onClick={() => { setMagnification(-1); open() }}
+            >
+              返金対応
+            </Button>
+          </Flex>
+        </SimpleGrid>
+        <Modal opened={opened} onClose={close} title={magnification > 0 ? "支払いへ進む" : "返金対応"}>
+          {magnification > 0 && (<>
+            合計金額: {calculateTotalPrice(order)}円
+          </>)}
+          <NumPad refund={(magnification > 0)} />
+          {magnification > 0 && parseInt(amountPaid.join(""), 10) >= calculateTotalPrice(order) && (
+            <div>
+              お釣り: {calculateChange(Number(amountPaid.join("")), calculateTotalPrice(order))}円
+            </div>
+          )}
+          <br />
+          <Center>
+            <Button
+              leftIcon={
+                <IconCoins size="1.2rem" stroke={1.5} />
+              }
+              radius="xl"
+              size="md"
+              color={magnification > 0 ? "green" : "blue"}
+              disabled={!(parseInt(amountPaid.join("")) >= calculateTotalPrice(order)) && magnification > 0}
+              styles={{
+                root: { paddingRight: rem(14), height: rem(48) },
+              }}
+              onClick={
+                () => { close(); resetall(magnification); }
+              }
+            >
+              {magnification > 0 ? "支払い" : "返金"}を完了
+            </Button>
+          </Center>
+        </Modal>
+      </AppShell>
     </>
   );
 }
