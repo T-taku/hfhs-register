@@ -296,6 +296,6 @@ export async function initAPI(token: (() => string) | (() => Promise<string>) | 
     }
   });
 
-  const config = new Configuration({ basePath: "https://registar-api.hfhs-schoolfestival2023.fun", accessToken: token });
+  const config = new Configuration({ basePath: "https://regi-api.hfhs-digital.app", accessToken: token });
   return new API(config, db);
 }
