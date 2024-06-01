@@ -1,19 +1,22 @@
-import Head from 'next/head'
-import { Comp_Navbar } from '../components/Navbar'
-import { NumPad } from '../components/Numpad'
-import { AppShell, Title, Text, Button, rem, Flex, Table, Mark, Modal, Center, SimpleGrid } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconCircleX, IconCoins, IconArrowBigLeftLine } from '@tabler/icons-react';
-import productsByClass, { Product } from '../utils/product';
-import { useEffect, useState } from 'react';
+import { useAPI } from '@/utils/useAPI';
+import { useUserinfo } from '@/utils/useUserinfo';
+import { AppShell, Button, Center, Flex, Mark, Modal, SimpleGrid, Table, Text, Title, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useRecoilState } from 'recoil';
-import { amountPaidState } from "../utils/states";
-import type { ResponseUser } from '@/utils/openapi';
-import type { API } from '@/utils/initAPI';
+import { notifications } from '@mantine/notifications';
+import { IconArrowBigLeftLine, IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { Comp_Navbar } from '../components/Navbar';
+import { NumPad } from '../components/Numpad';
+import productsByClass, { Product } from '../utils/product';
+import { amountPaidState } from "../utils/states";
 
-export default function Home({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
+export default async function Home() {
+  const api = useAPI();
+  const userData = await useUserinfo();
+
   const [opened, { open, close }] = useDisclosure(false);
   const [amountPaid, setamountPaid] = useRecoilState(amountPaidState);
   const [magnification, setMagnification] = useState<number>(1);
@@ -51,7 +54,7 @@ export default function Home({ api, userData }: { api: API | undefined, userData
     }
     try {
       api.addHistory(requestParameters).then(response => {
-        if (response.result) {
+        if (response.status == "COMPLETE") {
           notifications.show({
             id: 'donerecord',
             withCloseButton: true,
@@ -77,19 +80,19 @@ export default function Home({ api, userData }: { api: API | undefined, userData
           });
         }
       })
-    } catch (error: unknown) {
-      if (error instanceof Error)
-        notifications.show({
-          id: 'error',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "決済が記録できませんでした",
-          message: 'これはアプリのバグの可能性があります。\n' + error.name + ": " + error.message,
-          color: 'red',
-          icon: <IconCircleX />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+    } catch (e) {
+      const error = e as Error;
+      notifications.show({
+        id: 'error',
+        withCloseButton: true,
+        autoClose: 5000,
+        title: "決済が記録できませんでした",
+        message: 'これはアプリのバグの可能性があります。\n' + error.name + ": " + error.message,
+        color: 'red',
+        icon: <IconCircleX />,
+        className: 'my-notification-class',
+        loading: false,
+      });
     }
     setamountPaid([]);
     setOrder([]);
@@ -127,44 +130,34 @@ export default function Home({ api, userData }: { api: API | undefined, userData
     return times > 0 ? amountPaid - totalPrice : amountPaid + totalPrice;
   }
 
-  const router = useRouter();
 
   useEffect(() => {
     if (!api) return;
-    api.getIslogin().then((res) => { }).catch(() => {
-      router.replace("/auth/signin");
-    })
-  }, [api])
-
-  useEffect(() => {
-    if (!api) return;
-    api.sendHistoryQueue().then((res) => {
-      if (res.length > 0) {
-        if (res.every(val => val.result)) {
-          notifications.show({
-            id: 'error',
-            withCloseButton: true,
-            autoClose: 5000,
-            title: "以前の決済が正常に記録されました",
-            message: "決済記録が正常に記録されました。",
-            color: 'green',
-            icon: <IconCheck />,
-            className: 'my-notification-class',
-            loading: false,
-          });
-        } else {
-          notifications.show({
-            id: 'error',
-            withCloseButton: true,
-            autoClose: 5000,
-            title: "以前の決済の記録が記録されていません",
-            message: "アプリの再起動時に再試行されます。",
-            color: 'red',
-            icon: <IconCircleX />,
-            className: 'my-notification-class',
-            loading: false,
-          });
-        }
+    api.flushHistory().then((res) => {
+      if (res.status == "COMPLETE") {
+        notifications.show({
+          id: 'error',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: "以前の決済が正常に記録されました",
+          message: "決済記録が正常に記録されました。",
+          color: 'green',
+          icon: <IconCheck />,
+          className: 'my-notification-class',
+          loading: false,
+        });
+      } else {
+        notifications.show({
+          id: 'error',
+          withCloseButton: true,
+          autoClose: 5000,
+          title: "以前の決済の記録が送信されていません",
+          message: "アプリの再起動時に再試行されます。",
+          color: 'red',
+          icon: <IconCircleX />,
+          className: 'my-notification-class',
+          loading: false,
+        });
       }
     })
   }, [api])
@@ -179,7 +172,7 @@ export default function Home({ api, userData }: { api: API | undefined, userData
       {
         userData && (
           <AppShell
-            navbar={<Comp_Navbar page="会計" username={userData && userData.userName || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+            navbar={<Comp_Navbar page="会計" />}
           >
             <Flex
               mih={50}
