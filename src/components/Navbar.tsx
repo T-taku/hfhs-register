@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createStyles, Navbar, Group, getStylesRef, rem, Title } from '@mantine/core';
 import {
   IconCalculator,
@@ -11,6 +11,8 @@ import {
 } from '@tabler/icons-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useAPI } from '@/utils/useAPI';
+import { User } from '@/utils/RegiAPI';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -83,9 +85,15 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Comp_Navbar({ page, username, storeName }: { page: string, username?: string, storeName?: string }) {
+export function Comp_Navbar({ page}: { page: string }) {
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(page);
+  const api = useAPI();
+  const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    api?.getUserinfo().then((val) => setUserinfo(val))
+  })
 
   const data = [
     { link: '/', label: '会計', icon: IconCalculator },
@@ -110,7 +118,7 @@ export function Comp_Navbar({ page, username, storeName }: { page: string, usern
     <Navbar height={" 100% "} width={{ sm: 300 }} p="md" className={classes.navbar} fixed={true}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <Title order={4} color='#fff'>{storeName || "HFHS REGISYS"}</Title>
+          <Title order={4} color='#fff'>{`${userinfo?.userClass ?? "取得中..."} | HFHS REGI`}</Title>
         </Group>
         {links}
       </Navbar.Section>
@@ -118,7 +126,7 @@ export function Comp_Navbar({ page, username, storeName }: { page: string, usern
       <Navbar.Section className={classes.footer}>
         <div className={classes.link}>
           <IconUserCircle className={classes.linkIcon} stroke={1.5} />
-          <span>{username}</span>
+          <span>{userinfo?.userClass ?? "ゲスト"}</span>
         </div>
         <a href="#" className={classes.link} onClick={() => signOut({ redirect: true, callbackUrl: "/auth/signout" })}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />

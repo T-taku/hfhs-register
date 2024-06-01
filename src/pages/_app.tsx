@@ -7,53 +7,22 @@ import { RecoilRoot } from 'recoil';
 import { Notifications } from '@mantine/notifications';
 import Script from "next/script";
 import * as gtag from "../lib/gtag";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { ResponseError, ResponseUser } from '@/utils/openapi';
-import { API, initAPI } from '@/utils/initAPI';
+import { User } from '@/utils/RegiAPI';
+import { RegiAPI } from '@/utils/RegiAPI';
+import { APIProvider } from '@/components/APIProvider';
+import { UserinfoProvider } from '@/components/UserinfoProvider';
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
-  const [userData, setUserData] = useState<ResponseUser | undefined>();
-  const [api, setAPI] = useState<API | undefined>();
-  const fetchjwt = async () => {
-    const response = await fetch('/api/auth/jwt');
-    const data = await response.text();
-    return data
-  }
-
-  useEffect(() => {
-    initAPI(fetchjwt).then((resApi) => {
-      setAPI(resApi);
-    })
-  }, [])
-
-  useEffect(() => {
-    if (!api) return;
-    api.getUserinfo().then((res) => {
-      setUserData(res);
-    }).catch((e: Error) => {
-      if (e instanceof ResponseError) {
-        if (e.response.status === 500) {
-          throw e
-        } else {
-          //それ以外は無視とする
-        }
-      } else {
-        throw e;
-      }
-    })
-  }, [api])
-
   const router = useRouter();
   useEffect(() => {
-    const handleRouterChange = (url: any) => {
-      gtag.pageview(url);
-    };
-    router.events.on("routeChangeComplete", handleRouterChange);
+    router.events.on("routeChangeComplete", gtag.pageview);
     return () => {
-      router.events.off("routeChangeComplete", handleRouterChange);
+      router.events.off("routeChangeComplete", gtag.pageview);
     };
   }, [router.events]);
+
   return (
     <>
       <Head>
@@ -87,7 +56,15 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
         }}
       >
         <Notifications />
-        <SessionProvider session={pageProps.session}><RecoilRoot><Component api={api} userData={userData} {...pageProps} /></RecoilRoot></SessionProvider>
+        <SessionProvider session={pageProps.session}>
+          <RecoilRoot>
+            <APIProvider>
+              <UserinfoProvider>
+                <Component {...pageProps} />
+              </UserinfoProvider>
+            </APIProvider>
+          </RecoilRoot>
+        </SessionProvider>
       </MantineProvider>
     </>
   );

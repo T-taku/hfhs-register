@@ -1,8 +1,8 @@
-import type { ResponseHistory, ResponseSetting } from '@/utils/openapi';
+import type { History, Setting } from '@/utils/openapi';
 import { Card, Progress, Text } from '@mantine/core';
 import 'dayjs/locale/ja';
 
-export default function Earn({ paymentData, settingData }: { paymentData: ResponseHistory[], settingData?: ResponseSetting }) {
+export default function Earn({ paymentData, settingData }: { paymentData: History[], settingData?: Setting }) {
 
   const totalSum = paymentData.reduce((sum, item) => {
     if (typeof item.total === 'number') {

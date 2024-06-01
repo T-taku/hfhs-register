@@ -1,22 +1,8 @@
 import Head from 'next/head'
 import { Comp_Navbar } from '../../components/Navbar'
 import { AppShell, Title, Text } from '@mantine/core';
-import type { API } from '@/utils/initAPI';
-import { ResponseUser } from '@/utils/openapi';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
-
-export default function Conact({ api, userData }: { api: API | undefined, userData: ResponseUser | undefined }) {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!api) return;
-    api.getIslogin().then((res) => { }).catch(() => {
-      router.replace("/auth/signin");
-    })
-  }, [api])
-
+export default function Contact() {
   return (
     <>
       <Head>
@@ -25,7 +11,7 @@ export default function Conact({ api, userData }: { api: API | undefined, userDa
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppShell
-        navbar={<Comp_Navbar page="困った時は" username={userData && userData.userName || "ゲスト"} storeName={`${userData?.userClass ?? "取得中..."} | HFHS REGI`} />}
+        navbar={<Comp_Navbar page="困った時は"/>}
       >
         <Title order={2}>困った時は</Title>
         <br />
