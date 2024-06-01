@@ -19,9 +19,11 @@ export default function History() {
   const fetchSetting = () => {
     if (api) {
       userinfo?.then((user) => {
-        api.then(api => api.getSetting({ className: user.userClass })).then((res) => {
-          setSettingData(res);
-        })
+        if(user) {
+          api.then(api => api.getSetting({ className: user.userClass })).then((res) => {
+            setSettingData(res);
+          })
+        }
       })
     }
   }
