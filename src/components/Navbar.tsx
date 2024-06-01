@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createStyles, Navbar, Group, getStylesRef, rem, Title } from '@mantine/core';
 import {
   IconCalculator,
@@ -11,8 +11,7 @@ import {
 } from '@tabler/icons-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useAPI } from '@/utils/useAPI';
-import { User } from '@/utils/RegiAPI';
+import { useUserinfo } from '@/utils/useUserinfo';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -88,12 +87,7 @@ const useStyles = createStyles((theme) => ({
 export function Comp_Navbar({ page }: { page: string }) {
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(page);
-  const api = useAPI();
-  const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    api?.getUserinfo().then((val) => setUserinfo(val))
-  }, [api])
+  const userinfo = useUserinfo();
 
   const data = [
     { link: '/', label: '会計', icon: IconCalculator },
