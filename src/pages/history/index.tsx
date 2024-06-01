@@ -1,5 +1,6 @@
 import HistoryQueueTable from '@/components/HistoryQueuetable';
-import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
+import type { AddHistoryRequest, History, Setting } from '@/utils/RegiAPI';
+import { notif } from '@/utils/notif';
 import { useAPI } from '@/utils/useAPI';
 import { AppShell, Button, Title } from '@mantine/core';
 import Head from 'next/head';
@@ -7,14 +8,13 @@ import { useEffect, useState } from 'react';
 import Earn from '../../components/Earn';
 import HistoryTable from '../../components/Historytable';
 import { Comp_Navbar } from '../../components/Navbar';
-import { notif } from '@/utils/notif';
 
 
 export default function History() {
   const api = useAPI();
 
   const [paymentData, setPaymentData] = useState<History[]>([]);
-  const [paymentQueueData, setPaymentQueueData] = useState<AddHistoryQuery[]>([]);
+  const [paymentQueueData, setPaymentQueueData] = useState<AddHistoryRequest[]>([]);
   const [settingData, setSettingData] = useState<Setting | undefined>(undefined);
 
   const sendHistoryQueue = () => {

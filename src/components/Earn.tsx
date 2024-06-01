@@ -1,4 +1,4 @@
-import type { History, Setting } from '@/utils/openapi';
+import type { History, Setting } from '@/utils/RegiAPI';
 import { Card, Progress, Text } from '@mantine/core';
 import 'dayjs/locale/ja';
 

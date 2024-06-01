@@ -1,8 +1,8 @@
+import { notif } from '@/utils/notif';
 import { useAPI } from '@/utils/useAPI';
 import { useUserinfo } from '@/utils/useUserinfo';
 import { AppShell, Button, Center, Flex, Mark, Modal, SimpleGrid, Table, Text, Title, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
 import { IconArrowBigLeftLine, IconCheck, IconCircleX, IconCoins } from '@tabler/icons-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,6 @@ import { Comp_Navbar } from '../components/Navbar';
 import { NumPad } from '../components/Numpad';
 import productsByClass, { Product } from '../utils/product';
 import { amountPaidState } from "../utils/states";
-import { notif } from '@/utils/notif';
 
 export default function Home() {
   const api = useAPI();
