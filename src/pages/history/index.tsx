@@ -6,7 +6,6 @@ import { AppShell, Button, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconCircleX } from '@tabler/icons-react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Earn from '../../components/Earn';
 import Historytable from '../../components/HistoryTable';
@@ -14,8 +13,6 @@ import { Comp_Navbar } from '../../components/Navbar';
 
 
 export default function History() {
-  const router = useRouter();
-
   const api = useAPI();
   const userinfo = useUserinfo();
 

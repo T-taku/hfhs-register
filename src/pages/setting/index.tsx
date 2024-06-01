@@ -1,12 +1,12 @@
-import Head from 'next/head'
-import { Comp_Navbar } from '../../components/Navbar'
-import { AppShell, Title, Text, Button, Center, NumberInput } from '@mantine/core';
-import { IconCheck, IconCircleX } from '@tabler/icons-react';
 import type { Setting } from '@/utils/RegiAPI';
-import { useEffect, useState } from 'react';
-import { notifications } from '@mantine/notifications';
 import { useAPI } from '@/utils/useAPI';
 import { useUserinfo } from '@/utils/useUserinfo';
+import { AppShell, Button, Center, NumberInput, Text, Title } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconCircleX } from '@tabler/icons-react';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { Comp_Navbar } from '../../components/Navbar';
 
 export default function History() {
   const api = useAPI();
