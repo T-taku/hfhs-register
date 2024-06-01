@@ -50,11 +50,15 @@ export class RegiAPI {
   db?: IDBPDatabase<RegisterDBSchema>;
 
   constructor(
-    token: Promise<string> | string | (() => Promise<string> | string)
+    token: Promise<string> | string | (() => Promise<string> | string),
+    useLocal?: boolean
   ) {
     this.api = new DefaultApi(
       new Configuration({
-        basePath: "https://regi-api.hfhs-digital.app",
+        basePath:
+        useLocal
+          ? "http://localhost:8000"
+          : "https://regi-api.hfhs-digital.app",
         accessToken: token,
       })
     );
