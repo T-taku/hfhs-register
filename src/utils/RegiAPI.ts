@@ -12,7 +12,7 @@ import type {
   History,
 } from "./openapi";
 
-export {
+export type {
   AddHistoryRequest,
   GetHistoryRequest,
   GetSettingRequest,
