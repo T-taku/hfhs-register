@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { createStyles, Navbar, Group, getStylesRef, rem, Title } from '@mantine/core';
 import {
   IconCalculator,
@@ -84,22 +83,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Comp_Navbar({ page }: { page: string }) {
-  const { classes, cx } = useStyles();
-  const [active, setActive] = useState(page);
-  const userinfo = useUserinfo();
+const data = [
+  { link: '/', label: '会計', icon: IconCalculator },
+  { link: '/history', label: '売上確認', icon: IconReceipt2 },
+  { link: '/setting', label: '店舗設定', icon: IconSettings },
+  { link: '/contact', label: '困った時は', icon: IconHelp },
+  { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
+] as const;
 
-  const data = [
-    { link: '/', label: '会計', icon: IconCalculator },
-    { link: '/history', label: '売上確認', icon: IconReceipt2 },
-    { link: '/setting', label: '店舗設定', icon: IconSettings },
-    { link: '/contact', label: '困った時は', icon: IconHelp },
-    { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
-  ];
+export function Comp_Navbar({ page }: { page: (typeof data)[number]["label"] }) {
+  const { classes, cx } = useStyles();
+  const userinfo = useUserinfo();
 
   const links = data.map((item) => (
     <Link
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      className={cx(classes.link, { [classes.linkActive]: item.label === page })}
       href={item.link}
       key={item.label}
     >
