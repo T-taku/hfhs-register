@@ -1,7 +1,6 @@
 import HistoryQueueTable from '@/components/HistoryQueuetable';
 import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
 import { useAPI } from '@/utils/useAPI';
-import { useUserinfo } from '@/utils/useUserinfo';
 import { AppShell, Button, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconCircleX } from '@tabler/icons-react';
@@ -59,9 +58,9 @@ export default function History() {
     })
   }
 
-  const fetchHistory = () => {
+  const fetchHistory = (force?: boolean) => {
     if (!api) return;
-    api.fetchHistory().then((res) => {
+    api.fetchHistory(force).then((res) => {
       setPaymentData(res);
     })
     api.getSetting().then((res) => {
@@ -70,7 +69,7 @@ export default function History() {
   }
 
   useEffect(() => {
-    fetchHistory();
+    fetchHistory(true);
     getHistoryQueue();
   }, [api])
 
@@ -84,7 +83,7 @@ export default function History() {
       <AppShell
         navbar={<Comp_Navbar page="売上確認" />}
       >
-        <Title order={2}>売上確認<Button onClick={fetchHistory}>更新</Button></Title>
+        <Title order={2}>売上確認<Button onClick={() => fetchHistory(true)}>更新</Button></Title>
         <br />
         <Earn paymentData={paymentData} settingData={settingData}></Earn>
         <br />
