@@ -15,23 +15,27 @@
       "description": "Development Server"
     }
   ],
-  "tags": [{
-    "name": "ユーザー系"
-  }, {
-    "name": "決済履歴系"
-  }, {
-    "name": "店舗設定系"
-  }, {
-    "name": "ステータス"
-  }, {
-    "name": "認証系"
-  }],
+  "tags": [
+    {
+      "name": "ユーザー系"
+    },
+    {
+      "name": "決済履歴系"
+    },
+    {
+      "name": "店舗設定系"
+    },
+    {
+      "name": "ステータス"
+    },
+    {
+      "name": "認証系"
+    }
+  ],
   "paths": {
     "/user": {
       "get": {
-        "tags": [
-          "ユーザー系"
-        ],
+        "tags": ["ユーザー系"],
         "summary": "Get Userinfo",
         "operationId": "get_userinfo",
         "responses": {
@@ -55,9 +59,7 @@
     },
     "/history/{class_name}": {
       "get": {
-        "tags": [
-          "決済履歴系"
-        ],
+        "tags": ["決済履歴系"],
         "summary": "Get History",
         "operationId": "get_history",
         "security": [
@@ -118,11 +120,7 @@
                           }
                         },
                         "type": "object",
-                        "required": [
-                          "loc",
-                          "msg",
-                          "type"
-                        ],
+                        "required": ["loc", "msg", "type"],
                         "title": "ValidationError"
                       },
                       "type": "array",
@@ -140,9 +138,7 @@
     },
     "/history/add/{class_name}": {
       "post": {
-        "tags": [
-          "決済履歴系"
-        ],
+        "tags": ["決済履歴系"],
         "summary": "Add History",
         "operationId": "add_history",
         "security": [
@@ -226,11 +222,7 @@
                           }
                         },
                         "type": "object",
-                        "required": [
-                          "loc",
-                          "msg",
-                          "type"
-                        ],
+                        "required": ["loc", "msg", "type"],
                         "title": "ValidationError"
                       },
                       "type": "array",
@@ -248,9 +240,7 @@
     },
     "/setting/{class_name}": {
       "get": {
-        "tags": [
-          "店舗設定系"
-        ],
+        "tags": ["店舗設定系"],
         "summary": "Get Setting",
         "operationId": "get_setting",
         "security": [
@@ -307,11 +297,7 @@
                           }
                         },
                         "type": "object",
-                        "required": [
-                          "loc",
-                          "msg",
-                          "type"
-                        ],
+                        "required": ["loc", "msg", "type"],
                         "title": "ValidationError"
                       },
                       "type": "array",
@@ -329,9 +315,7 @@
     },
     "/setting/set/{class_name}": {
       "post": {
-        "tags": [
-          "店舗設定系"
-        ],
+        "tags": ["店舗設定系"],
         "summary": "Set Setting",
         "operationId": "set_setting",
         "security": [
@@ -415,11 +399,7 @@
                           }
                         },
                         "type": "object",
-                        "required": [
-                          "loc",
-                          "msg",
-                          "type"
-                        ],
+                        "required": ["loc", "msg", "type"],
                         "title": "ValidationError"
                       },
                       "type": "array",
@@ -437,9 +417,7 @@
     },
     "/": {
       "get": {
-        "tags": [
-          "ステータス"
-        ],
+        "tags": ["ステータス"],
         "summary": "Index",
         "operationId": "get_status",
         "responses": {
@@ -466,9 +444,7 @@
     },
     "/auth": {
       "get": {
-        "tags": [
-          "認証系"
-        ],
+        "tags": ["認証系"],
         "summary": "Get Islogin",
         "operationId": "get_isLogin",
         "responses": {
@@ -520,37 +496,30 @@
             "type": "string",
             "title": "Class Name",
             "description": "クラス名",
-            "examples": [
-              "2年1組"
-            ]
+            "examples": ["2年1組"]
           },
           "total": {
             "type": "integer",
             "title": "Total",
             "description": "購入金額",
-            "examples": [
-              200
-            ]
+            "examples": [200]
           },
           "change": {
             "type": "integer",
             "title": "Change",
             "description": "お釣り",
-            "examples": [
-              100
-            ]
+            "examples": [100]
           },
           "product": {
             "type": "string",
             "title": "Product",
             "description": "購入商品",
-            "examples": [
-              "かき氷, 練乳"
-            ]
+            "examples": ["かき氷, 練乳"]
           }
         },
         "type": "object",
-        "title": "AddHistoryQuery"
+        "title": "AddHistoryQuery",
+        "required": ["class_name", "total", "change", "product"]
       },
       "History": {
         "properties": {
@@ -612,12 +581,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "user_mail",
-          "user_name",
-          "user_class",
-          "user_role"
-        ],
+        "required": ["user_mail", "user_name", "user_class", "user_role"],
         "title": "User"
       },
       "Setting": {
@@ -626,37 +590,30 @@
             "type": "string",
             "title": "Class Name",
             "description": "クラス名",
-            "examples": [
-              "2年1組"
-            ]
+            "examples": ["2年1組"]
           },
           "goal": {
             "type": "integer",
             "title": "Goal",
             "description": "目標金額",
-            "examples": [
-              200
-            ]
+            "examples": [200]
           },
           "reserve": {
             "type": "integer",
             "title": "Reserve",
             "description": "準備金",
-            "examples": [
-              10000000
-            ]
+            "examples": [10000000]
           },
           "additionalreserve": {
             "type": "integer",
             "title": "Additionalreserve",
             "description": "追加準備金",
-            "examples": [
-              10000000
-            ]
+            "examples": [10000000]
           }
         },
         "type": "object",
-        "title": "Setting"
+        "title": "Setting",
+        "required": ["class_name", "goal", "reserve", "additionalreserve"]
       }
     },
     "securitySchemes": {

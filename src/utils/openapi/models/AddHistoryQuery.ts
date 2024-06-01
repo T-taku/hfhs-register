@@ -24,31 +24,35 @@ export interface AddHistoryQuery {
      * @type {string}
      * @memberof AddHistoryQuery
      */
-    className?: string;
+    className: string;
     /**
      * 購入金額
      * @type {number}
      * @memberof AddHistoryQuery
      */
-    total?: number;
+    total: number;
     /**
      * お釣り
      * @type {number}
      * @memberof AddHistoryQuery
      */
-    change?: number;
+    change: number;
     /**
      * 購入商品
      * @type {string}
      * @memberof AddHistoryQuery
      */
-    product?: string;
+    product: string;
 }
 
 /**
  * Check if a given object implements the AddHistoryQuery interface.
  */
 export function instanceOfAddHistoryQuery(value: object): value is AddHistoryQuery {
+    if (!('className' in value) || value['className'] === undefined) return false;
+    if (!('total' in value) || value['total'] === undefined) return false;
+    if (!('change' in value) || value['change'] === undefined) return false;
+    if (!('product' in value) || value['product'] === undefined) return false;
     return true;
 }
 
@@ -62,10 +66,10 @@ export function AddHistoryQueryFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'className': json['class_name'] == null ? undefined : json['class_name'],
-        'total': json['total'] == null ? undefined : json['total'],
-        'change': json['change'] == null ? undefined : json['change'],
-        'product': json['product'] == null ? undefined : json['product'],
+        'className': json['class_name'],
+        'total': json['total'],
+        'change': json['change'],
+        'product': json['product'],
     };
 }
 

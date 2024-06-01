@@ -24,31 +24,35 @@ export interface Setting {
      * @type {string}
      * @memberof Setting
      */
-    className?: string;
+    className: string;
     /**
      * 目標金額
      * @type {number}
      * @memberof Setting
      */
-    goal?: number;
+    goal: number;
     /**
      * 準備金
      * @type {number}
      * @memberof Setting
      */
-    reserve?: number;
+    reserve: number;
     /**
      * 追加準備金
      * @type {number}
      * @memberof Setting
      */
-    additionalreserve?: number;
+    additionalreserve: number;
 }
 
 /**
  * Check if a given object implements the Setting interface.
  */
 export function instanceOfSetting(value: object): value is Setting {
+    if (!('className' in value) || value['className'] === undefined) return false;
+    if (!('goal' in value) || value['goal'] === undefined) return false;
+    if (!('reserve' in value) || value['reserve'] === undefined) return false;
+    if (!('additionalreserve' in value) || value['additionalreserve'] === undefined) return false;
     return true;
 }
 
@@ -62,10 +66,10 @@ export function SettingFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
     }
     return {
         
-        'className': json['class_name'] == null ? undefined : json['class_name'],
-        'goal': json['goal'] == null ? undefined : json['goal'],
-        'reserve': json['reserve'] == null ? undefined : json['reserve'],
-        'additionalreserve': json['additionalreserve'] == null ? undefined : json['additionalreserve'],
+        'className': json['class_name'],
+        'goal': json['goal'],
+        'reserve': json['reserve'],
+        'additionalreserve': json['additionalreserve'],
     };
 }
 
