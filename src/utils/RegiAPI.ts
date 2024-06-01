@@ -55,7 +55,7 @@ export class RegiAPI {
     this.api = new DefaultApi(
       new Configuration({
         basePath:
-          env.NODE_ENV === "production"
+          env.VERCEL_ENV === "production"
             ? "https://regi-api.hfhs-digital.app"
             : "http://localhost:8000",
         accessToken: token,
