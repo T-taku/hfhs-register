@@ -12,6 +12,16 @@ import type {
   History,
 } from "./openapi";
 
+export {
+  AddHistoryRequest,
+  GetHistoryRequest,
+  GetSettingRequest,
+  SetSettingRequest,
+  Setting,
+  User,
+  History,
+} from "./openapi";
+
 export interface RegisterDBSchema extends DBSchema {
   history: {
     key: string;
@@ -192,7 +202,16 @@ export class RegiAPI {
     return setting;
   }
 
-  setSetting(param: SetSettingRequest) {
-    return this.api.setSetting(param);
+  async setSetting(param: SetSettingRequest) {
+    return await this.api.setSetting(param);
+  }
+
+  async clearAllCache() {
+    const stores = ["history", "history-queue", "user"] as const;
+    const transaction = this.db?.transaction(stores, "readwrite");
+    for(const storeName of stores) {
+      const store = transaction?.objectStore(storeName);
+      await store?.clear();
+    }
   }
 }
