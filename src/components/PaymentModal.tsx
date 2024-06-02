@@ -43,7 +43,7 @@ export default function PaymentModal({ opened, orderPrise, onClose, onPaymentSub
       <NumPad value={numValue} onChange={setNumValue} />
       <Stack p="sm" spacing="sm">
         <Center>
-          <Text size="xl">{
+          <Text size="xl" style={{ userSelect: "none", WebkitUserSelect: "none" }}>{
             numValue >= orderPrise ? (
               `お釣り: ¥${(numValue - orderPrise).toLocaleString()}`
             ) : (
