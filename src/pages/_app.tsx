@@ -9,7 +9,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from "next/script";
 import { useEffect } from 'react';
-import { RecoilRoot } from 'recoil';
 import * as gtag from "../lib/gtag";
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
@@ -88,20 +87,18 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
       >
         <Notifications />
         <SessionProvider session={pageProps.session}>
-          <RecoilRoot>
-            <APIProvider>
-              {
-                !router.pathname.includes("/auth") ?
-                  (
-                    <UserinfoProvider>
-                      <Component {...pageProps} />
-                    </UserinfoProvider>
-                  ) : (
+          <APIProvider>
+            {
+              !router.pathname.includes("/auth") ?
+                (
+                  <UserinfoProvider>
                     <Component {...pageProps} />
-                  )
-              }
-            </APIProvider>
-          </RecoilRoot>
+                  </UserinfoProvider>
+                ) : (
+                  <Component {...pageProps} />
+                )
+            }
+          </APIProvider>
         </SessionProvider>
       </MantineProvider>
     </>
