@@ -5,16 +5,16 @@ export default function OrderTable({ order, totalPrice, onDeleteOrder }: { order
   return (<Table verticalSpacing="md" striped>
     <thead>
       <tr>
-        <th>
+        <th scope="col">
           <Text size="lg">商品</Text>
         </th>
-        <th>
+        <th scope="col">
           <Text size="lg">値段</Text>
         </th>
-        <th>
+        <th scope="col">
           <Text size="lg">個数</Text>
         </th>
-        <th>
+        <th scope="col">
           <Text size="lg">操作</Text>
         </th>
       </tr>
@@ -22,9 +22,9 @@ export default function OrderTable({ order, totalPrice, onDeleteOrder }: { order
     <tbody>
       {order.map((item, index) => (
         <tr key={index}>
-          <td>
+          <th scope="row">
             <Text size="lg">{item.product.name}</Text>
-          </td>
+          </th>
           <td>
             <Text size="lg">¥{item.product.price}</Text>
           </td>
@@ -42,27 +42,23 @@ export default function OrderTable({ order, totalPrice, onDeleteOrder }: { order
           </td>
         </tr>
       ))}
-      <tr
-        style={{
-          borderTop: "2px dashed gray",
-          backgroundColor: "white",
-        }}
-      >
-        <td>
-          <Text size="lg" weight="bold">
+    </tbody>
+    <tfoot style={{ borderTop: "2px dashed gray" }}>
+      <tr>
+        <th scope="row">
+          <Text size="lg">
             合計金額
           </Text>
-        </td>
+        </th>
         <td>
           <Text size="xl" weight="bold">
             <Mark color="red">¥{totalPrice}</Mark>
           </Text>
         </td>
-        <td>
+        <td colSpan={2}>
           <Text>{order.length > 0 && `(${order.length})`}</Text>
         </td>
-        <td></td>
       </tr>
-    </tbody>
+    </tfoot>
   </Table>)
 }
