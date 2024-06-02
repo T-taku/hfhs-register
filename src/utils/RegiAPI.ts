@@ -54,7 +54,7 @@ export class RegiAPI {
     this.api = new DefaultApi(
       new Configuration({
         basePath: useLocal
-          ? "http://localhost:8000"
+          ? "https://regi-api.suyoharu.net"
           : "https://regi-api.hfhs-digital.app",
         accessToken: token,
       })

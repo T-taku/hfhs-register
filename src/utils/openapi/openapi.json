@@ -613,7 +613,7 @@
         },
         "type": "object",
         "title": "Setting",
-        "required": ["class_name", "goal", "reserve", "additionalreserve"]
+        "required": ["class_name"]
       }
     },
     "securitySchemes": {
