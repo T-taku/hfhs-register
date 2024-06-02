@@ -7,8 +7,6 @@ export default function Contact() {
     <>
       <Head>
         <title>困った時は | HFHS REGI SYS</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppShell
         navbar={<Comp_Navbar page="困った時は" />}
