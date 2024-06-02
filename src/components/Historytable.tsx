@@ -8,17 +8,16 @@ function formatTimestamp(timestamp: Date | string): string {
 }
 
 export default function HistoryTable({ paymentData }: { paymentData: History[] }) {
-  // timestampでソートするヘルパー関数
-  function sortByTimestamp(data: History[]) {
+  // timestampでソートする
+  const sortByTimestamp = (data: History[]) => {
     return data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
 
-  // テーブルに表示するデータを取得
-  const sortedData = sortByTimestamp(paymentData);
+  const sortedPaymentData = sortByTimestamp(paymentData);
 
   return (
     <Accordion variant="separated">
-      {sortedData.map((payment) => (
+      {sortedPaymentData.map((payment) => (
         <Accordion.Item className={payment.paymentId} value={payment.paymentId} key={payment.paymentId}>
           <Accordion.Control>{formatTimestamp(payment.timestamp)}</Accordion.Control>
           <Accordion.Panel>
@@ -31,7 +30,7 @@ export default function HistoryTable({ paymentData }: { paymentData: History[] }
                 </tr>
               </thead>
               <tbody>
-                <tr key={payment.paymentId}>
+                <tr>
                   <td>{formatTimestamp(payment.timestamp)}</td>
                   <td>{payment.product.split(",").map(t => (
                     <Text key={t} component='p'>

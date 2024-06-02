@@ -1,5 +1,5 @@
 import type { AddHistoryRequest } from "@/utils/RegiAPI";
-import { Accordion, Table, Text } from "@mantine/core";
+import { Table, Text } from "@mantine/core";
 
 export default function HistoryQueueTable({
   paymentData,
