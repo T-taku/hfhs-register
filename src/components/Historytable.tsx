@@ -34,7 +34,7 @@ export default function HistoryTable({ paymentData }: { paymentData: History[] }
                 <tr key={payment.paymentId}>
                   <td>{formatTimestamp(payment.timestamp)}</td>
                   <td>{payment.product.split(",").map(t => (
-                    <Text component='p'>
+                    <Text key={t} component='p'>
                       {t}
                     </Text>
                   ))}</td>

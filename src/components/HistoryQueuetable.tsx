@@ -18,7 +18,7 @@ export default function HistoryQueueTable({
         <tr>
           <td>
             {payment.product.split(",").map((t) => (
-              <Text component="p">{t}</Text>
+              <Text key={t} component="p">{t}</Text>
             ))}
           </td>
           <td>
