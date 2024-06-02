@@ -41,7 +41,8 @@ export default function Home() {
       }
       : {
         change: 0,
-        total: -paidAmount - totalPrice(order),
+        //返金対応は入力金額のみを返金金額とする
+        total: -paidAmount,
         product: "返金対応",
       };
     api
@@ -133,7 +134,12 @@ export default function Home() {
               styles={{
                 root: { paddingRight: rem(14), height: rem(48) },
               }}
-              onClick={openRefundModal}
+              onClick={() => {
+                //返金対応は入力金額のみを返金金額とする
+                //わかりやすくするためにこれまでの選択した商品はなかったことにする
+                setOrder([]);
+                openRefundModal();
+              }}
             >
               返金対応
             </Button>
