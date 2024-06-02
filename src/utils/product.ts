@@ -76,6 +76,11 @@ const productsByClass: ProductsByClass = {
   "2年15組": [
     { id: "1", name: 'レインボーわた飴', price: 300 },
     { id: "2", name: 'わたカップ', price: 250 },
+    { id: "3", name: 'フルーツポンチサイダー', price: 400 },
+    { id: "4", name: 'アップルパイ１個', price: 300 },
+    { id: "5", name: 'アップルパイ２個', price: 400 },
+    { id: "_3", name: '※フルーツポンチサイダー', price: 350 },
+    { id: "_4", name: '※アップルパイ１個', price: 250 },
   ],
   "2年A組": [
     { id: "1", name: 'フルーツポンチサイダー', price: 400 },

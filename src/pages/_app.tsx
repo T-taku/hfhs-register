@@ -9,7 +9,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from "next/script";
 import { useEffect } from 'react';
-import { RecoilRoot } from 'recoil';
 import * as gtag from "../lib/gtag";
 
 export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
@@ -24,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
   return (
     <>
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2B8A3E" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
@@ -51,24 +51,54 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
         theme={{
           /** Put your mantine theme override here */
           colorScheme: 'light',
+          components: {
+            Text: {
+              styles: {
+                root: {
+                  margin: "0em"
+                }
+              }
+            },
+            NumberInput: {
+              styles: {
+                label: {
+                  fontSize: "1.5em",
+                  fontWeight: "bold"
+                },
+                description: {
+                  color: "black",
+                  fontSize: "0.9em"
+                }
+              }
+            },
+            Tabs: {
+              styles: {
+                tabLabel: {
+                  fontSize: "1.2em",
+                  fontWeight: "bold"
+                },
+                tab: {
+                  borderBottom: "0.3rem solid transparent"
+                }
+              }
+            }
+          }
         }}
       >
         <Notifications />
         <SessionProvider session={pageProps.session}>
-          <RecoilRoot>
-            <APIProvider>
-              {
-                !router.pathname.includes("/auth") ?
-                  (
-                    <UserinfoProvider>
-                      <Component {...pageProps} />
-                    </UserinfoProvider>
-                  ) : (
+          <APIProvider>
+            {
+              !router.pathname.includes("/auth") ?
+                (
+                  <UserinfoProvider>
                     <Component {...pageProps} />
-                  )
-              }
-            </APIProvider>
-          </RecoilRoot>
+                  </UserinfoProvider>
+                ) : (
+                  <Component {...pageProps} />
+                )
+            }
+          </APIProvider>
         </SessionProvider>
       </MantineProvider>
     </>

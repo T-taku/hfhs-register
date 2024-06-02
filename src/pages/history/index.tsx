@@ -1,50 +1,28 @@
 import HistoryQueueTable from '@/components/HistoryQueuetable';
-import { type AddHistoryQuery, type History, type Setting } from '@/utils/openapi';
+import type { AddHistoryRequest, History, Setting } from '@/utils/RegiAPI';
+import { notif } from '@/utils/notif';
 import { useAPI } from '@/utils/useAPI';
-import { AppShell, Button, Title } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconCircleX } from '@tabler/icons-react';
+import { AppShell, Button, Group, Stack, Title } from '@mantine/core';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Earn from '../../components/Earn';
 import HistoryTable from '../../components/Historytable';
 import { Comp_Navbar } from '../../components/Navbar';
 
-
 export default function History() {
   const api = useAPI();
 
   const [paymentData, setPaymentData] = useState<History[]>([]);
-  const [paymentQueueData, setPaymentQueueData] = useState<AddHistoryQuery[]>([]);
+  const [paymentQueueData, setPaymentQueueData] = useState<AddHistoryRequest[]>([]);
   const [settingData, setSettingData] = useState<Setting | undefined>(undefined);
 
   const sendHistoryQueue = () => {
     if (!api) return;
     api.flushHistory().then((res) => {
       if (res.status == "COMPLETE") {
-        notifications.show({
-          id: 'done-queuesend',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "決済が正常に記録されました",
-          message: "決済記録が正常に記録されました。",
-          color: 'green',
-          icon: <IconCheck />,
-          className: 'my-notification-class',
-          loading: false,
-        })
+        notif("SENT");
       } else {
-        notifications.show({
-          id: 'error-queuesend',
-          withCloseButton: true,
-          autoClose: 5000,
-          title: "送信できませんでした",
-          message: "アプリの再起動時に再試行されます。",
-          color: 'red',
-          icon: <IconCircleX />,
-          className: 'my-notification-class',
-          loading: false,
-        });
+        notif("FAIL");
       }
     }).finally(() => {
       getHistoryQueue()
@@ -77,27 +55,33 @@ export default function History() {
     <>
       <Head>
         <title>売上確認 | HFHS REGI SYS</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppShell
         navbar={<Comp_Navbar page="売上確認" />}
       >
-        <Title order={2}>売上確認<Button onClick={() => fetchHistory(true)}>更新</Button></Title>
-        <br />
-        <Earn paymentData={paymentData} settingData={settingData}></Earn>
-        <br />
+        <Stack pb="md">
+          <Group>
+            <Title order={2}>売上確認</Title>
+            <Button onClick={() => fetchHistory(true)}>更新</Button>
+          </Group>
+          <Earn paymentData={paymentData} settingData={settingData} />
+        </Stack>
         {
           paymentQueueData.length > 0 &&
-          (<>
-            <Title order={3}>送信待機中の会計履歴</Title><Button onClick={() => { sendHistoryQueue() }}>送信</Button>
-            <HistoryQueueTable paymentData={paymentQueueData}></HistoryQueueTable>
-          </>)
+          (
+            <Stack pb="md">
+              <Group>
+                <Title order={3}>送信待機中の会計履歴</Title>
+                <Button onClick={() => { sendHistoryQueue() }}>送信</Button>
+              </Group>
+              <HistoryQueueTable paymentData={paymentQueueData}></HistoryQueueTable>
+            </Stack>
+          )
         }
-        <br />
-        <Title order={3}>会計履歴</Title>
-        <br />
-        <HistoryTable paymentData={paymentData}></HistoryTable>
+        <Stack spacing="sm">
+          <Title order={3} pb="md">会計履歴</Title>
+          <HistoryTable paymentData={paymentData}></HistoryTable>
+        </Stack>
       </AppShell>
     </>
   )

@@ -228,7 +228,8 @@ export class RegiAPI {
 
   async setSetting(param: Omit<SetSettingRequest, "className">) {
     const request = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass, ...param };
-    return await this.api.setSetting(request);
+    await this.api.setSetting(request);
+    return await this.updateSettingCache();
   }
 
   async clearAllCache() {

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { createStyles, Navbar, Group, getStylesRef, rem, Title } from '@mantine/core';
 import {
   IconCalculator,
@@ -11,8 +10,7 @@ import {
 } from '@tabler/icons-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useAPI } from '@/utils/useAPI';
-import { User } from '@/utils/RegiAPI';
+import { useUserinfo } from '@/utils/useUserinfo';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -85,27 +83,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Comp_Navbar({ page }: { page: string }) {
+export const pages = [
+  { link: '/', label: '会計', icon: IconCalculator },
+  { link: '/history', label: '売上確認', icon: IconReceipt2 },
+  { link: '/setting', label: '店舗設定', icon: IconSettings },
+  { link: '/contact', label: '困った時は', icon: IconHelp },
+  { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
+] as const;
+
+export function Comp_Navbar({ page }: { page: (typeof pages)[number]["label"] }) {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState(page);
-  const api = useAPI();
-  const [userinfo, setUserinfo] = useState<User | undefined>(undefined);
+  const userinfo = useUserinfo();
 
-  useEffect(() => {
-    api?.getUserinfo().then((val) => setUserinfo(val))
-  }, [api])
-
-  const data = [
-    { link: '/', label: '会計', icon: IconCalculator },
-    { link: '/history', label: '売上確認', icon: IconReceipt2 },
-    { link: '/setting', label: '店舗設定', icon: IconSettings },
-    { link: '/contact', label: '困った時は', icon: IconHelp },
-    { link: 'https://stats.uptimerobot.com/qWXkvcLPmk', label: 'ステータスページ', icon: IconActivity }
-  ];
-
-  const links = data.map((item) => (
+  const links = pages.map((item) => (
     <Link
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      className={cx(classes.link, { [classes.linkActive]: item.label === page })}
       href={item.link}
       key={item.label}
     >
@@ -115,7 +107,7 @@ export function Comp_Navbar({ page }: { page: string }) {
   ));
 
   return (
-    <Navbar height={" 100% "} width={{ sm: 300 }} p="md" className={classes.navbar} fixed={true}>
+    <Navbar hidden hiddenBreakpoint="xs" height="100%" width={{ xs: 170, sm: 210, md: 300 }} p="md" className={classes.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Title order={4} color='#fff'>{`${userinfo?.userClass ?? "取得中..."} | HFHS REGI`}</Title>
