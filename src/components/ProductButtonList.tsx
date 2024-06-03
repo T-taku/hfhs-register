@@ -33,7 +33,7 @@ export default function ProductButtonList({ products, onAddProduct }: { products
           <Text>通常</Text>
         </Tabs.Tab>
         <Tabs.Tab color="red" value="discount">
-          <Text>割引済み</Text>
+          <Text>割引</Text>
         </Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel value="normal">
