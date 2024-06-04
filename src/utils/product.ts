@@ -18,7 +18,7 @@ const productsByClass: ProductsByClass = {
     { id: "3", name: '写真スポット', price: 100 },
   ],
   "1年11組": [
-    { id: "1", name: '入場料', price: 200 },
+    { id: "1", name: '入場料', price: 100 },
   ],
   "1年12組": [
     { id: "1", name: '入場料', price: 200 },
