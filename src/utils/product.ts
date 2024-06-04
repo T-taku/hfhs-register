@@ -38,7 +38,7 @@ const productsByClass: ProductsByClass = {
     { id: "1", name: '3回', price: 300 },
     { id: "_1", name: '3回', price: 250 },
   ],
-  "1年A組": [
+  "1年AB組": [
     { id: "1", name: '輪5本', price: 100 },
     { id: "2", name: '輪12本', price: 200 },
   ],
