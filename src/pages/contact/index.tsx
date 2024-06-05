@@ -24,12 +24,12 @@ export default function Contact() {
               <List p="sm" spacing="0.2em">
                 <List.Item>
                   <Text>
-                    デジタル委員の場合:<Text>「デジタル委員(全員)内 R.5年度(2023)」にて、「0722 立石琢磨」を指定し、カードを送信。</Text>
+                    デジタル委員の場合:<Text>「(2024年度)デジタル委員会」にて、「030721 立石琢磨」を指定し、カードを送信。</Text>
                   </Text>
                 </List.Item>
                 <List.Item>
                   <Text>
-                    学園祭委員の場合:<Text>「学園祭委員会内 学園祭委員会」にて、「0722 立石琢磨」を指定し、カードを送信。</Text>
+                    学園祭委員の場合:<Text>「68期「学園祭委員」 学園祭委員全員」にて、「030721 立石琢磨」を指定し、カードを送信。</Text>
                   </Text>
                 </List.Item>
                 <List.Item>

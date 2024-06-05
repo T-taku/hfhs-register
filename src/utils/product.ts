@@ -18,7 +18,7 @@ const productsByClass: ProductsByClass = {
     { id: "3", name: '写真スポット', price: 100 },
   ],
   "1年11組": [
-    { id: "1", name: '入場料', price: 200 },
+    { id: "1", name: '入場料', price: 100 },
   ],
   "1年12組": [
     { id: "1", name: '入場料', price: 200 },
@@ -38,7 +38,7 @@ const productsByClass: ProductsByClass = {
     { id: "1", name: '3回', price: 300 },
     { id: "_1", name: '3回', price: 250 },
   ],
-  "1年A組": [
+  "1年AB組": [
     { id: "1", name: '輪5本', price: 100 },
     { id: "2", name: '輪12本', price: 200 },
   ],
@@ -132,7 +132,7 @@ const productsByClass: ProductsByClass = {
     { id: "_4", name: '※フロート', price: 250 },
   ],
   "2年A組": [
-    { id: "1", name: 'たこせん', price: 100 },
+    { id: "1", name: 'たこせん', price: 200 },
     { id: "2", name: 'たこせん(2個)', price: 300 },
   ],
   "2年B組": [
@@ -189,8 +189,8 @@ const productsByClass: ProductsByClass = {
     { id: "_1", name: '※団子単品', price: 170 },
     { id: "2", name: 'セットA', price: 350 },
     { id: "_2", name: '※セットA', price: 320 },
-    { id: "3", name: 'セットB', price: 450 },
-    { id: "_3", name: '※セットB', price: 400 },
+    { id: "3", name: 'セットB', price: 500 },
+    { id: "_3", name: '※セットB', price: 450 },
     { id: "4", name: 'セットC', price: 600 },
     { id: "_4", name: '※セットC', price: 550 },
     { id: "5", name: '追加団子', price: 150 },
