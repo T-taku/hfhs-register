@@ -2,7 +2,7 @@ import { OrderItem } from "@/utils/OrderItem";
 import { Button, Mark, Table, Text } from "@mantine/core";
 
 export default function OrderTable({ order, totalPrice, onDeleteOrder }: { order: OrderItem[], totalPrice: number, onDeleteOrder: (orderItemIndex: number) => void }) {
-  return (<Table verticalSpacing="md" striped>
+  return (<Table verticalSpacing="md">
     <thead>
       <tr>
         <th scope="col">
