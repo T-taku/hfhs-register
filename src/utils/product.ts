@@ -135,6 +135,7 @@ const productsByClass: ProductsByClass = {
   "2年A組": [
     { id: "1", name: 'たこせん', price: 200 },
     { id: "2", name: 'たこせん(2個)', price: 300 },
+    { id: "_1", name: 'たこせん', price: 100 },
   ],
   "2年B組": [
     { id: "1", name: 'フランクフルト', price: 300 },
