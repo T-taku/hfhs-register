@@ -24,7 +24,7 @@ export default function History() {
 
   const fetchSetting = () => {
     if (api) {
-      api.getSetting().then((res) => {
+      api.getSetting(true).then((res) => {
         setSettingData(res);
       });
     }

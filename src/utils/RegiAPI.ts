@@ -1,4 +1,4 @@
-import { Configuration, DefaultApi } from "./openapi";
+import { Configuration, DefaultApi, ResponseError } from "./openapi";
 import { DBSchema, openDB, IDBPDatabase } from "idb";
 
 import type {
@@ -56,8 +56,9 @@ export class RegiAPI {
       new Configuration({
         basePath: useLocal
           ? "http://localhost:8000"
-          : useBackup ? "https://regi-api.suyoharu.net" :
-          "https://regi-api.hfhs-digital.app",
+          : useBackup
+          ? "https://regi-api.suyoharu.net"
+          : "https://regi-api.hfhs-digital.app",
         accessToken: token,
       })
     );
@@ -85,9 +86,9 @@ export class RegiAPI {
       return await this.updateUserinfoCache();
     }
     try {
-      const userinfoCache = this.userinfo ?? (await this.db?.get("user", "userinfo")) as
-        | User
-        | undefined;
+      const userinfoCache =
+        this.userinfo ??
+        ((await this.db?.get("user", "userinfo")) as User | undefined);
       if (!userinfoCache) {
         const userinfo = await this.api.getUserinfo();
         await this.db?.put("user", userinfo, "userinfo");
@@ -196,7 +197,7 @@ export class RegiAPI {
     }
   }
 
-  async getSetting(force?: boolean) {
+  async getSetting(force?: boolean): Promise<Setting> {
     if (force) {
       return await this.updateSettingCache();
     } else {
@@ -205,31 +206,65 @@ export class RegiAPI {
           | Setting
           | undefined;
         if (!settingCache) {
-          if (!this.userinfo) await this.getUserinfo();
-          const param = { className: this.userinfo?.userClass! };
-          const setting = await this.api.getSetting(param);
-          await this.db?.put("user", setting, "settings");
-          return setting;
+          if (!this.userinfo) this.userinfo = await this.getUserinfo();
+          const param = { className: this.userinfo.userClass };
+          try {
+            const setting = await this.api.getSetting(param);
+            await this.db?.put("user", setting, "settings");
+            return setting;
+          } catch (e) {
+            console.error(e);
+            return this.settingErrorResponseHandler(e);
+          }
         }
         return settingCache;
       } catch {
-        const param = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass };
-        return await this.api.getSetting(param);
+        const param = {
+          className:
+            this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+        };
+        try {
+          return await this.api.getSetting(param);
+        } catch (e) {
+          console.error(e);
+          return this.settingErrorResponseHandler(e);
+        }
       }
     }
   }
 
-  private async updateSettingCache() {
-    const param = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass };
-    const setting = await this.api.getSetting(param);
+  private settingErrorResponseHandler(e: unknown): Setting {
+    if (e instanceof ResponseError && e.response.status === 404) {
+      return {
+        className: this.userinfo?.userClass!,
+      };
+    } else {
+      throw e;
+    }
+  }
+
+  private async updateSettingCache(): Promise<Setting> {
+    const param = {
+      className:
+        this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+    };
     try {
-      await this.db?.put("user", setting, "settings");
-    } catch {}
-    return setting;
+      const setting = await this.api.getSetting(param);
+      try {
+        await this.db?.put("user", setting, "settings");
+      } catch {}
+      return setting;
+    } catch (e) {
+      return this.settingErrorResponseHandler(e);
+    }
   }
 
   async setSetting(param: Omit<SetSettingRequest, "className">) {
-    const request = { className: this.userinfo?.userClass ?? (await this.getUserinfo()).userClass, ...param };
+    const request = {
+      className:
+        this.userinfo?.userClass ?? (await this.getUserinfo()).userClass,
+      ...param,
+    };
     await this.api.setSetting(request);
     return await this.updateSettingCache();
   }
