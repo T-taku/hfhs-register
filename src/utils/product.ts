@@ -72,9 +72,8 @@ const productsByClass: ProductsByClass = {
   ],
   "2年5組": [
     { id: "1", name: 'レインボー', price: 300 },
-    { id: "2", name: 'ハニー', price: 300 },
     { id: "3", name: 'クッキー&クリーム', price: 300 },
-    { id: "4", name: 'コットンキャンディー', price: 300 },
+    { id: "3", name: 'ハニーコットンキャンディー', price: 300 },
   ],
   "2年6組": [
     { id: "1", name: 'かき氷', price: 300 },
