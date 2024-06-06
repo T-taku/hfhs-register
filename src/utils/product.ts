@@ -99,11 +99,11 @@ const productsByClass: ProductsByClass = {
     { id: "2", name: 'フランクフルト(ソース)', price: 300 },
   ],
   "2年11組": [
-    { id: "1", name: 'ホットドッグ', price: 500 },
-    { id: "_1", name: '※ホットドッグ', price: 300 },
-    { id: "2", name: 'ジュース', price: 150 },
-    { id: "_2", name: '※ジュース', price: 100 },
-    { id: "3", name: 'セット', price: 450 },
+    { id: "1", name: 'ホットドッグ', price: 300 },
+    { id: "2", name: 'コーヒー', price: 300 },
+    { id: "3", name: 'ジュース', price: 100 },
+    { id: "4", name: 'セットA', price: 350 },
+    { id: "5", name: 'セットB', price: 550 },
   ],
   "2年12組": [
     { id: "1", name: 'かき氷', price: 200 },
