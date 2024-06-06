@@ -83,7 +83,7 @@ const productsByClass: ProductsByClass = {
   "2年7組": [
     { id: "1", name: 'かき氷いちご', price: 300 },
     { id: "2", name: 'かき氷コーラ', price: 300 },
-    { id: "3", name: 'かき氷抹茶', price: 300 },
+    { id: "3", name: 'かき氷抹茶', price: 400 },
   ],
   "2年8組": [
     { id: "1", name: 'ワッフル', price: 150 },
