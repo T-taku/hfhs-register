@@ -48,10 +48,8 @@ export default function ProductButtonList({ products, onAddProduct }: { products
       </Tabs.Panel>
     </Tabs>
   ) : (
-    <Stack spacing="xs">
-      <Group position="center" spacing="xs">
-        {normalProductButtons}
-      </Group>
-    </Stack>
+    <Group position="center" p="sm" spacing="xs">
+      {normalProductButtons}
+    </Group>
   )
 }
