@@ -121,6 +121,8 @@ const productsByClass: ProductsByClass = {
   "2年15組": [
     { id: "1", name: 'ミニクロドット', price: 300 },
     { id: "2", name: 'ジュースドット', price: 400 },
+    { id: "_1", name: 'ミニクロドット', price: 200 },
+    { id: "_2", name: 'ジュースドット', price: 300 },
   ],
   "2年16組": [
     { id: "1", name: 'バーガー', price: 300 },
