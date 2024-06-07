@@ -48,14 +48,16 @@ export class RegiAPI {
   userinfo?: User;
 
   constructor(
-    token?: Promise<string> | string | (() => Promise<string> | string)   ,
-    useLocal?: boolean
+    token?: Promise<string> | string | (() => Promise<string> | string),
+    useLocal?: boolean,
+    useBackup?: boolean
   ) {
     this.api = new DefaultApi(
       new Configuration({
         basePath: useLocal
           ? "http://localhost:8000"
-          : "https://regi-api.hfhs-digital.app",
+          : useBackup ? "https://regi-api.suyoharu.net" :
+          "https://regi-api.hfhs-digital.app",
         accessToken: token,
       })
     );
