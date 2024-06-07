@@ -16,13 +16,13 @@ export default function Earn({ paymentData, settingData }: { paymentData: Histor
         現在の売り上げ
       </Text>
       <Text fz="lg" fw={500}>
-        ¥{totalSum} {settingData && (<>/ ¥{settingData.goal + settingData.reserve}</>)}
+        ¥{totalSum} {settingData?.goal && settingData.reserve && (<>/ ¥{settingData.goal + settingData.reserve}</>)}
       </Text>
       <Text>
-        {settingData ?
+        {settingData?.goal && settingData.reserve ?
           "目標金額には、準備金が含まれています。" :
           "設定ページにて、設定を保存すると現在の売上が、どのくらい目標金額に近づいているかを確認できます。"}</Text>
-      {settingData && <Progress value={(totalSum / (settingData.goal + settingData.reserve)) * 100} mt="md" size="lg" radius="xl" />}
+      {settingData?.goal && settingData.reserve && <Progress value={(totalSum / (settingData.goal + settingData.reserve)) * 100} mt="md" size="lg" radius="xl" />}
     </Card>
   );
 }

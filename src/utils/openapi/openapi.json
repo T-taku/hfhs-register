@@ -264,6 +264,9 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found"
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -613,7 +616,7 @@
         },
         "type": "object",
         "title": "Setting",
-        "required": ["class_name", "goal", "reserve", "additionalreserve"]
+        "required": ["class_name"]
       }
     },
     "securitySchemes": {

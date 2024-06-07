@@ -24,11 +24,8 @@ export default function History() {
 
   const fetchSetting = () => {
     if (api) {
-      api.getSetting().then((res) => {
+      api.getSetting(true).then((res) => {
         setSettingData(res);
-        setGoal(res.goal);
-        setReserve(res.reserve);
-        setAdditionalreserve(res.additionalreserve);
       });
     }
   };
@@ -93,14 +90,14 @@ export default function History() {
                 </Text>
                 <Text component="p">
                   (現在の設定額:{" "}
-                  {settingData
+                  {settingData?.goal
                     ? `${settingData.goal.toLocaleString()}円`
                     : "設定なし"}
                   )
                 </Text>
               </>
             }
-            placeholder={settingData?.goal.toString() ?? "設定なし"}
+            placeholder={settingData?.goal?.toString() ?? "設定なし"}
             onChange={value => value !== "" && setGoal(value)}
           />
           <NumberInput
@@ -113,15 +110,15 @@ export default function History() {
                   </Text>
                   <Text component="p">
                     (現在の設定額:{" "}
-                    {settingData
-                      ? `${settingData?.reserve.toLocaleString()}円`
+                    {settingData?.reserve
+                      ? `${settingData.reserve.toLocaleString()}円`
                       : "設定なし"}
                     )
                   </Text>
                 </Text>
               </>
             }
-            placeholder={settingData?.reserve.toString() ?? "設定なし"}
+            placeholder={settingData?.reserve?.toString() ?? "設定なし"}
             onChange={value => value !== "" && setReserve(value)}
           />
           <NumberInput
@@ -134,8 +131,8 @@ export default function History() {
                   </Text>
                   <Text component="p">
                     (現在の設定額:{" "}
-                    {settingData
-                      ? `${settingData?.additionalreserve.toLocaleString()}円`
+                    {settingData?.additionalreserve
+                      ? `${settingData.additionalreserve.toLocaleString()}円`
                       : "設定なし"}
                     )
                   </Text>
@@ -143,7 +140,7 @@ export default function History() {
               </>
             }
             placeholder={
-              settingData?.additionalreserve.toString() ?? "設定なし"
+              settingData?.additionalreserve?.toString() ?? "設定なし"
             }
             onChange={value => value !== "" && setAdditionalreserve(value)}
           />
